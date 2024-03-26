@@ -1,0 +1,180 @@
+[
+    {
+        "Value": {
+            "Value": 1
+        },
+        "Edges": []
+    },
+    {
+        "Value": {
+            "Value": 1
+        },
+        "Edges": [
+            {
+                "To": 2,
+                "Value": {
+                    "Cost": 1
+                }
+            }
+        ]
+    },
+    {
+        "Value": {
+            "Value": 1
+        },
+        "Edges": [
+            {
+                "To": 1,
+                "Value": {
+                    "Cost": 1
+                }
+            }
+        ]
+    },
+    {
+        "Value": {
+            "Value": 1
+        },
+        "Edges": [
+            {
+                "To": 0,
+                "Value": {
+                    "Cost": 1
+                }
+            },
+            {
+                "To": 1,
+                "Value": {
+                    "Cost": 1
+                }
+            }
+        ]
+    },
+    {
+        "Value": {
+            "Value": 1
+        },
+        "Edges": [
+            {
+                "To": 1,
+                "Value": {
+                    "Cost": 1
+                }
+            },
+            {
+                "To": 3,
+                "Value": {
+                    "Cost": 1
+                }
+            },
+            {
+                "To": 5,
+                "Value": {
+                    "Cost": 1
+                }
+            }
+        ]
+    },
+    {
+        "Value": {
+            "Value": 1
+        },
+        "Edges": [
+            {
+                "To": 1,
+                "Value": {
+                    "Cost": 1
+                }
+            },
+            {
+                "To": 4,
+                "Value": {
+                    "Cost": 1
+                }
+            }
+        ]
+    },
+    {
+        "Value": {
+            "Value": 1
+        },
+        "Edges": [
+            {
+                "To": 4,
+                "Value": {
+                    "Cost": 1
+                }
+            }
+        ]
+    },
+    {
+        "Value": {
+            "Value": 1
+        },
+        "Edges": [
+            {
+                "To": 4,
+                "Value": {
+                    "Cost": 1
+                }
+            }
+        ]
+    },
+    {
+        "Value": {
+            "Value": 1
+        },
+        "Edges": [
+            {
+                "To": 1,
+                "Value": {
+                    "Cost": 1
+                }
+            },
+            {
+                "To": 4,
+                "Value": {
+                    "Cost": 1
+                }
+            }
+        ]
+    },
+    {
+        "Value": {
+            "Value": 1
+        },
+        "Edges": [
+            {
+                "To": 1,
+                "Value": {
+                    "Cost": 1
+                }
+            },
+            {
+                "To": 4,
+                "Value": {
+                    "Cost": 1
+                }
+            }
+        ]
+    },
+    {
+        "Value": {
+            "Value": 1
+        },
+        "Edges": [
+            {
+                "To": 1,
+                "Value": {
+                    "Cost": 1
+                }
+            },
+            {
+                "To": 4,
+                "Value": {
+                    "Cost": 1
+                }
+            }
+        ]
+    }
+]
