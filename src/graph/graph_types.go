@@ -1,13 +1,19 @@
 package graph
 
+type VertexIdType string
+
+type Graph struct {
+	Vertexes map[VertexIdType]Vertex
+}
+
 type Vertex struct {
-	Id    int
+	Id    VertexIdType
 	Value VertexValue
-	Edges []Edge
+	Edges map[VertexIdType]Edge
 }
 
 type Edge struct {
-	To    int
+	To    VertexIdType
 	Value EdgeValue
 }
 

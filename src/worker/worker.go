@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/rpc"
 	"pregel/customrpc"
+	"pregel/graph"
 )
 
 type Worker struct {
@@ -17,6 +18,9 @@ type Worker struct {
 	rpcServer      *rpc.Server
 
 	done chan bool
+
+	// SubGraph
+	graph graph.Graph
 }
 
 // Call RPC Register on Master to notify that this worker is ready to receive operations.

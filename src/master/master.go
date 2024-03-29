@@ -14,10 +14,10 @@ type Master struct {
 	listener  net.Listener
 
 	// Workers handling
-	workersMutex   sync.Mutex
-	workers        map[int]*RemoteWorker
-	totalWorkers   int // Used to generate unique ids for new workers
-	idleWorkerChan chan *RemoteWorker
+	workersMutex      sync.Mutex
+	workers           map[int]*RemoteWorker
+	totalWorkers      int // Used to generate unique ids for new workers
+	numWorkingWorkers int
 }
 
 type Operation struct {

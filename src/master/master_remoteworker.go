@@ -2,19 +2,13 @@ package master
 
 import (
 	"net/rpc"
-)
-
-type workerStatus string
-
-const (
-	WORKER_IDLE    workerStatus = "idle"
-	WORKER_RUNNING workerStatus = "running"
+	"pregel/utils"
 )
 
 type RemoteWorker struct {
 	id       int
 	hostname string
-	status   workerStatus
+	status   utils.WorkerStatus
 }
 
 // Call a RemoteWork with the procedure specified in parameters. It will also handle connecting

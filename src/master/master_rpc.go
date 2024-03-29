@@ -3,6 +3,7 @@ package master
 import (
 	"log"
 	"pregel/customrpc"
+	"pregel/utils"
 )
 
 // RPC - Register
@@ -15,13 +16,11 @@ func (master *Master) Register(args *customrpc.RegisterArgs, reply *customrpc.Re
 
 	master.workersMutex.Lock()
 
-	newWorker = &RemoteWorker{master.totalWorkers, args.WorkerHostname, WORKER_IDLE}
+	newWorker = &RemoteWorker{master.totalWorkers, args.WorkerHostname, utils.WORKER_WAITING}
 	master.workers[newWorker.id] = newWorker
 	master.totalWorkers++
 
 	master.workersMutex.Unlock()
-
-	master.idleWorkerChan <- newWorker
 
 	*reply = customrpc.RegisterReply{WorkerId: newWorker.id}
 	return nil
