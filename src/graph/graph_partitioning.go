@@ -8,7 +8,7 @@ func getSubGraphInPartition(numberOfPartitions int, graph Graph, partitionId int
 	)
 
 	subGraph = Graph{
-		Vertexes: make(map[VertexIdType]Vertex),
+		Vertexes: make(map[VertexIdType]*Vertex),
 	}
 
 	for vertexId, vertex := range graph.Vertexes {
@@ -20,7 +20,7 @@ func getSubGraphInPartition(numberOfPartitions int, graph Graph, partitionId int
 	return subGraph
 }
 
-func getPartitionIdFromVertex(numberOfPartitions int, vertex Vertex) int {
+func getPartitionIdFromVertex(numberOfPartitions int, vertex *Vertex) int {
 	return customHash(vertex.Id) % numberOfPartitions
 }
 

@@ -30,6 +30,14 @@ type RunSuperStepReply struct {
 	workerId int
 }
 
+type PassMessagesArgs struct {
+	workerId int
+}
+
+type PassMessagesReply struct {
+	workerId int
+}
+
 type RegisterSubGraphArgs struct {
 	workerId              int
 	numberOfWorkers       int

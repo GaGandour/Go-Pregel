@@ -1,4 +1,4 @@
-package master
+package remote_worker
 
 import (
 	"net/rpc"
@@ -6,20 +6,20 @@ import (
 )
 
 type RemoteWorker struct {
-	id       int
-	hostname string
-	status   utils.WorkerStatus
+	Id       int
+	Hostname string
+	Status   utils.WorkerStatus
 }
 
 // Call a RemoteWork with the procedure specified in parameters. It will also handle connecting
 // to the server and closing it afterwards.
-func (worker *RemoteWorker) callRemoteWorker(proc string, args interface{}, reply *interface{}) error {
+func (worker *RemoteWorker) CallRemoteWorker(proc string, args interface{}, reply *interface{}) error {
 	var (
 		err    error
 		client *rpc.Client
 	)
 
-	client, err = rpc.Dial("tcp", worker.hostname)
+	client, err = rpc.Dial("tcp", worker.Hostname)
 
 	if err != nil {
 		return err
@@ -30,7 +30,7 @@ func (worker *RemoteWorker) callRemoteWorker(proc string, args interface{}, repl
 
 	for err != nil {
 		var tmpClient *rpc.Client
-		tmpClient, err = rpc.Dial("tcp", worker.hostname)
+		tmpClient, err = rpc.Dial("tcp", worker.Hostname)
 		if err != nil {
 			return err
 		}

@@ -3,6 +3,7 @@ package master
 import (
 	"log"
 	"pregel/customrpc"
+	"pregel/remote_worker"
 	"pregel/utils"
 )
 
@@ -10,18 +11,22 @@ import (
 // Procedure that will be called by workers to register within this master.
 func (master *Master) Register(args *customrpc.RegisterArgs, reply *customrpc.RegisterReply) error {
 	var (
-		newWorker *RemoteWorker
+		newWorker *remote_worker.RemoteWorker
 	)
 	log.Printf("Registering worker '%v' with hostname '%v'", master.totalWorkers, args.WorkerHostname)
 
 	master.workersMutex.Lock()
 
-	newWorker = &RemoteWorker{master.totalWorkers, args.WorkerHostname, utils.WORKER_WAITING}
-	master.workers[newWorker.id] = newWorker
+	newWorker = &remote_worker.RemoteWorker{
+		Id:       master.totalWorkers,
+		Hostname: args.WorkerHostname,
+		Status:   utils.WORKER_WAITING,
+	}
+	master.workers[newWorker.Id] = newWorker
 	master.totalWorkers++
 
 	master.workersMutex.Unlock()
 
-	*reply = customrpc.RegisterReply{WorkerId: newWorker.id}
+	*reply = customrpc.RegisterReply{WorkerId: newWorker.Id}
 	return nil
 }

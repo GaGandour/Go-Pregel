@@ -1,9 +1,7 @@
 package worker
 
 import (
-	"encoding/json"
 	"log"
-	"os"
 	"pregel/customrpc"
 )
 
@@ -15,19 +13,22 @@ func (worker *Worker) RegisterSubGraph(args *customrpc.RegisterSubGraphArgs, rep
 
 // RPC - WriteSubGraphToFile
 func (worker *Worker) WriteSubGraphToFile(args *customrpc.WriteSubGraphToFileArgs, reply *customrpc.WriteSubGraphToFileReply) error {
-	vertexesJson, error := json.MarshalIndent(worker.graph, "", "\t")
-	if error != nil {
-		log.Println("Error marshalling vertexes")
-		return error
-	}
-	// Write to file
 	outputFileName := worker.getWorkerSubGraphFile()
-	os.WriteFile(outputFileName, vertexesJson, 0644)
+	worker.graph.WriteGraphToFile(outputFileName)
 	return nil
 }
 
 // RPC - RunSuperStep
 func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *customrpc.RunSuperStepReply) error {
+	for _, vertex := range worker.graph.Vertexes {
+		vertex.SuperStep()
+	}
+	return nil
+}
+
+// RPC - PassMessages
+func (worker *Worker) PassMessages(args *customrpc.PassMessagesArgs, reply *customrpc.PassMessagesReply) error {
+	// TODO: Implement
 	return nil
 }
 

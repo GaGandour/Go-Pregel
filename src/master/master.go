@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"net/rpc"
+	"pregel/remote_worker"
 	"sync"
 )
 
@@ -15,7 +16,7 @@ type Master struct {
 
 	// Workers handling
 	workersMutex      sync.Mutex
-	workers           map[int]*RemoteWorker
+	workers           map[int]*remote_worker.RemoteWorker
 	totalWorkers      int // Used to generate unique ids for new workers
 	numWorkingWorkers int
 }
@@ -28,7 +29,7 @@ type Operation struct {
 func newMaster(address string) (master *Master) {
 	master = new(Master)
 	master.address = address
-	master.workers = make(map[int]*RemoteWorker, 0)
+	master.workers = make(map[int]*remote_worker.RemoteWorker, 0)
 	// master.ii = invertedindex.InvertedIndex{}
 	master.totalWorkers = 0
 	return
