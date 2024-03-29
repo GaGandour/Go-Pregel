@@ -4,7 +4,6 @@ import (
 	"log"
 	"net"
 	"net/rpc"
-	"pregel/graph_package"
 	"time"
 )
 
@@ -21,17 +20,12 @@ func RunWorker(hostname string, masterHostname string) {
 
 	log.Println("Running Worker on", hostname)
 
-	worker = new(Worker)
-	worker.hostname = hostname
-	worker.graph = graph_package.Graph{}
-	worker.masterHostname = masterHostname
-	worker.done = make(chan bool)
+	worker = newWorker(hostname, masterHostname)
 
 	rpcs = rpc.NewServer()
 	rpcs.Register(worker)
 
 	worker.rpcServer = rpcs
-
 	listener, err = net.Listen("tcp", worker.hostname)
 
 	if err != nil {

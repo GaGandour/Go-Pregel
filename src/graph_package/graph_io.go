@@ -29,5 +29,8 @@ func ReadGraphFromFile(fileName string) *Graph {
 		return nil
 	}
 	graph.totalNumberOfVertexes = len(graph.Vertexes)
+	for vertexId, vertex := range graph.Vertexes {
+		vertex.Id = vertexId
+	}
 	return graph
 }

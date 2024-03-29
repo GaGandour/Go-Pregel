@@ -30,6 +30,15 @@ type Worker struct {
 	graph graph_package.Graph
 }
 
+func newWorker(hostname string, masterHostname string) *Worker {
+	worker := new(Worker)
+	worker.hostname = hostname
+	worker.graph = graph_package.Graph{}
+	worker.masterHostname = masterHostname
+	worker.done = make(chan bool)
+	return worker
+}
+
 // Call RPC Register on Master to notify that this worker is ready to receive operations.
 func (worker *Worker) register() error {
 	var (

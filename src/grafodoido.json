@@ -1,0 +1,235 @@
+{
+	"0": {
+		"Id": "0",
+		"Value": {
+			"Value": 1
+		},
+		"Edges": {},
+		"ReceivedMessages": null,
+		"MessageMutex": {},
+		"MessagesToSend": null,
+		"VotedToHalt": false
+	},
+	"1": {
+		"Id": "1",
+		"Value": {
+			"Value": 1
+		},
+		"Edges": {
+			"2": {
+				"To": "2",
+				"Value": {
+					"Cost": 1
+				}
+			}
+		},
+		"ReceivedMessages": null,
+		"MessageMutex": {},
+		"MessagesToSend": null,
+		"VotedToHalt": false
+	},
+	"10": {
+		"Id": "10",
+		"Value": {
+			"Value": 1
+		},
+		"Edges": {
+			"1": {
+				"To": "1",
+				"Value": {
+					"Cost": 1
+				}
+			},
+			"4": {
+				"To": "4",
+				"Value": {
+					"Cost": 1
+				}
+			}
+		},
+		"ReceivedMessages": null,
+		"MessageMutex": {},
+		"MessagesToSend": null,
+		"VotedToHalt": false
+	},
+	"2": {
+		"Id": "2",
+		"Value": {
+			"Value": 1
+		},
+		"Edges": {
+			"1": {
+				"To": "1",
+				"Value": {
+					"Cost": 1
+				}
+			}
+		},
+		"ReceivedMessages": null,
+		"MessageMutex": {},
+		"MessagesToSend": null,
+		"VotedToHalt": false
+	},
+	"3": {
+		"Id": "3",
+		"Value": {
+			"Value": 1
+		},
+		"Edges": {
+			"0": {
+				"To": "0",
+				"Value": {
+					"Cost": 1
+				}
+			},
+			"1": {
+				"To": "1",
+				"Value": {
+					"Cost": 1
+				}
+			}
+		},
+		"ReceivedMessages": null,
+		"MessageMutex": {},
+		"MessagesToSend": null,
+		"VotedToHalt": false
+	},
+	"4": {
+		"Id": "4",
+		"Value": {
+			"Value": 1
+		},
+		"Edges": {
+			"1": {
+				"To": "1",
+				"Value": {
+					"Cost": 1
+				}
+			},
+			"3": {
+				"To": "3",
+				"Value": {
+					"Cost": 1
+				}
+			},
+			"5": {
+				"To": "5",
+				"Value": {
+					"Cost": 1
+				}
+			}
+		},
+		"ReceivedMessages": null,
+		"MessageMutex": {},
+		"MessagesToSend": null,
+		"VotedToHalt": false
+	},
+	"5": {
+		"Id": "5",
+		"Value": {
+			"Value": 1
+		},
+		"Edges": {
+			"1": {
+				"To": "1",
+				"Value": {
+					"Cost": 1
+				}
+			},
+			"4": {
+				"To": "4",
+				"Value": {
+					"Cost": 1
+				}
+			}
+		},
+		"ReceivedMessages": null,
+		"MessageMutex": {},
+		"MessagesToSend": null,
+		"VotedToHalt": false
+	},
+	"6": {
+		"Id": "6",
+		"Value": {
+			"Value": 1
+		},
+		"Edges": {
+			"4": {
+				"To": "4",
+				"Value": {
+					"Cost": 1
+				}
+			}
+		},
+		"ReceivedMessages": null,
+		"MessageMutex": {},
+		"MessagesToSend": null,
+		"VotedToHalt": false
+	},
+	"7": {
+		"Id": "7",
+		"Value": {
+			"Value": 1
+		},
+		"Edges": {
+			"4": {
+				"To": "4",
+				"Value": {
+					"Cost": 1
+				}
+			}
+		},
+		"ReceivedMessages": null,
+		"MessageMutex": {},
+		"MessagesToSend": null,
+		"VotedToHalt": false
+	},
+	"8": {
+		"Id": "8",
+		"Value": {
+			"Value": 1
+		},
+		"Edges": {
+			"1": {
+				"To": "1",
+				"Value": {
+					"Cost": 1
+				}
+			},
+			"4": {
+				"To": "4",
+				"Value": {
+					"Cost": 1
+				}
+			}
+		},
+		"ReceivedMessages": null,
+		"MessageMutex": {},
+		"MessagesToSend": null,
+		"VotedToHalt": false
+	},
+	"9": {
+		"Id": "9",
+		"Value": {
+			"Value": 1
+		},
+		"Edges": {
+			"1": {
+				"To": "1",
+				"Value": {
+					"Cost": 1
+				}
+			},
+			"4": {
+				"To": "4",
+				"Value": {
+					"Cost": 1
+				}
+			}
+		},
+		"ReceivedMessages": null,
+		"MessageMutex": {},
+		"MessagesToSend": null,
+		"VotedToHalt": false
+	}
+}

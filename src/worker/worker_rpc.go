@@ -8,6 +8,7 @@ import (
 
 // RPC - RegisterSubGraph
 func (worker *Worker) RegisterSubGraph(args *customrpc.RegisterSubGraphArgs, reply *customrpc.RegisterSubGraphReply) error {
+	log.Println("Registering SubGraph")
 	worker.graph = args.SubGraph
 	worker.id = args.WorkerId
 	// Build map
@@ -20,6 +21,7 @@ func (worker *Worker) RegisterSubGraph(args *customrpc.RegisterSubGraphArgs, rep
 
 // RPC - WriteSubGraphToFile
 func (worker *Worker) WriteSubGraphToFile(args *customrpc.WriteSubGraphToFileArgs, reply *customrpc.WriteSubGraphToFileReply) error {
+	log.Println("Writing SubGraph to file")
 	outputFileName := worker.getWorkerSubGraphFile()
 	worker.graph.WriteGraphToFile(outputFileName)
 	return nil
@@ -27,6 +29,7 @@ func (worker *Worker) WriteSubGraphToFile(args *customrpc.WriteSubGraphToFileArg
 
 // RPC - RunSuperStep
 func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *customrpc.RunSuperStepReply) error {
+	log.Println("Running SuperStep")
 	var workerVoteToHalt = true
 	for _, vertex := range worker.graph.Vertexes {
 		if !vertex.VotedToHalt {
@@ -40,6 +43,7 @@ func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *cust
 
 // RPC - ReceiveMessage
 func (worker *Worker) ReceiveMessage(args *customrpc.ReceiveMessageArgs, reply *customrpc.ReceiveMessageReply) error {
+	log.Println("Receiving Message")
 	vertexId := args.VertexId
 	vertex := worker.graph.Vertexes[vertexId]
 	vertex.ReceiveMessage(args.Message)
@@ -48,6 +52,7 @@ func (worker *Worker) ReceiveMessage(args *customrpc.ReceiveMessageArgs, reply *
 
 // RPC - PassMessages
 func (worker *Worker) PassMessages(args *customrpc.PassMessagesArgs, reply *customrpc.PassMessagesReply) error {
+	log.Println("Passing Messages")
 	for _, sendingVertex := range worker.graph.Vertexes {
 		for receiverId, messageList := range sendingVertex.MessagesToSend {
 			combinedMessageList := graph_package.CombinePregelMessages(messageList)

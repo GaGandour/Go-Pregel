@@ -45,7 +45,12 @@ func RunMaster(hostname string) {
 	master.getConnectionsFromWorkers()
 
 	// Ler JSON
-	graph := graph_package.ReadGraphFromFile("graphs/graph1.json")
+	graph := graph_package.ReadGraphFromFile("../graphs/graph1.json")
+
+	if graph == nil {
+		log.Println("Error reading graph")
+		return
+	}
 
 	// Particionar Grafo
 	master.partitionGraph(graph)

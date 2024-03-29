@@ -46,6 +46,7 @@ func main() {
 		log.Println("Master:", *masterAddr)
 
 		hostname = *addr + ":" + strconv.Itoa(*port)
+		log.Println("Hostname:", hostname)
 
 		worker.RunWorker(hostname, *masterAddr)
 	}
