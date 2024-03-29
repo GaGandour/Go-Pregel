@@ -28,6 +28,13 @@ func (vertex *Vertex) PrepareMessageToVertex(vertexId VertexIdType, message Preg
 	vertex.MessagesToSend[vertexId] = append(vertex.MessagesToSend[vertexId], message)
 }
 
+func (vertex *Vertex) ReceiveMessage(message PregelMessage) {
+	vertex.MessageMutex.Lock()
+	vertex.ReceivedMessages = append(vertex.ReceivedMessages, message)
+	vertex.VotedToHalt = false
+	vertex.MessageMutex.Unlock()
+}
+
 func (vertex *Vertex) VoteToHalt() {
 	vertex.VotedToHalt = true
 }

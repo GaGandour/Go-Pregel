@@ -37,9 +37,7 @@ func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *cust
 func (worker *Worker) ReceiveMessage(args *customrpc.ReceiveMessageArgs, reply *customrpc.ReceiveMessageReply) error {
 	vertexId := args.VertexId
 	vertex := worker.graph.Vertexes[vertexId]
-	vertex.MessageMutex.Lock()
-	vertex.ReceivedMessages = append(vertex.ReceivedMessages, args.Message)
-	vertex.MessageMutex.Unlock()
+	vertex.ReceiveMessage(args.Message)
 	return nil
 }
 
@@ -53,9 +51,7 @@ func (worker *Worker) PassMessages(args *customrpc.PassMessagesArgs, reply *cust
 				if partitionToReceiveMessage == worker.id {
 					// register message in vertex
 					receivingVertex := worker.graph.Vertexes[receiverId]
-					receivingVertex.MessageMutex.Lock()
-					receivingVertex.ReceivedMessages = append(receivingVertex.ReceivedMessages, message)
-					receivingVertex.MessageMutex.Unlock()
+					receivingVertex.ReceiveMessage(message)
 				} else {
 					remoteWorkerToReceive := worker.getRemoteWorkerByPartitionId(partitionToReceiveMessage)
 					args_remote := customrpc.ReceiveMessageArgs{
