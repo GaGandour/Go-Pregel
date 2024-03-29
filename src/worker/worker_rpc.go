@@ -27,9 +27,14 @@ func (worker *Worker) WriteSubGraphToFile(args *customrpc.WriteSubGraphToFileArg
 
 // RPC - RunSuperStep
 func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *customrpc.RunSuperStepReply) error {
+	var workerVoteToHalt = true
 	for _, vertex := range worker.graph.Vertexes {
-		vertex.SuperStep()
+		if !vertex.VotedToHalt {
+			vertex.SuperStep()
+		}
+		workerVoteToHalt = workerVoteToHalt && vertex.VotedToHalt
 	}
+	reply.VoteToHalt = workerVoteToHalt
 	return nil
 }
 

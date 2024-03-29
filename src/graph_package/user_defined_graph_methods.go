@@ -9,6 +9,7 @@ func (vertex *Vertex) InterpretMessages() {
 
 func (vertex *Vertex) Compute() {
 	// The user will implement this function
+	vertex.VotedToHalt = true
 }
 
 func CombinePregelMessages(messageList []PregelMessage) []PregelMessage {

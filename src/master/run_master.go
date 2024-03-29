@@ -49,15 +49,13 @@ func RunMaster(hostname string) {
 	// Particionar Grafo
 	master.partitionGraph(graph)
 	// Comandar Superstep 0
-	master.orderWorkersToExecuteSuperStep()
-	// TODO: implementar halt condition
-	for i := 0; i < 10; i++ {
+	shouldStopPregel := master.orderWorkersToExecuteSuperStep()
+	for !shouldStopPregel {
 		// Comandar Passagem de Mensagens
 		master.orderWorkersToPassMessages()
 		// Comandar Supersteps até todos os workers terminarem
 		master.orderWorkersToExecuteSuperStep()
 	}
-	// Comandar Supersteps até todos os workers terminarem
 	// Comandar Escrita do Grafo
 	master.orderWorkersToWriteSubGraphs()
 	// Juntar os SubGrafos
@@ -82,12 +80,18 @@ func (master *Master) orderWorkersToWriteSubGraphs() {
 	master.wg.Wait()
 }
 
-func (master *Master) orderWorkersToExecuteSuperStep() {
+func (master *Master) orderWorkersToExecuteSuperStep() bool {
 	for _, worker := range master.workers {
 		master.wg.Add(1)
 		go master.orderSuperStep(worker)
 	}
 	master.wg.Wait()
+	for vote := range master.votesToHaltChan {
+		if !vote {
+			return false
+		}
+	}
+	return true
 }
 
 func (master *Master) orderWorkersToPassMessages() {

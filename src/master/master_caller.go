@@ -48,13 +48,14 @@ func (master *Master) orderSuperStep(remoteWorker *remote_worker.RemoteWorker) {
 	)
 
 	args = &customrpc.RunSuperStepArgs{}
-	reply := interface{}(nil)
+	reply := customrpc.RunSuperStepReply{}
 
 	err = remoteWorker.CallRemoteWorker("Worker.RunSuperStep", args, &reply, &master.wg)
 
 	if err != nil {
 		log.Printf("Failed to order superstep to worker. Error: %v\n", err)
 	}
+	master.votesToHaltChan <- reply.VoteToHalt
 }
 
 func (master *Master) orderWriteSubGraph(remoteWorker *remote_worker.RemoteWorker) {

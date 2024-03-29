@@ -20,6 +20,9 @@ type Master struct {
 	totalWorkers      int // Used to generate unique ids for new workers
 	numWorkingWorkers int
 	wg                sync.WaitGroup
+
+	// Pregel Specific
+	votesToHaltChan chan bool
 }
 
 // Construct a new Master struct
@@ -27,7 +30,7 @@ func newMaster(address string) (master *Master) {
 	master = new(Master)
 	master.address = address
 	master.workers = make(map[int]*remote_worker.RemoteWorker, 0)
-	// master.ii = invertedindex.InvertedIndex{}
+	master.votesToHaltChan = make(chan bool, 10)
 	master.totalWorkers = 0
 	return
 }

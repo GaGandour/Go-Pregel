@@ -28,7 +28,8 @@ type RunSuperStepArgs struct {
 }
 
 type RunSuperStepReply struct {
-	WorkerId int
+	WorkerId   int
+	VoteToHalt bool
 }
 
 type PassMessagesArgs struct {
