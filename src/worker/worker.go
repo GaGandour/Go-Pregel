@@ -5,22 +5,29 @@ import (
 	"net"
 	"net/rpc"
 	"pregel/customrpc"
-	"pregel/graph"
+	"pregel/graph_package"
+	"pregel/remote_worker"
+	"sync"
 )
 
 type Worker struct {
 	id int
 
 	// Network
-	hostname       string
-	masterHostname string
-	listener       net.Listener
-	rpcServer      *rpc.Server
+	hostname           string
+	masterHostname     string
+	remoteWorkersMap   map[int]*remote_worker.RemoteWorker
+	numberOfPartitions int
+	listener           net.Listener
+	rpcServer          *rpc.Server
+
+	// sync group
+	wg sync.WaitGroup
 
 	done chan bool
 
 	// SubGraph
-	graph graph.Graph
+	graph graph_package.Graph
 }
 
 // Call RPC Register on Master to notify that this worker is ready to receive operations.

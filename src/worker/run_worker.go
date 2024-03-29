@@ -4,7 +4,7 @@ import (
 	"log"
 	"net"
 	"net/rpc"
-	"pregel/graph"
+	"pregel/graph_package"
 	"time"
 )
 
@@ -23,7 +23,7 @@ func RunWorker(hostname string, masterHostname string) {
 
 	worker = new(Worker)
 	worker.hostname = hostname
-	worker.graph = graph.Graph{}
+	worker.graph = graph_package.Graph{}
 	worker.masterHostname = masterHostname
 	worker.done = make(chan bool)
 

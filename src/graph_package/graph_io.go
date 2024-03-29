@@ -1,4 +1,4 @@
-package graph
+package graph_package
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 )
 
 func (graph *Graph) WriteGraphToFile(fileName string) error {
-	vertexesJson, err := json.MarshalIndent(graph, "", "\t")
+	vertexesJson, err := json.MarshalIndent(graph.Vertexes, "", "\t")
 	if err != nil {
 		log.Println("Error marshalling vertexes")
 		return err
@@ -16,16 +16,18 @@ func (graph *Graph) WriteGraphToFile(fileName string) error {
 	return nil
 }
 
-func (graph *Graph) ReadGraphFromFile(fileName string) error {
+func ReadGraphFromFile(fileName string) *Graph {
+	graph := new(Graph)
 	vertexesJson, err := os.ReadFile(fileName)
 	if err != nil {
 		log.Println("Error reading file")
-		return err
+		return nil
 	}
-	err = json.Unmarshal(vertexesJson, graph)
+	err = json.Unmarshal(vertexesJson, &graph.Vertexes)
 	if err != nil {
 		log.Println("Error unmarshalling vertexes")
-		return err
+		return nil
 	}
-	return nil
+	graph.totalNumberOfVertexes = len(graph.Vertexes)
+	return graph
 }

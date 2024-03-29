@@ -1,9 +1,9 @@
-package graph
+package graph_package
 
 func (vertex *Vertex) SuperStep() {
 	vertex.InterpretMessages()
 	vertex.Compute()
-	vertex.receivedMessages = []PregelMessage{}
+	vertex.ReceivedMessages = []PregelMessage{}
 }
 
 func (vertex *Vertex) GetValue() VertexValue {
@@ -23,11 +23,11 @@ func (vertex *Vertex) GetOutEdges() []Edge {
 }
 
 func (vertex *Vertex) PrepareMessageToVertex(vertexId VertexIdType, message PregelMessage) {
-	vertex.messageMutex.Lock()
-	defer vertex.messageMutex.Unlock()
-	vertex.messagesToSend[vertexId] = append(vertex.messagesToSend[vertexId], message)
+	vertex.MessageMutex.Lock()
+	defer vertex.MessageMutex.Unlock()
+	vertex.MessagesToSend[vertexId] = append(vertex.MessagesToSend[vertexId], message)
 }
 
 func (vertex *Vertex) VoteToHalt() {
-	vertex.votedToHalt = true
+	vertex.VotedToHalt = true
 }

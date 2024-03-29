@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"net/rpc"
+	"pregel/graph_package"
 )
 
 // RunMaster will start a master node on the map reduce operations.
@@ -43,12 +44,56 @@ func RunMaster(hostname string) {
 	go master.acceptMultipleConnections()
 
 	// Ler JSON
+	graph := graph_package.ReadGraphFromFile("graphs/graph1.json")
+
 	// Particionar Grafo
+	master.partitionGraph(graph)
 	// Comandar Superstep 0
-	// Esperar retorno
+	master.orderWorkersToExecuteSuperStep()
+	// TODO: implementar halt condition
+	for i := 0; i < 10; i++ {
+		// Comandar Passagem de Mensagens
+		master.orderWorkersToPassMessages()
+		// Comandar Supersteps até todos os workers terminarem
+		master.orderWorkersToExecuteSuperStep()
+	}
 	// Comandar Supersteps até todos os workers terminarem
 	// Comandar Escrita do Grafo
-	// Esperar retorno
-	// Juntar os subgrafos
-	// Escrever grande grafo
+	master.orderWorkersToWriteSubGraphs()
+	// Juntar os SubGrafos
+}
+
+func (master *Master) partitionGraph(graph *graph_package.Graph) {
+	// Particionar o grafo
+	for partitionId := 0; partitionId < master.numWorkingWorkers; partitionId++ {
+		// Enviar subgrafo para worker
+		subGraph := graph_package.GetSubGraphInPartition(master.numWorkingWorkers, graph, partitionId)
+		master.wg.Add(1)
+		go master.sendSubGraphToWorker(master.workers[partitionId], &subGraph)
+	}
+	master.wg.Wait()
+}
+
+func (master *Master) orderWorkersToWriteSubGraphs() {
+	for _, worker := range master.workers {
+		master.wg.Add(1)
+		go master.orderWriteSubGraph(worker)
+	}
+	master.wg.Wait()
+}
+
+func (master *Master) orderWorkersToExecuteSuperStep() {
+	for _, worker := range master.workers {
+		master.wg.Add(1)
+		go master.orderSuperStep(worker)
+	}
+	master.wg.Wait()
+}
+
+func (master *Master) orderWorkersToPassMessages() {
+	for _, worker := range master.workers {
+		master.wg.Add(1)
+		go master.orderMessagePassing(worker)
+	}
+	master.wg.Wait()
 }

@@ -19,10 +19,7 @@ type Master struct {
 	workers           map[int]*remote_worker.RemoteWorker
 	totalWorkers      int // Used to generate unique ids for new workers
 	numWorkingWorkers int
-}
-
-type Operation struct {
-	proc string
+	wg                sync.WaitGroup
 }
 
 // Construct a new Master struct

@@ -1,21 +1,22 @@
-package graph
+package graph_package
 
 import "sync"
 
 type VertexIdType string
 
 type Graph struct {
-	Vertexes map[VertexIdType]*Vertex
+	totalNumberOfVertexes int
+	Vertexes              map[VertexIdType]*Vertex
 }
 
 type Vertex struct {
 	Id               VertexIdType
 	Value            VertexValue
 	Edges            map[VertexIdType]Edge
-	receivedMessages []PregelMessage
-	messageMutex     sync.Mutex
-	messagesToSend   map[VertexIdType][]PregelMessage
-	votedToHalt      bool
+	ReceivedMessages []PregelMessage
+	MessageMutex     sync.Mutex
+	MessagesToSend   map[VertexIdType][]PregelMessage
+	VotedToHalt      bool
 }
 
 type Edge struct {

@@ -3,7 +3,8 @@
 package customrpc
 
 import (
-	"pregel/graph"
+	"pregel/graph_package"
+	"pregel/remote_worker"
 )
 
 type HeartBeatArgs struct {
@@ -23,36 +24,46 @@ type RegisterReply struct {
 }
 
 type RunSuperStepArgs struct {
-	workerId int
+	WorkerId int
 }
 
 type RunSuperStepReply struct {
-	workerId int
+	WorkerId int
 }
 
 type PassMessagesArgs struct {
-	workerId int
+	WorkerId int
 }
 
 type PassMessagesReply struct {
-	workerId int
+	WorkerId int
+}
+
+type ReceiveMessageArgs struct {
+	Message  graph_package.PregelMessage
+	VertexId graph_package.VertexIdType
+}
+
+type ReceiveMessageReply struct {
+	WorkerId int
 }
 
 type RegisterSubGraphArgs struct {
-	workerId              int
-	numberOfWorkers       int
-	totalNumberOfVertexes int
-	SubGraph              graph.Graph
+	WorkerId              int
+	NumberOfWorkers       int
+	RemoteWorkersMap      map[int]remote_worker.RemoteWorker
+	TotalNumberOfVertexes int
+	SubGraph              graph_package.Graph
 }
 
 type RegisterSubGraphReply struct {
-	workerId int
+	WorkerId int
 }
 
 type WriteSubGraphToFileArgs struct {
-	workerId int
+	WorkerId int
 }
 
 type WriteSubGraphToFileReply struct {
-	workerId int
+	WorkerId int
 }
