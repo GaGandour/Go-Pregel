@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/rpc"
 	"pregel/graph_package"
+	"time"
 )
 
 // RunMaster will start a master node on the map reduce operations.
@@ -41,7 +42,7 @@ func RunMaster(hostname string) {
 
 	master.listener = listener
 
-	go master.acceptMultipleConnections()
+	master.getConnectionsFromWorkers()
 
 	// Ler JSON
 	graph := graph_package.ReadGraphFromFile("graphs/graph1.json")
@@ -59,6 +60,11 @@ func RunMaster(hostname string) {
 	// Comandar Escrita do Grafo
 	master.orderWorkersToWriteSubGraphs()
 	// Juntar os SubGrafos
+}
+
+func (master *Master) getConnectionsFromWorkers() {
+	go master.acceptMultipleConnections()
+	time.Sleep(time.Duration(5) * time.Second)
 }
 
 func (master *Master) partitionGraph(graph *graph_package.Graph) {
