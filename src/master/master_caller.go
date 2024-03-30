@@ -14,7 +14,7 @@ func (master *Master) sendSubGraphToWorker(remoteWorker *remote_worker.RemoteWor
 	)
 
 	args = &customrpc.RegisterSubGraphArgs{}
-	reply := interface{}(nil)
+	reply := customrpc.RegisterSubGraphReply{}
 
 	args.SubGraph = *subGraph
 

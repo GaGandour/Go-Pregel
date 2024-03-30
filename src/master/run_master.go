@@ -56,7 +56,9 @@ func RunMaster(hostname string) {
 	master.partitionGraph(graph)
 	// Comandar Superstep 0
 	shouldStopPregel := master.orderWorkersToExecuteSuperStep()
+	log.Println("1")
 	for !shouldStopPregel {
+		log.Println("2")
 		// Comandar Passagem de Mensagens
 		master.orderWorkersToPassMessages()
 		// Comandar Supersteps até todos os workers terminarem
@@ -70,6 +72,7 @@ func RunMaster(hostname string) {
 func (master *Master) getConnectionsFromWorkers() {
 	go master.acceptMultipleConnections()
 	time.Sleep(time.Duration(5) * time.Second)
+	master.numWorkingWorkers = len(master.workers)
 }
 
 func (master *Master) partitionGraph(graph *graph_package.Graph) {
