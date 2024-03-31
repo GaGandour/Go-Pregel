@@ -1,15 +1,17 @@
 package graph_package
 
-func (vertex *Vertex) InterpretMessages() {
-	for _, message := range vertex.ReceivedMessages {
-		// The user will implement this function
-		println(message.VertexId)
+func (vertex *Vertex) InterpretSingleMessage(message PregelMessage) {
+	// The user will implement this function
+	if message.Value > vertex.Value.Value {
+		vertex.Value.Value = message.Value
 	}
 }
 
 func (vertex *Vertex) Compute() {
 	// The user will implement this function
-	vertex.VotedToHalt = true
+	for _, edge := range vertex.GetOutEdges() {
+		vertex.PrepareMessageToVertex(edge.To, PregelMessage{vertex.Id, vertex.Value.Value})
+	}
 }
 
 func CombinePregelMessages(messageList []PregelMessage) []PregelMessage {

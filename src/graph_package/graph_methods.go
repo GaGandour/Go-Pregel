@@ -1,8 +1,17 @@
 package graph_package
 
 func (vertex *Vertex) SuperStep() {
+	oldValue := vertex.GetValue()
 	vertex.InterpretMessages()
-	vertex.Compute()
+	if !vertex.VotedToHalt {
+		vertex.Compute()
+	}
+	if vertex.numSuperSteps > 0 {
+		if oldValue == vertex.GetValue() {
+			vertex.VoteToHalt()
+		}
+	}
+	vertex.numSuperSteps++
 	vertex.ReceivedMessages = []PregelMessage{}
 }
 
@@ -37,4 +46,10 @@ func (vertex *Vertex) ReceiveMessage(message PregelMessage) {
 
 func (vertex *Vertex) VoteToHalt() {
 	vertex.VotedToHalt = true
+}
+
+func (vertex *Vertex) InterpretMessages() {
+	for _, message := range vertex.ReceivedMessages {
+		vertex.InterpretSingleMessage(message)
+	}
 }

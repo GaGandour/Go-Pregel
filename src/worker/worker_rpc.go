@@ -32,9 +32,7 @@ func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *cust
 	log.Println("Running SuperStep")
 	var workerVoteToHalt = true
 	for _, vertex := range worker.graph.Vertexes {
-		if !vertex.VotedToHalt {
-			vertex.SuperStep()
-		}
+		vertex.SuperStep()
 		workerVoteToHalt = workerVoteToHalt && vertex.VotedToHalt
 	}
 	reply.VoteToHalt = workerVoteToHalt

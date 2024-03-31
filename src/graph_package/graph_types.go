@@ -19,6 +19,7 @@ type Vertex struct {
 	messageMutex     *sync.Mutex
 	MessagesToSend   map[VertexIdType][]PregelMessage
 	VotedToHalt      bool
+	numSuperSteps    int
 }
 
 type Edge struct {
