@@ -50,11 +50,10 @@ type ReceiveMessageReply struct {
 }
 
 type RegisterSubGraphArgs struct {
-	WorkerId              int
-	NumberOfWorkers       int
-	RemoteWorkersMap      map[int]remote_worker.RemoteWorker
-	TotalNumberOfVertexes int
-	SubGraph              graph_package.Graph
+	WorkerId         int
+	NumberOfWorkers  int
+	RemoteWorkersMap map[int]remote_worker.RemoteWorker
+	SubGraph         graph_package.Graph
 }
 
 type RegisterSubGraphReply struct {

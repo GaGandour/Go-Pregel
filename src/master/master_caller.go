@@ -9,16 +9,23 @@ import (
 
 func (master *Master) sendSubGraphToWorker(remoteWorker *remote_worker.RemoteWorker, subGraph *graph_package.Graph) {
 	var (
-		err  error
-		args *customrpc.RegisterSubGraphArgs
+		err   error
+		args  *customrpc.RegisterSubGraphArgs
+		reply *customrpc.RegisterSubGraphReply
 	)
 
-	args = &customrpc.RegisterSubGraphArgs{}
-	reply := customrpc.RegisterSubGraphReply{}
+	args = new(customrpc.RegisterSubGraphArgs)
+	reply = new(customrpc.RegisterSubGraphReply)
 
+	args.WorkerId = remoteWorker.Id
+	args.NumberOfWorkers = master.numWorkingWorkers
+	args.RemoteWorkersMap = make(map[int]remote_worker.RemoteWorker)
+	for _, worker := range master.workers {
+		args.RemoteWorkersMap[worker.Id] = *worker
+	}
 	args.SubGraph = *subGraph
 
-	err = remoteWorker.CallRemoteWorker("Worker.RegisterSubGraph", args, &reply, &master.wg)
+	err = remoteWorker.CallRemoteWorker("Worker.RegisterSubGraph", args, reply, &master.wg)
 
 	if err != nil {
 		log.Printf("Failed to send subgraph to worker. Error: %v\n", err)

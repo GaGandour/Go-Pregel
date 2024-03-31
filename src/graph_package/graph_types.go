@@ -6,7 +6,7 @@ type VertexIdType string
 
 type Graph struct {
 	totalNumberOfVertexes int
-	Vertexes              map[VertexIdType]*Vertex
+	Vertexes              map[VertexIdType]Vertex
 }
 
 type Vertex struct {
@@ -14,7 +14,7 @@ type Vertex struct {
 	Value            VertexValue
 	Edges            map[VertexIdType]Edge
 	ReceivedMessages []PregelMessage
-	MessageMutex     sync.Mutex
+	messageMutex     *sync.Mutex
 	MessagesToSend   map[VertexIdType][]PregelMessage
 	VotedToHalt      bool
 }

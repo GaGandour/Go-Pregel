@@ -23,16 +23,16 @@ func (vertex *Vertex) GetOutEdges() []Edge {
 }
 
 func (vertex *Vertex) PrepareMessageToVertex(vertexId VertexIdType, message PregelMessage) {
-	vertex.MessageMutex.Lock()
-	defer vertex.MessageMutex.Unlock()
+	vertex.messageMutex.Lock()
+	defer vertex.messageMutex.Unlock()
 	vertex.MessagesToSend[vertexId] = append(vertex.MessagesToSend[vertexId], message)
 }
 
 func (vertex *Vertex) ReceiveMessage(message PregelMessage) {
-	vertex.MessageMutex.Lock()
+	vertex.messageMutex.Lock()
 	vertex.ReceivedMessages = append(vertex.ReceivedMessages, message)
 	vertex.VotedToHalt = false
-	vertex.MessageMutex.Unlock()
+	vertex.messageMutex.Unlock()
 }
 
 func (vertex *Vertex) VoteToHalt() {

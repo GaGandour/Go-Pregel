@@ -4,7 +4,8 @@ import "hash/fnv"
 
 func GetSubGraphInPartition(numberOfPartitions int, graph *Graph, partitionId int) Graph {
 	subGraph := Graph{
-		Vertexes: make(map[VertexIdType]*Vertex),
+		totalNumberOfVertexes: graph.totalNumberOfVertexes,
+		Vertexes:              make(map[VertexIdType]Vertex),
 	}
 
 	for vertexId, vertex := range graph.Vertexes {
