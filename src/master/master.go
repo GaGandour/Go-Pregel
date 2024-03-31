@@ -8,6 +8,8 @@ import (
 	"sync"
 )
 
+const VOTE_TO_HALT_CHANNEL_BUFFER_SIZE = 10
+
 type Master struct {
 	// Network
 	address   string
@@ -30,7 +32,7 @@ func newMaster(address string) (master *Master) {
 	master = new(Master)
 	master.address = address
 	master.workers = make(map[int]*remote_worker.RemoteWorker, 0)
-	master.votesToHaltChan = make(chan bool, 10)
+	master.votesToHaltChan = make(chan bool, VOTE_TO_HALT_CHANNEL_BUFFER_SIZE)
 	master.totalWorkers = 0
 	return
 }

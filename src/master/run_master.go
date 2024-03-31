@@ -87,16 +87,19 @@ func (master *Master) orderWorkersToWriteSubGraphs() {
 	for _, worker := range master.workers {
 		master.wg.Add(1)
 		go master.orderWriteSubGraph(worker)
+		log.Println("Ordered write subgraph to worker")
 	}
 	master.wg.Wait()
 }
 
 func (master *Master) orderWorkersToExecuteSuperStep() bool {
+	master.votesToHaltChan = make(chan bool, VOTE_TO_HALT_CHANNEL_BUFFER_SIZE)
 	for _, worker := range master.workers {
 		master.wg.Add(1)
 		go master.orderSuperStep(worker)
 	}
 	master.wg.Wait()
+	close(master.votesToHaltChan)
 	for vote := range master.votesToHaltChan {
 		if !vote {
 			return false

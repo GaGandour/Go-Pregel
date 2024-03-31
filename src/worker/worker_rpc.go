@@ -38,6 +38,7 @@ func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *cust
 		workerVoteToHalt = workerVoteToHalt && vertex.VotedToHalt
 	}
 	reply.VoteToHalt = workerVoteToHalt
+	log.Println("VoteToHalt: ", workerVoteToHalt)
 	return nil
 }
 
