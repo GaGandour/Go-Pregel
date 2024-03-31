@@ -46,7 +46,6 @@ func RunMaster(hostname string) {
 
 	// Ler JSON
 	graph := graph_package.ReadCommunicationGraphFromFile("../graphs/graph1.json")
-	graph.WriteGraphToFile("grafodoidomaster.json")
 	if graph == nil {
 		log.Println("Error reading graph")
 		return

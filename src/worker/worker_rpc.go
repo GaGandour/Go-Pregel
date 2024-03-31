@@ -15,7 +15,6 @@ func (worker *Worker) RegisterSubGraph(args *customrpc.RegisterSubGraphArgs, rep
 	for key, value := range args.RemoteWorkersMap {
 		worker.remoteWorkersMap[key] = &value
 	}
-	worker.graph.WriteGraphToFile("grafodoido.json")
 	worker.numberOfPartitions = len(worker.remoteWorkersMap)
 	return nil
 }
