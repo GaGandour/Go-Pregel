@@ -39,6 +39,10 @@ func ReadCommunicationGraphFromFile(fileName string) *CommunicationGraph {
 		return nil
 	}
 	graph.totalNumberOfVertexes = len(graph.Vertexes)
+	for vertexId, communicationVertex := range graph.Vertexes {
+		communicationVertex.Id = vertexId
+		graph.Vertexes[vertexId] = communicationVertex
+	}
 	return graph
 }
 
