@@ -49,8 +49,8 @@ type PassMessagesReply struct {
 }
 
 type ReceiveMessageArgs struct {
-	Message  graph_package.PregelMessage
-	VertexId graph_package.VertexIdType
+	Message           graph_package.PregelMessage
+	ReceivingVertexId graph_package.VertexIdType
 }
 
 type ReceiveMessageReply struct {

@@ -59,7 +59,7 @@ func RunMaster(hostname string) {
 		// Comandar Passagem de Mensagens
 		master.orderWorkersToPassMessages()
 		// Comandar Supersteps até todos os workers terminarem
-		master.orderWorkersToExecuteSuperStep()
+		shouldStopPregel = master.orderWorkersToExecuteSuperStep()
 	}
 	// Comandar Escrita do Grafo
 	master.orderWorkersToWriteSubGraphs()
@@ -69,12 +69,14 @@ func RunMaster(hostname string) {
 }
 
 func (master *Master) getConnectionsFromWorkers() {
+	log.Println("Waiting for workers to connect")
 	go master.acceptMultipleConnections()
 	time.Sleep(time.Duration(5) * time.Second)
 	master.numWorkingWorkers = len(master.workers)
 }
 
 func (master *Master) partitionGraph(graph *graph_package.CommunicationGraph) {
+	log.Println("Partitioning graph")
 	// Particionar o grafo
 	for partitionId := 0; partitionId < master.numWorkingWorkers; partitionId++ {
 		// Enviar subgrafo para worker
@@ -86,6 +88,7 @@ func (master *Master) partitionGraph(graph *graph_package.CommunicationGraph) {
 }
 
 func (master *Master) orderWorkersToWriteSubGraphs() {
+	log.Println("Ordering workers to write subgraphs")
 	for _, worker := range master.workers {
 		master.wg.Add(1)
 		go master.orderWriteSubGraph(worker)
@@ -94,6 +97,7 @@ func (master *Master) orderWorkersToWriteSubGraphs() {
 }
 
 func (master *Master) orderWorkersToExecuteSuperStep() bool {
+	log.Println("Ordering workers to execute superstep")
 	master.votesToHaltChan = make(chan bool, VOTE_TO_HALT_CHANNEL_BUFFER_SIZE)
 	for _, worker := range master.workers {
 		master.wg.Add(1)
@@ -110,6 +114,7 @@ func (master *Master) orderWorkersToExecuteSuperStep() bool {
 }
 
 func (master *Master) orderWorkersToPassMessages() {
+	log.Println("Ordering workers to pass messages")
 	for _, worker := range master.workers {
 		master.wg.Add(1)
 		go master.orderMessagePassing(worker)
@@ -118,6 +123,7 @@ func (master *Master) orderWorkersToPassMessages() {
 }
 
 func (master *Master) orderFinishOperations() {
+	log.Println("Ordering workers to finish operations")
 	for _, worker := range master.workers {
 		master.wg.Add(1)
 		go master.orderFinishOperation(worker)

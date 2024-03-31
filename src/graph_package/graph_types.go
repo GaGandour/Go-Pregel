@@ -16,7 +16,7 @@ type Vertex struct {
 	Value            VertexValue
 	Edges            map[VertexIdType]*Edge
 	ReceivedMessages []PregelMessage
-	messageMutex     *sync.Mutex
+	messageMutex     sync.Mutex
 	MessagesToSend   map[VertexIdType][]PregelMessage
 	VotedToHalt      bool
 	numSuperSteps    int

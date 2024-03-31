@@ -42,8 +42,12 @@ func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *cust
 // RPC - ReceiveMessage
 func (worker *Worker) ReceiveMessage(args *customrpc.ReceiveMessageArgs, reply *customrpc.ReceiveMessageReply) error {
 	log.Println("Receiving Message")
-	vertexId := args.VertexId
+	vertexId := args.ReceivingVertexId
 	vertex := worker.graph.Vertexes[vertexId]
+	if vertex == nil {
+		log.Println("Vertex not found")
+		return nil
+	}
 	vertex.ReceiveMessage(args.Message)
 	return nil
 }
@@ -62,11 +66,11 @@ func (worker *Worker) PassMessages(args *customrpc.PassMessagesArgs, reply *cust
 					receivingVertex.ReceiveMessage(message)
 				} else {
 					remoteWorkerToReceive := worker.getRemoteWorkerByPartitionId(partitionToReceiveMessage)
-					args_remote := customrpc.ReceiveMessageArgs{
-						Message:  message,
-						VertexId: receiverId,
+					args_remote := &customrpc.ReceiveMessageArgs{
+						Message:           message,
+						ReceivingVertexId: receiverId,
 					}
-					reply_remote := customrpc.ReceiveMessageReply{}
+					reply_remote := new(customrpc.ReceiveMessageReply)
 					worker.wg.Add(1)
 					go remoteWorkerToReceive.CallRemoteWorker("Worker.ReceiveMessage", args_remote, reply_remote, &worker.wg)
 				}

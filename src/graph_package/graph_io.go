@@ -63,9 +63,10 @@ func ConvertCommunicationGraphToGraph(communicationGraph *CommunicationGraph) *G
 			Value:            communicationVertex.Value,
 			Edges:            edges,
 			ReceivedMessages: []PregelMessage{},
-			messageMutex:     new(sync.Mutex),
+			messageMutex:     sync.Mutex{},
 			MessagesToSend:   make(map[VertexIdType][]PregelMessage),
 			VotedToHalt:      false,
+			numSuperSteps:    0,
 		}
 	}
 	return graph

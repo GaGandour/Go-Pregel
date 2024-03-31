@@ -3,7 +3,8 @@ package graph_package
 func (vertex *Vertex) InterpretSingleMessage(message PregelMessage) {
 	// The user will implement this function
 	if message.Value > vertex.Value.Value {
-		vertex.Value.Value = message.Value
+		newValue := VertexValue{message.Value}
+		vertex.SetValue(newValue)
 	}
 }
 
