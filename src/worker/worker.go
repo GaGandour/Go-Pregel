@@ -27,15 +27,16 @@ type Worker struct {
 	done chan bool
 
 	// SubGraph
-	graph graph_package.Graph
+	graph *graph_package.Graph
 }
 
 func newWorker(hostname string, masterHostname string) *Worker {
 	worker := new(Worker)
 	worker.hostname = hostname
-	worker.graph = graph_package.Graph{}
+	worker.graph = new(graph_package.Graph)
 	worker.masterHostname = masterHostname
 	worker.done = make(chan bool)
+	worker.remoteWorkersMap = make(map[int]*remote_worker.RemoteWorker)
 	return worker
 }
 

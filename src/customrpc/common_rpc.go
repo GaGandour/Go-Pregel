@@ -53,7 +53,7 @@ type RegisterSubGraphArgs struct {
 	WorkerId         int
 	NumberOfWorkers  int
 	RemoteWorkersMap map[int]remote_worker.RemoteWorker
-	SubGraph         graph_package.Graph
+	SubGraph         graph_package.CommunicationGraph
 }
 
 type RegisterSubGraphReply struct {

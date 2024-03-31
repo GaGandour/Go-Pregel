@@ -4,9 +4,15 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"sync"
 )
 
 func (graph *Graph) WriteGraphToFile(fileName string) error {
+	ConvertGraphToCommunicationGraph(graph).WriteGraphToFile(fileName)
+	return nil
+}
+
+func (graph *CommunicationGraph) WriteGraphToFile(fileName string) error {
 	vertexesJson, err := json.MarshalIndent(graph.Vertexes, "", "\t")
 	if err != nil {
 		log.Println("Error marshalling vertexes")
@@ -17,7 +23,11 @@ func (graph *Graph) WriteGraphToFile(fileName string) error {
 }
 
 func ReadGraphFromFile(fileName string) *Graph {
-	graph := new(Graph)
+	return ConvertCommunicationGraphToGraph(ReadCommunicationGraphFromFile(fileName))
+}
+
+func ReadCommunicationGraphFromFile(fileName string) *CommunicationGraph {
+	graph := new(CommunicationGraph)
 	vertexesJson, err := os.ReadFile(fileName)
 	if err != nil {
 		log.Println("Error reading file")
@@ -29,8 +39,51 @@ func ReadGraphFromFile(fileName string) *Graph {
 		return nil
 	}
 	graph.totalNumberOfVertexes = len(graph.Vertexes)
-	for vertexId, vertex := range graph.Vertexes {
-		vertex.Id = vertexId
+	return graph
+}
+
+func ConvertCommunicationGraphToGraph(communicationGraph *CommunicationGraph) *Graph {
+	graph := new(Graph)
+	graph.totalNumberOfVertexes = communicationGraph.totalNumberOfVertexes
+	graph.Vertexes = make(map[VertexIdType]*Vertex)
+	for vertexId, communicationVertex := range communicationGraph.Vertexes {
+		edges := make(map[VertexIdType]*Edge)
+		for edgeId, communicationEdge := range communicationVertex.Edges {
+			edges[edgeId] = &Edge{
+				To:    communicationEdge.To,
+				Value: communicationEdge.Value,
+			}
+		}
+		graph.Vertexes[vertexId] = &Vertex{
+			Id:               vertexId,
+			Value:            communicationVertex.Value,
+			Edges:            edges,
+			ReceivedMessages: []PregelMessage{},
+			messageMutex:     new(sync.Mutex),
+			MessagesToSend:   make(map[VertexIdType][]PregelMessage),
+			VotedToHalt:      false,
+		}
 	}
 	return graph
+}
+
+func ConvertGraphToCommunicationGraph(graph *Graph) *CommunicationGraph {
+	communicationGraph := new(CommunicationGraph)
+	communicationGraph.totalNumberOfVertexes = graph.totalNumberOfVertexes
+	communicationGraph.Vertexes = make(map[VertexIdType]CommunicationVertex)
+	for vertexId, vertex := range graph.Vertexes {
+		edges := make(map[VertexIdType]CommunicationEdge)
+		for edgeId, edge := range vertex.Edges {
+			edges[edgeId] = CommunicationEdge{
+				To:    edge.To,
+				Value: edge.Value,
+			}
+		}
+		communicationGraph.Vertexes[vertexId] = CommunicationVertex{
+			Id:    vertex.Id,
+			Value: vertex.Value,
+			Edges: edges,
+		}
+	}
+	return communicationGraph
 }

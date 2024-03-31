@@ -7,7 +7,7 @@ import (
 	"pregel/remote_worker"
 )
 
-func (master *Master) sendSubGraphToWorker(remoteWorker *remote_worker.RemoteWorker, subGraph *graph_package.Graph) {
+func (master *Master) sendSubGraphToWorker(remoteWorker *remote_worker.RemoteWorker, subGraph *graph_package.CommunicationGraph) {
 	var (
 		err   error
 		args  *customrpc.RegisterSubGraphArgs

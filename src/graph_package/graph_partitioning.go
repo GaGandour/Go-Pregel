@@ -5,7 +5,22 @@ import "hash/fnv"
 func GetSubGraphInPartition(numberOfPartitions int, graph *Graph, partitionId int) Graph {
 	subGraph := Graph{
 		totalNumberOfVertexes: graph.totalNumberOfVertexes,
-		Vertexes:              make(map[VertexIdType]Vertex),
+		Vertexes:              make(map[VertexIdType]*Vertex),
+	}
+
+	for vertexId, vertex := range graph.Vertexes {
+		if GetPartitionIdFromVertex(numberOfPartitions, vertex.Id) == partitionId {
+			subGraph.Vertexes[vertexId] = vertex
+		}
+	}
+
+	return subGraph
+}
+
+func GetCommunicationSubGraphInPartition(numberOfPartitions int, graph *CommunicationGraph, partitionId int) CommunicationGraph {
+	subGraph := CommunicationGraph{
+		totalNumberOfVertexes: graph.totalNumberOfVertexes,
+		Vertexes:              make(map[VertexIdType]CommunicationVertex),
 	}
 
 	for vertexId, vertex := range graph.Vertexes {

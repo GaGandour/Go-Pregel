@@ -4,11 +4,7 @@
 		"Value": {
 			"Value": 1
 		},
-		"Edges": {},
-		"ReceivedMessages": null,
-		"MessageMutex": {},
-		"MessagesToSend": null,
-		"VotedToHalt": false
+		"Edges": {}
 	},
 	"1": {
 		"Id": "1",
@@ -22,11 +18,7 @@
 					"Cost": 1
 				}
 			}
-		},
-		"ReceivedMessages": null,
-		"MessageMutex": {},
-		"MessagesToSend": null,
-		"VotedToHalt": false
+		}
 	},
 	"10": {
 		"Id": "10",
@@ -46,11 +38,7 @@
 					"Cost": 1
 				}
 			}
-		},
-		"ReceivedMessages": null,
-		"MessageMutex": {},
-		"MessagesToSend": null,
-		"VotedToHalt": false
+		}
 	},
 	"2": {
 		"Id": "2",
@@ -64,11 +52,7 @@
 					"Cost": 1
 				}
 			}
-		},
-		"ReceivedMessages": null,
-		"MessageMutex": {},
-		"MessagesToSend": null,
-		"VotedToHalt": false
+		}
 	},
 	"3": {
 		"Id": "3",
@@ -88,11 +72,7 @@
 					"Cost": 1
 				}
 			}
-		},
-		"ReceivedMessages": null,
-		"MessageMutex": {},
-		"MessagesToSend": null,
-		"VotedToHalt": false
+		}
 	},
 	"4": {
 		"Id": "4",
@@ -118,11 +98,7 @@
 					"Cost": 1
 				}
 			}
-		},
-		"ReceivedMessages": null,
-		"MessageMutex": {},
-		"MessagesToSend": null,
-		"VotedToHalt": false
+		}
 	},
 	"5": {
 		"Id": "5",
@@ -142,11 +118,7 @@
 					"Cost": 1
 				}
 			}
-		},
-		"ReceivedMessages": null,
-		"MessageMutex": {},
-		"MessagesToSend": null,
-		"VotedToHalt": false
+		}
 	},
 	"6": {
 		"Id": "6",
@@ -160,11 +132,7 @@
 					"Cost": 1
 				}
 			}
-		},
-		"ReceivedMessages": null,
-		"MessageMutex": {},
-		"MessagesToSend": null,
-		"VotedToHalt": false
+		}
 	},
 	"7": {
 		"Id": "7",
@@ -178,11 +146,7 @@
 					"Cost": 1
 				}
 			}
-		},
-		"ReceivedMessages": null,
-		"MessageMutex": {},
-		"MessagesToSend": null,
-		"VotedToHalt": false
+		}
 	},
 	"8": {
 		"Id": "8",
@@ -202,11 +166,7 @@
 					"Cost": 1
 				}
 			}
-		},
-		"ReceivedMessages": null,
-		"MessageMutex": {},
-		"MessagesToSend": null,
-		"VotedToHalt": false
+		}
 	},
 	"9": {
 		"Id": "9",
@@ -226,10 +186,6 @@
 					"Cost": 1
 				}
 			}
-		},
-		"ReceivedMessages": null,
-		"MessageMutex": {},
-		"MessagesToSend": null,
-		"VotedToHalt": false
+		}
 	}
 }

@@ -45,8 +45,8 @@ func RunMaster(hostname string) {
 	master.getConnectionsFromWorkers()
 
 	// Ler JSON
-	graph := graph_package.ReadGraphFromFile("../graphs/graph1.json")
-
+	graph := graph_package.ReadCommunicationGraphFromFile("../graphs/graph1.json")
+	graph.WriteGraphToFile("grafodoidomaster.json")
 	if graph == nil {
 		log.Println("Error reading graph")
 		return
@@ -56,9 +56,7 @@ func RunMaster(hostname string) {
 	master.partitionGraph(graph)
 	// Comandar Superstep 0
 	shouldStopPregel := master.orderWorkersToExecuteSuperStep()
-	log.Println("1")
 	for !shouldStopPregel {
-		log.Println("2")
 		// Comandar Passagem de Mensagens
 		master.orderWorkersToPassMessages()
 		// Comandar Supersteps até todos os workers terminarem
@@ -75,11 +73,11 @@ func (master *Master) getConnectionsFromWorkers() {
 	master.numWorkingWorkers = len(master.workers)
 }
 
-func (master *Master) partitionGraph(graph *graph_package.Graph) {
+func (master *Master) partitionGraph(graph *graph_package.CommunicationGraph) {
 	// Particionar o grafo
 	for partitionId := 0; partitionId < master.numWorkingWorkers; partitionId++ {
 		// Enviar subgrafo para worker
-		subGraph := graph_package.GetSubGraphInPartition(master.numWorkingWorkers, graph, partitionId)
+		subGraph := graph_package.GetCommunicationSubGraphInPartition(master.numWorkingWorkers, graph, partitionId)
 		master.wg.Add(1)
 		go master.sendSubGraphToWorker(master.workers[partitionId], &subGraph)
 	}

@@ -14,8 +14,8 @@ func (vertex *Vertex) SetValue(value VertexValue) {
 	vertex.Value = value
 }
 
-func (vertex *Vertex) GetOutEdges() []Edge {
-	var edges []Edge
+func (vertex *Vertex) GetOutEdges() []*Edge {
+	var edges []*Edge
 	for _, edge := range vertex.Edges {
 		edges = append(edges, edge)
 	}

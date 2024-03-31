@@ -9,12 +9,13 @@ import (
 // RPC - RegisterSubGraph
 func (worker *Worker) RegisterSubGraph(args *customrpc.RegisterSubGraphArgs, reply *customrpc.RegisterSubGraphReply) error {
 	log.Println("Registering SubGraph")
-	worker.graph = args.SubGraph
+	worker.graph = graph_package.ConvertCommunicationGraphToGraph(&args.SubGraph)
 	worker.id = args.WorkerId
 	// Build map
 	for key, value := range args.RemoteWorkersMap {
 		worker.remoteWorkersMap[key] = &value
 	}
+	worker.graph.WriteGraphToFile("grafodoido.json")
 	worker.numberOfPartitions = len(worker.remoteWorkersMap)
 	return nil
 }
