@@ -15,6 +15,14 @@ type HeartBeatReply struct {
 	WorkerId int
 }
 
+type DoneArgs struct {
+	WorkerId int
+}
+
+type DoneReply struct {
+	WorkerId int
+}
+
 type RegisterArgs struct {
 	WorkerHostname string
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func (worker *Worker) getWorkerSubGraphFile() string {
-	return "SubGraph-" + fmt.Sprint(worker.id) + ".json"
+	return "./output_graphs/SubGraph-" + fmt.Sprint(worker.id) + ".json"
 }
 
 func (worker *Worker) getWorkerHostnameByPartitionId(partitionId int) string {

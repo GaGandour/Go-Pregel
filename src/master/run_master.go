@@ -64,6 +64,8 @@ func RunMaster(hostname string) {
 	// Comandar Escrita do Grafo
 	master.orderWorkersToWriteSubGraphs()
 	// Juntar os SubGrafos
+	// time.Sleep(time.Duration(1) * time.Second)
+	master.orderFinishOperations()
 }
 
 func (master *Master) getConnectionsFromWorkers() {
@@ -87,7 +89,6 @@ func (master *Master) orderWorkersToWriteSubGraphs() {
 	for _, worker := range master.workers {
 		master.wg.Add(1)
 		go master.orderWriteSubGraph(worker)
-		log.Println("Ordered write subgraph to worker")
 	}
 	master.wg.Wait()
 }
@@ -112,6 +113,14 @@ func (master *Master) orderWorkersToPassMessages() {
 	for _, worker := range master.workers {
 		master.wg.Add(1)
 		go master.orderMessagePassing(worker)
+	}
+	master.wg.Wait()
+}
+
+func (master *Master) orderFinishOperations() {
+	for _, worker := range master.workers {
+		master.wg.Add(1)
+		go master.orderFinishOperation(worker)
 	}
 	master.wg.Wait()
 }

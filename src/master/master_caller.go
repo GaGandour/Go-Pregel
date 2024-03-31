@@ -34,14 +34,15 @@ func (master *Master) sendSubGraphToWorker(remoteWorker *remote_worker.RemoteWor
 
 func (master *Master) orderMessagePassing(remoteWorker *remote_worker.RemoteWorker) {
 	var (
-		err  error
-		args *customrpc.PassMessagesArgs
+		err   error
+		args  *customrpc.PassMessagesArgs
+		reply *customrpc.PassMessagesReply
 	)
 
-	args = &customrpc.PassMessagesArgs{}
-	reply := interface{}(nil)
+	args = new(customrpc.PassMessagesArgs)
+	reply = new(customrpc.PassMessagesReply)
 
-	err = remoteWorker.CallRemoteWorker("Worker.PassMessages", args, &reply, &master.wg)
+	err = remoteWorker.CallRemoteWorker("Worker.PassMessages", args, reply, &master.wg)
 
 	if err != nil {
 		log.Printf("Failed to order message passing to worker. Error: %v\n", err)
@@ -50,14 +51,15 @@ func (master *Master) orderMessagePassing(remoteWorker *remote_worker.RemoteWork
 
 func (master *Master) orderSuperStep(remoteWorker *remote_worker.RemoteWorker) {
 	var (
-		err  error
-		args *customrpc.RunSuperStepArgs
+		err   error
+		args  *customrpc.RunSuperStepArgs
+		reply *customrpc.RunSuperStepReply
 	)
 
-	args = &customrpc.RunSuperStepArgs{}
-	reply := customrpc.RunSuperStepReply{}
+	args = new(customrpc.RunSuperStepArgs)
+	reply = new(customrpc.RunSuperStepReply)
 
-	err = remoteWorker.CallRemoteWorker("Worker.RunSuperStep", args, &reply, &master.wg)
+	err = remoteWorker.CallRemoteWorker("Worker.RunSuperStep", args, reply, &master.wg)
 
 	if err != nil {
 		log.Printf("Failed to order superstep to worker. Error: %v\n", err)
@@ -67,16 +69,34 @@ func (master *Master) orderSuperStep(remoteWorker *remote_worker.RemoteWorker) {
 
 func (master *Master) orderWriteSubGraph(remoteWorker *remote_worker.RemoteWorker) {
 	var (
-		err  error
-		args *customrpc.WriteSubGraphToFileArgs
+		err   error
+		args  *customrpc.WriteSubGraphToFileArgs
+		reply *customrpc.WriteSubGraphToFileReply
 	)
 
-	args = &customrpc.WriteSubGraphToFileArgs{}
-	reply := interface{}(nil)
+	args = new(customrpc.WriteSubGraphToFileArgs)
+	reply = new(customrpc.WriteSubGraphToFileReply)
 
-	err = remoteWorker.CallRemoteWorker("Worker.WriteSubGraphToFile", args, &reply, &master.wg)
+	err = remoteWorker.CallRemoteWorker("Worker.WriteSubGraphToFile", args, reply, &master.wg)
 
 	if err != nil {
 		log.Printf("Failed to order write subgraph to worker. Error: %v\n", err)
+	}
+}
+
+func (master *Master) orderFinishOperation(remoteWorker *remote_worker.RemoteWorker) {
+
+	var (
+		err   error
+		args  *customrpc.DoneArgs
+		reply *customrpc.DoneReply
+	)
+
+	args = new(customrpc.DoneArgs)
+	reply = new(customrpc.DoneReply)
+	err = remoteWorker.CallRemoteWorker("Worker.Done", args, reply, &master.wg)
+
+	if err != nil {
+		log.Printf("Failed to order finish operation to worker. Error: %v\n", err)
 	}
 }
