@@ -143,7 +143,6 @@ func (master *Master) reduceSubGraphsAndWriteToFile(outputFile string) {
 	for _, worker := range master.workers {
 		fileNames = append(fileNames, utils.GetSubGraphOutputFileName(worker.Id))
 	}
-	log.Println(fileNames)
 	// Reduzir os subgrafos
 	communicationGraph := graph_package.ReduceSubGraphsToCommunicationGraph(fileNames)
 	// Escrever o grafo final
