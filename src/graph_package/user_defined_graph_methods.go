@@ -2,6 +2,14 @@ package graph_package
 
 func (vertex *Vertex) Compute() {
 	// The user will implement this function
+	if vertex.numSuperSteps == 0 {
+		for receivingId := range vertex.GetOutEdges() {
+			vertex.PrepareMessageToVertex(receivingId, PregelMessage{OriginVertexId: vertex.Id, Value: vertex.Value.Value})
+		}
+		return
+	}
+
+	vertex.VoteToHalt()
 	for _, message := range vertex.ReceivedMessages {
 		if message.Value > vertex.Value.Value {
 			newValue := VertexValue{
@@ -19,7 +27,6 @@ func (vertex *Vertex) Compute() {
 			vertex.PrepareMessageToVertex(receivingId, PregelMessage{OriginVertexId: vertex.Id, Value: vertex.Value.Value})
 		}
 	}
-	vertex.VoteToHalt()
 }
 
 func CombinePregelMessages(messageList []PregelMessage) []PregelMessage {
