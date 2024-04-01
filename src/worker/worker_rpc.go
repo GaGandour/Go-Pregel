@@ -4,6 +4,7 @@ import (
 	"log"
 	"pregel/customrpc"
 	"pregel/graph_package"
+	"pregel/remote_worker"
 )
 
 // RPC - RegisterSubGraph
@@ -13,7 +14,11 @@ func (worker *Worker) RegisterSubGraph(args *customrpc.RegisterSubGraphArgs, rep
 	worker.id = args.WorkerId
 	// Build map
 	for key, value := range args.RemoteWorkersMap {
-		worker.remoteWorkersMap[key] = &value
+		worker.remoteWorkersMap[key] = &remote_worker.RemoteWorker{
+			Id:       value.Id,
+			Hostname: value.Hostname,
+			Status:   value.Status,
+		}
 	}
 	worker.numberOfPartitions = len(worker.remoteWorkersMap)
 	return nil
@@ -44,10 +49,6 @@ func (worker *Worker) ReceiveMessage(args *customrpc.ReceiveMessageArgs, reply *
 	log.Println("Receiving Message")
 	vertexId := args.ReceivingVertexId
 	vertex := worker.graph.Vertexes[vertexId]
-	if vertex == nil {
-		log.Println("Vertex not found")
-		return nil
-	}
 	vertex.ReceiveMessage(args.Message)
 	return nil
 }
@@ -72,10 +73,11 @@ func (worker *Worker) PassMessages(args *customrpc.PassMessagesArgs, reply *cust
 					}
 					reply_remote := new(customrpc.ReceiveMessageReply)
 					worker.wg.Add(1)
-					go remoteWorkerToReceive.CallRemoteWorker("Worker.ReceiveMessage", args_remote, reply_remote, &worker.wg)
+					remoteWorkerToReceive.CallRemoteWorker("Worker.ReceiveMessage", args_remote, reply_remote, &worker.wg)
 				}
 			}
 		}
+		sendingVertex.MessagesToSend = make(map[graph_package.VertexIdType][]graph_package.PregelMessage)
 	}
 	worker.wg.Wait()
 	return nil

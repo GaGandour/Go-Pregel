@@ -10,6 +10,5 @@ type EdgeValue struct {
 }
 
 type PregelMessage struct {
-	VertexId VertexIdType
-	Value    int
+	Value int
 }
