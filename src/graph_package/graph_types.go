@@ -2,8 +2,6 @@ package graph_package
 
 import "sync"
 
-type VertexIdType string
-
 // These are the types used in computing
 
 type Graph struct {

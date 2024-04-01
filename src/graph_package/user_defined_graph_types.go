@@ -1,6 +1,8 @@
 package graph_package
 
 // These are the types that might be changed by the user
+type VertexIdType string
+
 type VertexValue struct {
 	Value int
 }

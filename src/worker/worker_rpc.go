@@ -64,13 +64,11 @@ func (worker *Worker) PassMessages(args *customrpc.PassMessagesArgs, reply *cust
 	for _, sendingVertex := range worker.graph.Vertexes {
 		for receiverId, messageList := range sendingVertex.MessagesToSend {
 			combinedMessageList := graph_package.CombinePregelMessages(messageList)
-			for _, message := range combinedMessageList {
-				partitionToReceiveMessages := graph_package.GetPartitionIdFromVertex(worker.numberOfPartitions, receiverId)
-				if messagesToSend[partitionToReceiveMessages] == nil {
-					messagesToSend[partitionToReceiveMessages] = make(map[graph_package.VertexIdType][]graph_package.PregelMessage)
-				}
-				messagesToSend[partitionToReceiveMessages][receiverId] = append(messagesToSend[partitionToReceiveMessages][receiverId], message)
+			partitionToReceiveMessages := graph_package.GetPartitionIdFromVertex(worker.numberOfPartitions, receiverId)
+			if messagesToSend[partitionToReceiveMessages] == nil {
+				messagesToSend[partitionToReceiveMessages] = make(map[graph_package.VertexIdType][]graph_package.PregelMessage)
 			}
+			messagesToSend[partitionToReceiveMessages][receiverId] = combinedMessageList
 		}
 		sendingVertex.MessagesToSend = make(map[graph_package.VertexIdType][]graph_package.PregelMessage)
 	}
