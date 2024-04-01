@@ -5,7 +5,13 @@ import (
 	"net"
 	"net/rpc"
 	"pregel/graph_package"
+	"pregel/utils"
 	"time"
+)
+
+const (
+	INPUT_FILE_NAME  = "../graphs/graph1.json"
+	OUTPUT_FILE_NAME = "./output_graphs/output_graph.json"
 )
 
 // RunMaster will start a master node on the map reduce operations.
@@ -45,7 +51,7 @@ func RunMaster(hostname string) {
 	master.getConnectionsFromWorkers()
 
 	// Ler JSON
-	graph := graph_package.ReadCommunicationGraphFromFile("../graphs/graph1.json")
+	graph := graph_package.ReadCommunicationGraphFromFile(INPUT_FILE_NAME)
 	if graph == nil {
 		log.Println("Error reading graph")
 		return
@@ -64,7 +70,7 @@ func RunMaster(hostname string) {
 	// Comandar Escrita do Grafo
 	master.orderWorkersToWriteSubGraphs()
 	// Juntar os SubGrafos
-	// time.Sleep(time.Duration(1) * time.Second)
+	master.reduceSubGraphsAndWriteToFile(OUTPUT_FILE_NAME)
 	master.orderFinishOperations()
 }
 
@@ -129,4 +135,17 @@ func (master *Master) orderFinishOperations() {
 		go master.orderFinishOperation(worker)
 	}
 	master.wg.Wait()
+}
+
+func (master *Master) reduceSubGraphsAndWriteToFile(outputFile string) {
+	log.Println("Reducing subgraphs and writing to file")
+	fileNames := make([]string, 0)
+	for _, worker := range master.workers {
+		fileNames = append(fileNames, utils.GetSubGraphOutputFileName(worker.Id))
+	}
+	log.Println(fileNames)
+	// Reduzir os subgrafos
+	communicationGraph := graph_package.ReduceSubGraphsToCommunicationGraph(fileNames)
+	// Escrever o grafo final
+	communicationGraph.WriteGraphToFile(outputFile)
 }

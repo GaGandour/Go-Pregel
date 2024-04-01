@@ -92,3 +92,16 @@ func ConvertGraphToCommunicationGraph(graph *Graph) *CommunicationGraph {
 	}
 	return communicationGraph
 }
+
+func ReduceSubGraphsToCommunicationGraph(fileNames []string) *CommunicationGraph {
+	communicationGraph := new(CommunicationGraph)
+	communicationGraph.Vertexes = make(map[VertexIdType]CommunicationVertex)
+	for _, fileName := range fileNames {
+		graph := ReadCommunicationGraphFromFile(fileName)
+		for vertexId, communicationVertex := range graph.Vertexes {
+			communicationGraph.Vertexes[vertexId] = communicationVertex
+		}
+	}
+	communicationGraph.totalNumberOfVertexes = len(communicationGraph.Vertexes)
+	return communicationGraph
+}

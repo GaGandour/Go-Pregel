@@ -1,16 +1,12 @@
 package worker
 
 import (
-	"fmt"
 	"pregel/remote_worker"
+	"pregel/utils"
 )
 
 func (worker *Worker) getWorkerSubGraphFile() string {
-	return "./output_graphs/SubGraph-" + fmt.Sprint(worker.id) + ".json"
-}
-
-func (worker *Worker) getWorkerHostnameByPartitionId(partitionId int) string {
-	return worker.remoteWorkersMap[partitionId].Hostname
+	return utils.GetSubGraphOutputFileName(worker.id)
 }
 
 func (worker *Worker) getRemoteWorkerByPartitionId(partitionId int) *remote_worker.RemoteWorker {
