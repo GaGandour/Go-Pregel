@@ -48,12 +48,11 @@ type PassMessagesReply struct {
 	WorkerId int
 }
 
-type ReceiveMessageArgs struct {
-	Message           graph_package.PregelMessage
-	ReceivingVertexId graph_package.VertexIdType
+type ReceiveMessagesArgs struct {
+	MessageMap map[graph_package.VertexIdType][]graph_package.PregelMessage
 }
 
-type ReceiveMessageReply struct {
+type ReceiveMessagesReply struct {
 	WorkerId int
 }
 

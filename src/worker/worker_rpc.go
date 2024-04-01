@@ -44,40 +44,55 @@ func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *cust
 	return nil
 }
 
-// RPC - ReceiveMessage
-func (worker *Worker) ReceiveMessage(args *customrpc.ReceiveMessageArgs, reply *customrpc.ReceiveMessageReply) error {
-	log.Println("Receiving Message")
-	vertexId := args.ReceivingVertexId
-	vertex := worker.graph.Vertexes[vertexId]
-	vertex.ReceiveMessage(args.Message)
+// RPC - ReceiveMessages
+func (worker *Worker) ReceiveMessages(args *customrpc.ReceiveMessagesArgs, reply *customrpc.ReceiveMessagesReply) error {
+	log.Println("Receiving Messages")
+	for receiverId, messageList := range args.MessageMap {
+		vertex := worker.graph.Vertexes[receiverId]
+		for _, message := range messageList {
+			vertex.ReceiveMessage(message)
+		}
+	}
 	return nil
 }
 
 // RPC - PassMessages
 func (worker *Worker) PassMessages(args *customrpc.PassMessagesArgs, reply *customrpc.PassMessagesReply) error {
 	log.Println("Passing Messages")
+	messagesToSend := make(map[int]map[graph_package.VertexIdType][]graph_package.PregelMessage)
+
 	for _, sendingVertex := range worker.graph.Vertexes {
 		for receiverId, messageList := range sendingVertex.MessagesToSend {
 			combinedMessageList := graph_package.CombinePregelMessages(messageList)
 			for _, message := range combinedMessageList {
-				partitionToReceiveMessage := graph_package.GetPartitionIdFromVertex(worker.numberOfPartitions, receiverId)
-				if partitionToReceiveMessage == worker.id {
-					// register message in vertex
-					receivingVertex := worker.graph.Vertexes[receiverId]
-					receivingVertex.ReceiveMessage(message)
-				} else {
-					remoteWorkerToReceive := worker.getRemoteWorkerByPartitionId(partitionToReceiveMessage)
-					args_remote := &customrpc.ReceiveMessageArgs{
-						Message:           message,
-						ReceivingVertexId: receiverId,
-					}
-					reply_remote := new(customrpc.ReceiveMessageReply)
-					worker.wg.Add(1)
-					remoteWorkerToReceive.CallRemoteWorker("Worker.ReceiveMessage", args_remote, reply_remote, &worker.wg)
+				partitionToReceiveMessages := graph_package.GetPartitionIdFromVertex(worker.numberOfPartitions, receiverId)
+				if messagesToSend[partitionToReceiveMessages] == nil {
+					messagesToSend[partitionToReceiveMessages] = make(map[graph_package.VertexIdType][]graph_package.PregelMessage)
 				}
+				messagesToSend[partitionToReceiveMessages][receiverId] = append(messagesToSend[partitionToReceiveMessages][receiverId], message)
 			}
 		}
 		sendingVertex.MessagesToSend = make(map[graph_package.VertexIdType][]graph_package.PregelMessage)
+	}
+
+	for partitionId, messageMap := range messagesToSend {
+		if partitionId == worker.id {
+			// register message in vertex
+			for receiverVertexId, messageList := range messageMap {
+				receivingVertex := worker.graph.Vertexes[receiverVertexId]
+				for _, message := range messageList {
+					receivingVertex.ReceiveMessage(message)
+				}
+			}
+		} else {
+			remoteWorkerToReceive := worker.getRemoteWorkerByPartitionId(partitionId)
+			args_remote := &customrpc.ReceiveMessagesArgs{
+				MessageMap: messageMap,
+			}
+			reply_remote := new(customrpc.ReceiveMessagesReply)
+			worker.wg.Add(1)
+			remoteWorkerToReceive.CallRemoteWorker("Worker.ReceiveMessages", args_remote, reply_remote, &worker.wg)
+		}
 	}
 	worker.wg.Wait()
 	return nil
