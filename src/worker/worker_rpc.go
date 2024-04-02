@@ -68,7 +68,7 @@ func (worker *Worker) PassMessages(args *customrpc.PassMessagesArgs, reply *cust
 			if messagesToSend[partitionToReceiveMessages] == nil {
 				messagesToSend[partitionToReceiveMessages] = make(map[graph_package.VertexIdType][]graph_package.PregelMessage)
 			}
-			messagesToSend[partitionToReceiveMessages][receiverId] = combinedMessageList
+			messagesToSend[partitionToReceiveMessages][receiverId] = append(messagesToSend[partitionToReceiveMessages][receiverId], combinedMessageList...)
 		}
 		sendingVertex.MessagesToSend = make(map[graph_package.VertexIdType][]graph_package.PregelMessage)
 	}

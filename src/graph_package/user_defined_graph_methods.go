@@ -17,8 +17,9 @@ func (vertex *Vertex) Compute() {
 			}
 			vertex.SetValue(newValue)
 			vertex.Activate()
-		} else {
+		} else if message.Value < vertex.Value.Value {
 			vertex.PrepareMessageToVertex(message.OriginVertexId, PregelMessage{OriginVertexId: vertex.Id, Value: vertex.Value.Value})
+			vertex.Activate()
 		}
 	}
 
