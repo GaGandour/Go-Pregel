@@ -4,7 +4,7 @@ if [ -z "$1" ]
     echo "Usage: ./start_docker.sh <number of workers>"
     exit 1
 fi
-# TODO: BUILD DOCKER-COMPOSE FILE
+python3 write_docker_compose.py $1 > ../docker-compose.yml
 cd ..
 docker-compose -f docker-compose.yml up -d
 echo "Starting Pregel with $1 workers"
