@@ -7,6 +7,10 @@ type VertexValue struct {
 	Value int
 }
 
+type VertexState struct {
+	neighbors map[VertexIdType]bool
+}
+
 type EdgeValue struct {
 	Cost int
 }

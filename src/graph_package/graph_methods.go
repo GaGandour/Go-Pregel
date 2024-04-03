@@ -2,9 +2,6 @@ package graph_package
 
 func (vertex *Vertex) SuperStep() {
 	vertex.Compute()
-	if vertex.numSuperSteps == 0 {
-		vertex.Activate()
-	}
 	vertex.numSuperSteps++
 	vertex.ReceivedMessages = []PregelMessage{}
 }
@@ -40,4 +37,12 @@ func (vertex *Vertex) VoteToHalt() {
 
 func (vertex *Vertex) Activate() {
 	vertex.VotedToHalt = false
+}
+
+func (vertex *Vertex) IsHalted() bool {
+	return vertex.VotedToHalt
+}
+
+func (vertex *Vertex) IsActive() bool {
+	return !vertex.VotedToHalt
 }

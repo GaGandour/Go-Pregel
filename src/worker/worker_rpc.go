@@ -37,7 +37,9 @@ func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *cust
 	log.Println("Running SuperStep")
 	var workerVoteToHalt = true
 	for _, vertex := range worker.graph.Vertexes {
-		vertex.SuperStep()
+		if vertex.IsActive() {
+			vertex.SuperStep()
+		}
 		workerVoteToHalt = workerVoteToHalt && vertex.VotedToHalt
 	}
 	reply.VoteToHalt = workerVoteToHalt
@@ -50,6 +52,7 @@ func (worker *Worker) ReceiveMessages(args *customrpc.ReceiveMessagesArgs, reply
 	for receiverId, messageList := range args.MessageMap {
 		vertex := worker.graph.Vertexes[receiverId]
 		for _, message := range messageList {
+			vertex.Activate()
 			vertex.ReceiveMessage(message)
 		}
 	}

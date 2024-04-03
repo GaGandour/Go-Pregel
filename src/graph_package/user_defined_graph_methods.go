@@ -8,8 +8,8 @@ func (vertex *Vertex) Compute() {
 		}
 		return
 	}
-
-	vertex.VoteToHalt()
+	oldValue := vertex.Value.Value
+	neighbors := vertex.state.neighbors
 	for _, message := range vertex.ReceivedMessages {
 		if message.Value > vertex.Value.Value {
 			newValue := VertexValue{
