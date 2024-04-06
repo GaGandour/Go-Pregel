@@ -13,9 +13,10 @@ var (
 	nodeType = flag.String("type", "worker", "Node type: master or worker")
 
 	// Network settings
-	addr       = flag.String("addr", "localhost", "IP address to listen on")
-	port       = flag.Int("port", 5000, "TCP port to listen on")
-	masterAddr = flag.String("master", "localhost:5000", "Master address")
+	addr           = flag.String("addr", "localhost", "IP address to listen on")
+	port           = flag.Int("port", 5000, "TCP port to listen on")
+	masterAddr     = flag.String("master", "localhost:5000", "Master address")
+	graphInputFile = flag.String("graph_file", "../graphs/graph1.json", "Graph input file")
 )
 
 // Code Entry Point
@@ -33,11 +34,12 @@ func main() {
 		log.Println("NodeType:", *nodeType)
 		log.Println("Address:", *addr)
 		log.Println("Port:", *port)
+		log.Println("Graph File:", *graphInputFile)
 
 		hostname = *addr + ":" + strconv.Itoa(*port)
 
 		// Create fan in and out channels for mapreduce.Tas
-		master.RunMaster(hostname)
+		master.RunMaster(hostname, *graphInputFile)
 
 	case "worker":
 		log.Println("NodeType:", *nodeType)

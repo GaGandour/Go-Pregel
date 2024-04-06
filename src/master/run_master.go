@@ -10,7 +10,6 @@ import (
 )
 
 const (
-	INPUT_FILE_NAME  = "../graphs/graph1.json"
 	OUTPUT_FILE_NAME = "./output_graphs/output_graph.json"
 )
 
@@ -19,7 +18,7 @@ const (
 // the operations to be executed in order to complete the task.
 //   - task: the Task object that contains the mapreduce operation.
 //   - hostname: the tcp/ip address on which it will listen for connections.
-func RunMaster(hostname string) {
+func RunMaster(hostname string, inputFile string) {
 	var (
 		err          error
 		master       *Master
@@ -51,7 +50,8 @@ func RunMaster(hostname string) {
 	master.getConnectionsFromWorkers()
 
 	// Ler JSON
-	graph := graph_package.ReadCommunicationGraphFromFile(INPUT_FILE_NAME)
+	log.Println(inputFile)
+	graph := graph_package.ReadCommunicationGraphFromFile(inputFile)
 	if graph == nil {
 		log.Println("Error reading graph")
 		return
