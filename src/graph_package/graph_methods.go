@@ -26,6 +26,18 @@ func (vertex *Vertex) SetValue(value VertexValue) {
 	vertex.Activate()
 }
 
+func (vertex *Vertex) GetEdgeValue(edgeId VertexIdType) EdgeValue {
+	edge := vertex.Edges[edgeId]
+	return edge.Value
+}
+
+func (vertex *Vertex) SetEdgeValue(edgeId VertexIdType, edgeValue EdgeValue) {
+	if edge, ok := vertex.Edges[edgeId]; ok {
+		edge.Value = edgeValue
+		vertex.Activate()
+	}
+}
+
 func (vertex *Vertex) GetOutEdges() map[VertexIdType]*Edge {
 	return vertex.Edges
 }
