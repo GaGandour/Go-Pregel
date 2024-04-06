@@ -67,7 +67,6 @@ func ConvertCommunicationGraphToGraph(communicationGraph *CommunicationGraph) *G
 			MessagesToSend:   make(map[VertexIdType][]PregelMessage),
 			VotedToHalt:      false,
 			numSuperSteps:    0,
-			state:            VertexState{},
 		}
 	}
 	return graph

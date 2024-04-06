@@ -18,7 +18,6 @@ type Vertex struct {
 	MessagesToSend   map[VertexIdType][]PregelMessage
 	VotedToHalt      bool
 	numSuperSteps    int
-	state            VertexState
 }
 
 type Edge struct {
