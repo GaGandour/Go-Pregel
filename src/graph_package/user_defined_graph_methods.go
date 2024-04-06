@@ -1,30 +1,36 @@
 package graph_package
 
-func (vertex *Vertex) Compute() {
+/*
+Vertex methods
+*/
+
+func (vertex *Vertex) ComputeInSuperStepZero() {
+	neighbors := NewVertexIdSet()
+	for receivingId := range vertex.GetOutEdges() {
+		neighbors.Add(receivingId)
+		vertex.PrepareMessageToVertex(receivingId, PregelMessage{OriginVertexId: vertex.Id, Value: vertex.Value.Value})
+	}
+	vertex.SetValue(VertexValue{Value: vertex.Value.Value, neighbors: *neighbors})
+}
+
+func (vertex *Vertex) Compute(receivedMessages []PregelMessage) {
 	// The user will implement this function
-	if vertex.numSuperSteps == 0 {
-		for receivingId := range vertex.GetOutEdges() {
-			vertex.PrepareMessageToVertex(receivingId, PregelMessage{OriginVertexId: vertex.Id, Value: vertex.Value.Value})
+	currentValue := vertex.Value.Value
+	neighbors := vertex.Value.neighbors
+	for _, message := range receivedMessages {
+		neighbors.Add(message.OriginVertexId)
+		if message.Value > currentValue {
+			currentValue = message.Value
 		}
-		return
 	}
 
-	vertex.VoteToHalt()
-	for _, message := range vertex.ReceivedMessages {
-		if message.Value > vertex.Value.Value {
-			newValue := VertexValue{
-				Value: message.Value,
-			}
-			vertex.SetValue(newValue)
-			vertex.Activate()
-		}
-		vertex.PrepareMessageToVertex(message.OriginVertexId, PregelMessage{OriginVertexId: vertex.Id, Value: vertex.Value.Value})
-	}
-
-	if !vertex.VotedToHalt {
-		for receivingId := range vertex.GetOutEdges() {
+	if currentValue != vertex.Value.Value || !VertexIdSetsAreEqual(&neighbors, &vertex.Value.neighbors) {
+		vertex.SetValue(VertexValue{Value: currentValue, neighbors: neighbors})
+		for _, receivingId := range neighbors.ToSlice() {
 			vertex.PrepareMessageToVertex(receivingId, PregelMessage{OriginVertexId: vertex.Id, Value: vertex.Value.Value})
 		}
+	} else {
+		vertex.VoteToHalt()
 	}
 }
 
