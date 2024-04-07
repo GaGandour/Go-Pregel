@@ -13,9 +13,10 @@ fi
 
 python3 write_docker_compose.py $1 $2 > ../docker-compose.yml
 cd ..
+mkdir -p output_graphs
 docker-compose -f docker-compose.yml up -d
 echo "Starting Pregel with $1 workers on file $2"
 docker attach pregel-master
 echo "Stopping Pregel containers"
 cd scripts
-./stop_docker.sh
+sh ./stop_docker.sh

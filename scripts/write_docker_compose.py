@@ -8,20 +8,22 @@ def create_worker(worker_id: int) -> str:
     ports:
       - "5000{worker_id}:5000{worker_id}"
     volumes:
-      - FS:/lab_pregel
+      - ./graphs:/graphs
+      - ./src/output_graphs:/src/output_graphs
 """
 
 def create_master(input_file) -> str:
     return f"""  pregel-master:
     image: pregel
     container_name: pregel-master
-    command: ["./pregel", "-type", "master", "-addr", "pregel-master", "-graph_file", "{input_file}"]
+    command: ["./pregel", "-type", "master", "-addr", "pregel-master", "-graph_file", "/graphs/{input_file}"]
     tty: true
     stdin_open: true
     ports:
       - "5000:5000"
     volumes:
-      - FS:/lab_pregel
+      - ./graphs:/graphs
+      - ./src/output_graphs:/src/output_graphs
 """
 
 def create_volumes() -> str:
@@ -36,7 +38,7 @@ def create_docker_compose(num_workers: int, input_file: str) -> str:
 services:
 {create_master(input_file)}
 {workers_description}
-{create_volumes()}"""
+"""
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
