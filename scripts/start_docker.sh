@@ -20,3 +20,6 @@ docker attach pregel-master
 echo "Stopping Pregel containers"
 cd scripts
 sh ./stop_docker.sh
+cd ..
+cd visualization
+python3 draw_graph.py ../src/output_graphs/output_graph.json

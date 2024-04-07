@@ -2,3 +2,4 @@ docker-compose.yml
 *.json
 pregel
 user_defined_*
+venv
