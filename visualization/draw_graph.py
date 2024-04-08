@@ -14,10 +14,10 @@ ARROW_STYLE = '-|>'
 
 
 def vertex_value_to_display(vertex_id, value_dict):
-    return f"""{vertex_id}::{value_dict["Value"]}"""
+    return f"""{vertex_id}::{value_dict["NextVertex"]}:{value_dict["Distance"]}"""
 
 def edge_value_to_display(edge_id, value_dict):
-    return None
+    return value_dict["Cost"]
 
 def print_graph_from_file(file_name):
     vertexes = {}
