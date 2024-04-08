@@ -1,0 +1,1 @@
+sudo rm ../src/output_graphs/*
