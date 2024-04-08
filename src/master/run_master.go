@@ -60,10 +60,8 @@ func RunMaster(hostname string, inputFile string) {
 	// Particionar Grafo
 	master.partitionGraph(graph)
 	// Comandar Superstep 0
-	shouldStopPregel := master.orderWorkersToExecuteSuperStep()
+	shouldStopPregel := false
 	for !shouldStopPregel {
-		// Comandar Passagem de Mensagens
-		master.orderWorkersToPassMessages()
 		// Comandar Supersteps até todos os workers terminarem
 		shouldStopPregel = master.orderWorkersToExecuteSuperStep()
 	}
@@ -117,15 +115,6 @@ func (master *Master) orderWorkersToExecuteSuperStep() bool {
 		}
 	}
 	return true
-}
-
-func (master *Master) orderWorkersToPassMessages() {
-	log.Println("Ordering workers to pass messages")
-	for _, worker := range master.workers {
-		master.wg.Add(1)
-		go master.orderMessagePassing(worker)
-	}
-	master.wg.Wait()
 }
 
 func (master *Master) orderFinishOperations() {

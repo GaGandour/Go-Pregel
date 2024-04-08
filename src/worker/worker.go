@@ -27,7 +27,8 @@ type Worker struct {
 	done chan bool
 
 	// SubGraph
-	graph *graph_package.Graph
+	graph     *graph_package.Graph
+	superStep int
 }
 
 func newWorker(hostname string, masterHostname string) *Worker {
@@ -37,6 +38,7 @@ func newWorker(hostname string, masterHostname string) *Worker {
 	worker.masterHostname = masterHostname
 	worker.done = make(chan bool)
 	worker.remoteWorkersMap = make(map[int]*remote_worker.RemoteWorker)
+	worker.superStep = 0
 	return worker
 }
 

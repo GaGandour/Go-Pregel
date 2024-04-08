@@ -59,14 +59,14 @@ func ConvertCommunicationGraphToGraph(communicationGraph *CommunicationGraph) *G
 			}
 		}
 		graph.Vertexes[vertexId] = &Vertex{
-			Id:               vertexId,
-			Value:            communicationVertex.Value,
-			Edges:            edges,
-			ReceivedMessages: []PregelMessage{},
-			messageMutex:     sync.Mutex{},
-			MessagesToSend:   make(map[VertexIdType][]PregelMessage),
-			VotedToHalt:      false,
-			numSuperSteps:    0,
+			Id:                          vertexId,
+			Value:                       communicationVertex.Value,
+			Edges:                       edges,
+			ReceivedMessagesInSuperStep: make(map[int][]PregelMessage),
+			messageMutex:                sync.Mutex{},
+			MessagesToSend:              make(map[VertexIdType][]PregelMessage),
+			VotedToHalt:                 false,
+			numSuperSteps:               0,
 		}
 	}
 	return graph
