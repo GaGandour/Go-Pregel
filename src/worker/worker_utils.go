@@ -15,7 +15,6 @@ func (worker *Worker) getRemoteWorkerByPartitionId(partitionId int) *remote_work
 	return worker.remoteWorkersMap[partitionId]
 }
 
-// RPC - PassMessages
 func (worker *Worker) PassMessages() {
 	messagesToSend := make(map[int]map[graph_package.VertexIdType][]graph_package.PregelMessage)
 
