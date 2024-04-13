@@ -58,6 +58,10 @@ func (worker *Worker) ReceiveMessages(args *customrpc.ReceiveMessagesArgs, reply
 	return nil
 }
 
+func (worker *Worker) HeartBeat(_ *struct{}, _ *struct{}) error {
+	return nil
+}
+
 // RPC - Done
 // Will be called by Master when the task is done.
 func (worker *Worker) Done(_ *struct{}, _ *struct{}) error {

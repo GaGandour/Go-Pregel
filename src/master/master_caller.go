@@ -5,6 +5,7 @@ import (
 	"pregel/customrpc"
 	"pregel/graph_package"
 	"pregel/remote_worker"
+	"sync"
 )
 
 func (master *Master) sendSubGraphToWorker(remoteWorker *remote_worker.RemoteWorker, subGraph *graph_package.CommunicationGraph) {
@@ -82,4 +83,22 @@ func (master *Master) orderFinishOperation(remoteWorker *remote_worker.RemoteWor
 	if err != nil {
 		log.Printf("Failed to order finish operation to worker. Error: %v\n", err)
 	}
+}
+
+func (master *Master) orderHeartBeat(remoteWorker *remote_worker.RemoteWorker, wg *sync.WaitGroup) error {
+	var (
+		err   error
+		args  *struct{}
+		reply *struct{}
+	)
+
+	args = new(struct{})
+	reply = new(struct{})
+	err = remoteWorker.CallRemoteWorker("Worker.HeartBeat", args, reply, wg)
+
+	if err != nil {
+		log.Printf("Failed to order heartbeat to worker. Error: %v\n", err)
+		return err
+	}
+	return nil
 }

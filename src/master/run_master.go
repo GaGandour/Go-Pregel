@@ -6,6 +6,7 @@ import (
 	"net/rpc"
 	"pregel/graph_package"
 	"pregel/utils"
+	"sync"
 	"time"
 )
 
@@ -136,4 +137,14 @@ func (master *Master) reduceSubGraphsAndWriteToFile(outputFile string) {
 	communicationGraph := graph_package.ReduceSubGraphsToCommunicationGraph(fileNames)
 	// Escrever o grafo final
 	communicationGraph.WriteGraphToFile(outputFile)
+}
+
+func (master *Master) orderHeartBeats() {
+	var wg sync.WaitGroup
+	log.Println("Ordering workers to send heartbeat")
+	for _, worker := range master.workers {
+		wg.Add(1)
+		go master.orderHeartBeat(worker, &wg)
+	}
+	wg.Wait()
 }
