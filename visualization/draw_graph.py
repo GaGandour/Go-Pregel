@@ -10,7 +10,7 @@ EDGE_DESTINATION_KEY = "To"
 
 
 def vertex_value_to_display(vertex_id, value_dict):
-    return f"""{vertex_id}::{value_dict["NextVertex"]}:{value_dict["Distance"]}"""
+    return f"""{vertex_id}\n{value_dict["NextVertex"]}:{value_dict["Distance"]}"""
 
 def edge_value_to_display(edge_id, value_dict):
     return value_dict["Cost"]
@@ -28,7 +28,11 @@ def print_graph_from_file(file_name):
     for vertex_id in vertexes:
         vertex = vertexes[vertex_id]
         vertex_value = vertex_value_to_display(vertex_id, vertex.get(VERTEX_VALUE_KEY))
-        net.add_node(vertex_id, label=vertex_value,physics=False)
+        net.add_node(
+            vertex_id,
+            label=vertex_value,
+            physics=False,
+        )
     
     # Add directed edges
     for vertex_id in vertexes:
