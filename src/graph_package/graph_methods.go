@@ -13,11 +13,14 @@ func (vertex *Vertex) SuperStep() {
 		vertex.Compute(vertex.ReceivedMessagesInSuperStep[vertex.GetSuperStepNumber()])
 	}
 	delete(vertex.ReceivedMessagesInSuperStep, vertex.GetSuperStepNumber())
-	vertex.numSuperSteps++
 }
 
 func (vertex *Vertex) GetSuperStepNumber() int {
 	return vertex.numSuperSteps
+}
+
+func (vertex *Vertex) IncreaseSuperStepNumber() {
+	vertex.numSuperSteps++
 }
 
 func (vertex *Vertex) GetValue() VertexValue {
