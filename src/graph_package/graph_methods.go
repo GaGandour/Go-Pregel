@@ -1,20 +1,26 @@
 package graph_package
 
 func (vertex *Vertex) SuperStep() {
+	if vertex.ReceivedMessagesInSuperStep[vertex.GetSuperStepNumber()] != nil {
+		vertex.Activate()
+	}
 	if vertex.IsHalted() {
 		return
 	}
 	if vertex.GetSuperStepNumber() == 0 {
 		vertex.ComputeInSuperStepZero()
 	} else {
-		vertex.Compute(vertex.ReceivedMessages)
+		vertex.Compute(vertex.ReceivedMessagesInSuperStep[vertex.GetSuperStepNumber()])
 	}
-	vertex.numSuperSteps++
-	vertex.ReceivedMessages = []PregelMessage{}
+	delete(vertex.ReceivedMessagesInSuperStep, vertex.GetSuperStepNumber())
 }
 
 func (vertex *Vertex) GetSuperStepNumber() int {
 	return vertex.numSuperSteps
+}
+
+func (vertex *Vertex) IncreaseSuperStepNumber() {
+	vertex.numSuperSteps++
 }
 
 func (vertex *Vertex) GetValue() VertexValue {
@@ -23,7 +29,6 @@ func (vertex *Vertex) GetValue() VertexValue {
 
 func (vertex *Vertex) SetValue(value VertexValue) {
 	vertex.Value = value
-	vertex.Activate()
 }
 
 func (vertex *Vertex) GetEdgeValue(edgeId VertexIdType) EdgeValue {
@@ -43,16 +48,17 @@ func (vertex *Vertex) GetOutEdges() map[VertexIdType]*Edge {
 }
 
 func (vertex *Vertex) PrepareMessageToVertex(vertexId VertexIdType, message PregelMessage) {
-	vertex.messageMutex.Lock()
-	defer vertex.messageMutex.Unlock()
 	vertex.MessagesToSend[vertexId] = append(vertex.MessagesToSend[vertexId], message)
-	vertex.Activate()
 }
 
-func (vertex *Vertex) ReceiveMessage(message PregelMessage) {
+func (vertex *Vertex) ReceiveMessage(superStepToReceive int, message PregelMessage) {
 	vertex.messageMutex.Lock()
-	vertex.ReceivedMessages = append(vertex.ReceivedMessages, message)
-	vertex.Activate()
+	receivedMessages := vertex.ReceivedMessagesInSuperStep[superStepToReceive]
+	if receivedMessages == nil {
+		receivedMessages = make([]PregelMessage, 0)
+	}
+	receivedMessages = append(receivedMessages, message)
+	vertex.ReceivedMessagesInSuperStep[superStepToReceive] = receivedMessages
 	vertex.messageMutex.Unlock()
 }
 

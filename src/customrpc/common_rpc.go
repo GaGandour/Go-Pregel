@@ -49,6 +49,7 @@ type PassMessagesReply struct {
 }
 
 type ReceiveMessagesArgs struct {
+	SuperStep  int
 	MessageMap map[graph_package.VertexIdType][]graph_package.PregelMessage
 }
 

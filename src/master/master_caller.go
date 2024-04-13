@@ -32,23 +32,6 @@ func (master *Master) sendSubGraphToWorker(remoteWorker *remote_worker.RemoteWor
 	}
 }
 
-func (master *Master) orderMessagePassing(remoteWorker *remote_worker.RemoteWorker) {
-	var (
-		err   error
-		args  *customrpc.PassMessagesArgs
-		reply *customrpc.PassMessagesReply
-	)
-
-	args = new(customrpc.PassMessagesArgs)
-	reply = new(customrpc.PassMessagesReply)
-
-	err = remoteWorker.CallRemoteWorker("Worker.PassMessages", args, reply, &master.wg)
-
-	if err != nil {
-		log.Printf("Failed to order message passing to worker. Error: %v\n", err)
-	}
-}
-
 func (master *Master) orderSuperStep(remoteWorker *remote_worker.RemoteWorker) {
 	var (
 		err   error

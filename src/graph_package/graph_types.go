@@ -10,14 +10,14 @@ type Graph struct {
 }
 
 type Vertex struct {
-	Id               VertexIdType
-	Value            VertexValue
-	Edges            map[VertexIdType]*Edge
-	ReceivedMessages []PregelMessage
-	messageMutex     sync.Mutex
-	MessagesToSend   map[VertexIdType][]PregelMessage
-	VotedToHalt      bool
-	numSuperSteps    int
+	Id                          VertexIdType
+	Value                       VertexValue
+	Edges                       map[VertexIdType]*Edge
+	ReceivedMessagesInSuperStep map[int][]PregelMessage
+	messageMutex                sync.Mutex
+	MessagesToSend              map[VertexIdType][]PregelMessage
+	VotedToHalt                 bool
+	numSuperSteps               int
 }
 
 type Edge struct {
