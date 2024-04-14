@@ -21,8 +21,9 @@ echo "Stopping Pregel containers"
 cd scripts
 sh ./stop_docker.sh
 cd ..
+source venv/bin/activate
 cd visualization
-(
-  source venv/bin/activate
-  python3 draw_graph.py ../src/output_graphs/output_graph.json
-)
+python3 draw_graph.py ../src/output_graphs/output_graph.json
+deactivate
+open graph.html
+cd ..

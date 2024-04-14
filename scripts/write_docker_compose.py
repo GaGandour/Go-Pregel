@@ -1,10 +1,13 @@
 import sys
 
+MASTER_PORT = 5000
+
+
 def create_worker(worker_id: int) -> str:
     return f"""  pregel-worker-{worker_id}:
     image: pregel
     container_name: pregel-worker-{worker_id}
-    command: ["./pregel", "-type", "worker", "-addr", "pregel-worker-{worker_id}", "-port", "5000{worker_id}", "-master", "pregel-master:5000"]
+    command: ["./pregel", "-type", "worker", "-addr", "pregel-worker-{worker_id}", "-port", "5000{worker_id}", "-master", "pregel-master:{MASTER_PORT}"]
     ports:
       - "5000{worker_id}:5000{worker_id}"
     volumes:
@@ -12,19 +15,21 @@ def create_worker(worker_id: int) -> str:
       - ./src/output_graphs:/src/output_graphs
 """
 
+
 def create_master(input_file) -> str:
     return f"""  pregel-master:
     image: pregel
     container_name: pregel-master
-    command: ["./pregel", "-type", "master", "-addr", "pregel-master", "-graph_file", "/graphs/{input_file}"]
+    command: ["./pregel", "-type", "master", "-port", "{MASTER_PORT}", "-addr", "pregel-master", "-graph_file", "/graphs/{input_file}"]
     tty: true
     stdin_open: true
     ports:
-      - "5000:5000"
+      - "{MASTER_PORT}:{MASTER_PORT}"
     volumes:
       - ./graphs:/graphs
       - ./src/output_graphs:/src/output_graphs
 """
+
 
 def create_volumes() -> str:
     return f"""volumes:
@@ -32,13 +37,15 @@ def create_volumes() -> str:
     external: true
 """
 
+
 def create_docker_compose(num_workers: int, input_file: str) -> str:
-    workers_description = "\n".join([create_worker(i) for i in range(1, num_workers+1)])
+    workers_description = "\n".join([create_worker(i) for i in range(1, num_workers + 1)])
     return f"""version: '3'
 services:
 {create_master(input_file)}
 {workers_description}
 """
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
