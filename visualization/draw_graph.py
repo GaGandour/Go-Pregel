@@ -1,6 +1,7 @@
 import json
 
 from pyvis.network import Network
+from user_defined_value_displaying import edge_value_to_display, vertex_value_to_display
 
 FILE = "../src/output_graphs/output_graph.json"
 
@@ -8,14 +9,6 @@ VERTEX_VALUE_KEY = "Value"
 EDGE_VALUE_KEY = "Value"
 EDGES_KEY = "Edges"
 EDGE_DESTINATION_KEY = "To"
-
-
-def vertex_value_to_display(vertex_id, value_dict):
-    return f"""{vertex_id}\n{value_dict["Previous"]}:{value_dict["Distance"]}"""
-
-
-def edge_value_to_display(edge_id, value_dict):
-    return value_dict["Cost"]
 
 
 def print_graph_from_file(file_name):
