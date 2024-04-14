@@ -24,6 +24,7 @@ func (vertex *Vertex) Compute(receivedMessages []PregelMessage) {
 		Pregel computation. Remember to interpret the receivedMessages and to
 		call VoteToHalt() when the vertex is done.
 	*/
+	vertex.VoteToHalt()
 }
 
 /*
