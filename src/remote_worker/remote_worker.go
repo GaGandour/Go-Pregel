@@ -39,7 +39,6 @@ func (worker *RemoteWorker) CallRemoteWorker(proc string, args interface{}, repl
 		defer tmpClient.Close()
 
 		err = tmpClient.Call(proc, args, reply)
-
 	}
 
 	return nil

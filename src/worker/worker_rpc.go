@@ -58,6 +58,7 @@ func (worker *Worker) ReceiveMessages(args *customrpc.ReceiveMessagesArgs, reply
 	return nil
 }
 
+// RPC - HeartBeat
 func (worker *Worker) HeartBeat(_ *struct{}, _ *struct{}) error {
 	return nil
 }
