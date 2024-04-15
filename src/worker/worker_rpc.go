@@ -35,6 +35,9 @@ func (worker *Worker) WriteSubGraphToFile(args *customrpc.WriteSubGraphToFileArg
 // RPC - RunSuperStep
 func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *customrpc.RunSuperStepReply) error {
 	log.Println("Running SuperStep")
+	if worker.superStep == 2 && worker.id == 0 {
+		panic("Panic")
+	}
 	var workerVoteToHalt = true
 	for _, vertex := range worker.graph.Vertexes {
 		vertex.SuperStep()

@@ -65,26 +65,25 @@ func (master *Master) reduceSubGraphsAndWriteToFile(outputFile string) {
 	communicationGraph.WriteGraphToFile(outputFile)
 }
 
-func (master *Master) executePregel(inputFile string) {
-	// Ler JSON
-	log.Println(inputFile)
-	graph := graph_package.ReadCommunicationGraphFromFile(inputFile)
-	if graph == nil {
-		log.Println("Error reading graph")
-		return
+func (master *Master) executePregel(inputFile string, heartBeatFailedChan chan bool) bool {
+	pregelStepValues := &PregelStepValues{
+		ShouldStopPregel: false,
+		InputFile:        inputFile,
+		PregelState:      READ_GRAPH_FROM_FILE,
+		Graph:            nil,
 	}
 
-	// Particionar Grafo
-	master.partitionGraph(graph)
-	// Comandar Superstep 0
-	shouldStopPregel := false
-	for !shouldStopPregel {
-		// Comandar Supersteps até todos os workers terminarem
-		shouldStopPregel = master.orderWorkersToExecuteSuperStep()
+	for {
+		select {
+		case <-heartBeatFailedChan:
+			log.Println("Heartbeat failed. Stopping Pregel")
+			return false
+		default:
+			if pregelStepValues.PregelState == END_PREGEL {
+				log.Println("Pregel finished")
+				return true
+			}
+			master.executePregelStep(pregelStepValues)
+		}
 	}
-	// Comandar Escrita do Grafo
-	master.orderWorkersToWriteSubGraphs()
-	// Juntar os SubGrafos
-	master.reduceSubGraphsAndWriteToFile(OUTPUT_FILE_NAME)
-	master.orderFinishOperations()
 }

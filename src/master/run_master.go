@@ -43,7 +43,7 @@ func RunMaster(hostname string, inputFile string) {
 
 	master.getConnectionsFromWorkers()
 
-	master.executePregel(inputFile)
+	master.runFaultTolerantPregel(inputFile)
 }
 
 func (master *Master) getConnectionsFromWorkers() {
@@ -51,4 +51,10 @@ func (master *Master) getConnectionsFromWorkers() {
 	go master.acceptMultipleConnections()
 	time.Sleep(time.Duration(5) * time.Second)
 	master.numWorkingWorkers = len(master.workers)
+}
+
+func (master *Master) runFaultTolerantPregel(inputFile string) {
+	heartBeatFailedChan := make(chan bool, 1)
+	go master.heartBeatCycle(heartBeatFailedChan)
+	master.executePregel(inputFile, heartBeatFailedChan)
 }
