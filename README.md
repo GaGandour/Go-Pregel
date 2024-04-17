@@ -44,6 +44,7 @@ You can modify the following files:
 + `src/graph_package/user_defined_graph_types.go`
 + `src/graph_package/user_defined_utils_methods.go`
 + `src/graph_package/user_defined_utils_types.go`
++ `visualization/user_defined_value_displaying.py`
 
 ### Preparing the Docker image
 
