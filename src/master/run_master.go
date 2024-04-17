@@ -55,6 +55,15 @@ func (master *Master) getConnectionsFromWorkers() {
 
 func (master *Master) runFaultTolerantPregel(inputFile string) {
 	heartBeatFailedChan := make(chan bool, 1)
-	go master.heartBeatCycle(heartBeatFailedChan)
-	master.executePregel(inputFile, heartBeatFailedChan)
+	success := false
+	for !success {
+		master.workerHasFailed = false
+		log.Println("Num workers:", len(master.workers))
+		log.Println("Starting Pregel")
+		master.orderHeartBeats()
+		log.Println("Received HeartBeats")
+		go master.heartBeatCycle(heartBeatFailedChan)
+		success = master.executePregel(inputFile, heartBeatFailedChan)
+		time.Sleep(5 * time.Second)
+	}
 }

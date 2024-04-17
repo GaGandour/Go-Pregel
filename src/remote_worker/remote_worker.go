@@ -19,7 +19,9 @@ func (worker *RemoteWorker) CallRemoteWorker(proc string, args interface{}, repl
 		err    error
 		client *rpc.Client
 	)
-	defer wg.Done()
+	if wg != nil {
+		defer wg.Done()
+	}
 
 	client, err = rpc.Dial("tcp", worker.Hostname)
 
