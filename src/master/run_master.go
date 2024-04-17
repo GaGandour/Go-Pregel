@@ -31,7 +31,7 @@ func RunMaster(hostname string, inputFile string) {
 	master = newMaster(hostname)
 
 	newRpcServer = rpc.NewServer()
-	newRpcServer.Register(master)
+	err = newRpcServer.Register(master)
 
 	if err != nil {
 		log.Panicln("Failed to register RPC server. Error:", err)
