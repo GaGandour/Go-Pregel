@@ -74,6 +74,10 @@ func (master *Master) executePregel(inputFile string, heartBeatFailedChan chan b
 	}
 
 	for {
+		if master.workerHasFailed {
+			log.Println("Worker has failed. Stopping Pregel")
+			return false
+		}
 		select {
 		case <-heartBeatFailedChan:
 			log.Println("Heartbeat failed. Stopping Pregel")

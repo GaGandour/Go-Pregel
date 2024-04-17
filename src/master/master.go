@@ -23,6 +23,9 @@ type Master struct {
 
 	// Pregel Specific
 	votesToHaltChan chan bool
+
+	// Fault Tolerance
+	workerHasFailed bool
 }
 
 // Construct a new Master struct
@@ -32,6 +35,7 @@ func newMaster(address string) (master *Master) {
 	master.workers = make(map[int]*remote_worker.RemoteWorker, 0)
 	master.votesToHaltChan = make(chan bool, VOTE_TO_HALT_CHANNEL_BUFFER_SIZE)
 	master.totalWorkers = 0
+	master.workerHasFailed = false
 	return
 }
 

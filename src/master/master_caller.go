@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-func (master *Master) sendSubGraphToWorker(remoteWorker *remote_worker.RemoteWorker, subGraph *graph_package.CommunicationGraph) {
+func (master *Master) sendSubGraphToWorker(remoteWorker *remote_worker.RemoteWorker, subGraph *graph_package.CommunicationGraph) error {
 	var (
 		err   error
 		args  *customrpc.RegisterSubGraphArgs
@@ -30,10 +30,13 @@ func (master *Master) sendSubGraphToWorker(remoteWorker *remote_worker.RemoteWor
 
 	if err != nil {
 		log.Printf("Failed to send subgraph to worker. Error: %v\n", err)
+		master.workerHasFailed = true
+		return err
 	}
+	return nil
 }
 
-func (master *Master) orderSuperStep(remoteWorker *remote_worker.RemoteWorker) {
+func (master *Master) orderSuperStep(remoteWorker *remote_worker.RemoteWorker) error {
 	var (
 		err   error
 		args  *customrpc.RunSuperStepArgs
@@ -47,11 +50,14 @@ func (master *Master) orderSuperStep(remoteWorker *remote_worker.RemoteWorker) {
 
 	if err != nil {
 		log.Printf("Failed to order superstep to worker. Error: %v\n", err)
+		master.workerHasFailed = true
+		return err
 	}
 	master.votesToHaltChan <- reply.VoteToHalt
+	return nil
 }
 
-func (master *Master) orderWriteSubGraph(remoteWorker *remote_worker.RemoteWorker) {
+func (master *Master) orderWriteSubGraph(remoteWorker *remote_worker.RemoteWorker) error {
 	var (
 		err   error
 		args  *customrpc.WriteSubGraphToFileArgs
@@ -65,10 +71,13 @@ func (master *Master) orderWriteSubGraph(remoteWorker *remote_worker.RemoteWorke
 
 	if err != nil {
 		log.Printf("Failed to order write subgraph to worker. Error: %v\n", err)
+		master.workerHasFailed = true
+		return err
 	}
+	return nil
 }
 
-func (master *Master) orderFinishOperation(remoteWorker *remote_worker.RemoteWorker) {
+func (master *Master) orderFinishOperation(remoteWorker *remote_worker.RemoteWorker) error {
 
 	var (
 		err   error
@@ -82,7 +91,10 @@ func (master *Master) orderFinishOperation(remoteWorker *remote_worker.RemoteWor
 
 	if err != nil {
 		log.Printf("Failed to order finish operation to worker. Error: %v\n", err)
+		master.workerHasFailed = true
+		return err
 	}
+	return nil
 }
 
 func (master *Master) orderHeartBeat(remoteWorker *remote_worker.RemoteWorker, wg *sync.WaitGroup) error {
@@ -98,6 +110,7 @@ func (master *Master) orderHeartBeat(remoteWorker *remote_worker.RemoteWorker, w
 
 	if err != nil {
 		log.Printf("Failed to order heartbeat to worker. Error: %v\n", err)
+		master.workerHasFailed = true
 		return err
 	}
 	return nil

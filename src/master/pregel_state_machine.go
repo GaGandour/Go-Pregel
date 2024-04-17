@@ -11,6 +11,7 @@ const (
 	READ_GRAPH_FROM_FILE PregelState = iota
 	PARTITION_GRAPH
 	EXECUTE_SUPERSTEP
+	CHECK_HALT_SUPERSTEP
 	WRITE_SUBGRAPHS
 	REDUCE_SUBGRAPHS
 	FINISH_OPERATIONS
@@ -43,7 +44,15 @@ func (master *Master) executePregelStep(pregelStepValues *PregelStepValues) {
 		// Tell workers to execute superstep
 		shouldStopPregel := master.orderWorkersToExecuteSuperStep()
 		if shouldStopPregel {
+			pregelStepValues.PregelState = CHECK_HALT_SUPERSTEP
+		}
+	case CHECK_HALT_SUPERSTEP:
+		// Tell workers to execute superstep
+		shouldStopPregel := master.orderWorkersToExecuteSuperStep()
+		if shouldStopPregel {
 			pregelStepValues.PregelState = WRITE_SUBGRAPHS
+		} else {
+			pregelStepValues.PregelState = EXECUTE_SUPERSTEP
 		}
 	case WRITE_SUBGRAPHS:
 		// Tell workers to write subgraphs
