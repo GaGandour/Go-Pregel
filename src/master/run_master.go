@@ -9,10 +9,6 @@ import (
 	"time"
 )
 
-const (
-	OUTPUT_FILE_NAME = "./output_graphs/output_graph.json"
-)
-
 // RunMaster will start a master node on the map reduce operations.
 // In the distributed model, a Master should serve multiple workers and distribute
 // the operations to be executed in order to complete the task.
@@ -68,7 +64,7 @@ func RunMaster(hostname string, inputFile string) {
 	// Comandar Escrita do Grafo
 	master.orderWorkersToWriteSubGraphs()
 	// Juntar os SubGrafos
-	master.reduceSubGraphsAndWriteToFile(OUTPUT_FILE_NAME)
+	master.reduceSubGraphsAndWriteToFile(utils.OUTPUT_FILE_NAME)
 	master.orderFinishOperations()
 }
 
