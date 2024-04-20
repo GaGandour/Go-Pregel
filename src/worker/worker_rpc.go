@@ -43,10 +43,6 @@ func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *cust
 		vertex.IncreaseSuperStepNumber()
 		workerVoteToHalt = workerVoteToHalt && vertex.IsHalted() && !vertex.HasSentMessages
 	}
-
-	if worker.id == 2 && worker.superStep == 2 {
-		panic("Panic")
-	}
 	reply.VoteToHalt = workerVoteToHalt
 	worker.PassMessages()
 	worker.superStep++
