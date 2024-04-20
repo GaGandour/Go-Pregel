@@ -12,7 +12,9 @@ func (worker *Worker) RegisterSubGraph(args *customrpc.RegisterSubGraphArgs, rep
 	log.Println("Registering SubGraph")
 	worker.graph = graph_package.ConvertCommunicationGraphToGraph(&args.SubGraph)
 	worker.id = args.WorkerId
+	worker.superStep = 0
 	// Build map
+	worker.remoteWorkersMap = make(map[int]*remote_worker.RemoteWorker)
 	for key, value := range args.RemoteWorkersMap {
 		worker.remoteWorkersMap[key] = &remote_worker.RemoteWorker{
 			Id:       value.Id,
@@ -40,6 +42,10 @@ func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *cust
 		vertex.SuperStep()
 		vertex.IncreaseSuperStepNumber()
 		workerVoteToHalt = workerVoteToHalt && vertex.IsHalted() && !vertex.HasSentMessages
+	}
+
+	if worker.id == 2 && worker.superStep == 2 {
+		panic("Panic")
 	}
 	reply.VoteToHalt = workerVoteToHalt
 	worker.PassMessages()

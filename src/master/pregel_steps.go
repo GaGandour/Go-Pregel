@@ -38,7 +38,7 @@ func (master *Master) checkWorkers() {
 }
 
 func (master *Master) partitionGraph(graph *graph_package.CommunicationGraph) error {
-	log.Println("Partitioning graph")
+	log.Println("Partitioning graph between", master.numWorkingWorkers, "workers")
 
 	var err error
 	for _, worker := range master.workers {
