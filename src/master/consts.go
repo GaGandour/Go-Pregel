@@ -1,3 +1,3 @@
 package master
 
-const VOTE_TO_HALT_CHANNEL_BUFFER_SIZE = 10
+const MAX_NUM_OF_WORKERS = 10

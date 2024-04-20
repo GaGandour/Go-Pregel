@@ -7,6 +7,25 @@ import (
 	"pregel/remote_worker"
 )
 
+func (master *Master) checkWorker(remoteWorker *remote_worker.RemoteWorker) bool {
+	var (
+		err   error
+		args  *customrpc.HeartBeatArgs
+		reply *customrpc.HeartBeatReply
+	)
+
+	args = new(customrpc.HeartBeatArgs)
+	reply = new(customrpc.HeartBeatReply)
+
+	err = remoteWorker.CallRemoteWorker("Worker.HeartBeat", args, reply, &master.wg)
+
+	if err != nil {
+		log.Printf("Failed to check worker. Error: %v\n", err)
+		return false
+	}
+	return true
+}
+
 func (master *Master) sendSubGraphToWorker(remoteWorker *remote_worker.RemoteWorker, subGraph *graph_package.CommunicationGraph) {
 	var (
 		err   error

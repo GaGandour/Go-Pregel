@@ -1,6 +1,7 @@
 package graph_package
 
 func (vertex *Vertex) SuperStep() {
+	vertex.HasSentMessages = false
 	if vertex.ReceivedMessagesInSuperStep[vertex.GetSuperStepNumber()] != nil {
 		vertex.Activate()
 	}
@@ -48,6 +49,7 @@ func (vertex *Vertex) GetOutEdges() map[VertexIdType]*Edge {
 }
 
 func (vertex *Vertex) PrepareMessageToVertex(vertexId VertexIdType, message PregelMessage) {
+	vertex.HasSentMessages = true
 	vertex.MessagesToSend[vertexId] = append(vertex.MessagesToSend[vertexId], message)
 }
 

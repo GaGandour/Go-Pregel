@@ -39,7 +39,7 @@ func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *cust
 	for _, vertex := range worker.graph.Vertexes {
 		vertex.SuperStep()
 		vertex.IncreaseSuperStepNumber()
-		workerVoteToHalt = workerVoteToHalt && vertex.VotedToHalt
+		workerVoteToHalt = workerVoteToHalt && vertex.IsHalted() && !vertex.HasSentMessages
 	}
 	reply.VoteToHalt = workerVoteToHalt
 	worker.PassMessages()
@@ -55,6 +55,12 @@ func (worker *Worker) ReceiveMessages(args *customrpc.ReceiveMessagesArgs, reply
 			vertex.ReceiveMessage(args.SuperStep, message)
 		}
 	}
+	return nil
+}
+
+// RPC - HeartBeat
+func (worker *Worker) HeartBeat(_ *struct{}, _ *struct{}) error {
+	log.Println("HeartBeat")
 	return nil
 }
 
