@@ -13,17 +13,17 @@ func (master *Master) Register(args *customrpc.RegisterArgs, reply *customrpc.Re
 	var (
 		newWorker *remote_worker.RemoteWorker
 	)
-	log.Printf("Registering worker '%v' with hostname '%v'", master.totalWorkers, args.WorkerHostname)
+	log.Printf("Registering worker '%v' with hostname '%v'", master.numWorkingWorkers, args.WorkerHostname)
 
 	master.workersMutex.Lock()
 
 	newWorker = &remote_worker.RemoteWorker{
-		Id:       master.totalWorkers,
+		Id:       master.numWorkingWorkers,
 		Hostname: args.WorkerHostname,
 		Status:   utils.WORKER_WAITING,
 	}
 	master.workers[newWorker.Id] = newWorker
-	master.totalWorkers++
+	master.numWorkingWorkers++
 
 	master.workersMutex.Unlock()
 

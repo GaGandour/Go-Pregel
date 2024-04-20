@@ -11,6 +11,7 @@ if [ -z "$2" ]
     exit 1
 fi
 
+sh build_image.sh
 python3 write_docker_compose.py $1 $2 > ../docker-compose.yml
 cd ..
 mkdir -p src/output_graphs

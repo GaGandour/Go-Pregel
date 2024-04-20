@@ -12,7 +12,9 @@ func (worker *Worker) RegisterSubGraph(args *customrpc.RegisterSubGraphArgs, rep
 	log.Println("Registering SubGraph")
 	worker.graph = graph_package.ConvertCommunicationGraphToGraph(&args.SubGraph)
 	worker.id = args.WorkerId
+	worker.superStep = 0
 	// Build map
+	worker.remoteWorkersMap = make(map[int]*remote_worker.RemoteWorker)
 	for key, value := range args.RemoteWorkersMap {
 		worker.remoteWorkersMap[key] = &remote_worker.RemoteWorker{
 			Id:       value.Id,
@@ -39,7 +41,7 @@ func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *cust
 	for _, vertex := range worker.graph.Vertexes {
 		vertex.SuperStep()
 		vertex.IncreaseSuperStepNumber()
-		workerVoteToHalt = workerVoteToHalt && vertex.VotedToHalt
+		workerVoteToHalt = workerVoteToHalt && vertex.IsHalted() && !vertex.HasSentMessages
 	}
 	reply.VoteToHalt = workerVoteToHalt
 	worker.PassMessages()
@@ -55,6 +57,12 @@ func (worker *Worker) ReceiveMessages(args *customrpc.ReceiveMessagesArgs, reply
 			vertex.ReceiveMessage(args.SuperStep, message)
 		}
 	}
+	return nil
+}
+
+// RPC - HeartBeat
+func (worker *Worker) HeartBeat(_ *struct{}, _ *struct{}) error {
+	log.Println("HeartBeat")
 	return nil
 }
 

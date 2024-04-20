@@ -1,6 +1,6 @@
 import sys
 
-MASTER_PORT = 5000
+MASTER_PORT = 50000
 
 
 def create_worker(worker_id: int) -> str:

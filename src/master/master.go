@@ -8,8 +8,6 @@ import (
 	"sync"
 )
 
-const VOTE_TO_HALT_CHANNEL_BUFFER_SIZE = 10
-
 type Master struct {
 	// Network
 	address   string
@@ -19,7 +17,6 @@ type Master struct {
 	// Workers handling
 	workersMutex      sync.Mutex
 	workers           map[int]*remote_worker.RemoteWorker
-	totalWorkers      int // Used to generate unique ids for new workers
 	numWorkingWorkers int
 	wg                sync.WaitGroup
 
@@ -32,8 +29,8 @@ func newMaster(address string) (master *Master) {
 	master = new(Master)
 	master.address = address
 	master.workers = make(map[int]*remote_worker.RemoteWorker, 0)
-	master.votesToHaltChan = make(chan bool, VOTE_TO_HALT_CHANNEL_BUFFER_SIZE)
-	master.totalWorkers = 0
+	master.votesToHaltChan = make(chan bool, MAX_NUM_OF_WORKERS)
+	master.numWorkingWorkers = 0
 	return
 }
 
