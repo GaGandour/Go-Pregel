@@ -14,8 +14,8 @@ func (master *Master) checkWorkers() {
 	for _, worker := range master.workers {
 		master.wg.Add(1)
 		go func(w *remote_worker.RemoteWorker) {
-			ok := master.checkWorker(w)
-			if !ok {
+			err := master.checkWorker(w)
+			if err != nil {
 				brokenWorkers <- w.Id
 			}
 		}(worker)
@@ -37,51 +37,83 @@ func (master *Master) checkWorkers() {
 	master.workers = newWorkersMap
 }
 
-func (master *Master) partitionGraph(graph *graph_package.CommunicationGraph) {
+func (master *Master) partitionGraph(graph *graph_package.CommunicationGraph) error {
 	log.Println("Partitioning graph")
-	// Particionar o grafo
-	for partitionId := 0; partitionId < master.numWorkingWorkers; partitionId++ {
-		// Enviar subgrafo para worker
-		subGraph := graph_package.GetCommunicationSubGraphInPartition(master.numWorkingWorkers, graph, partitionId)
+
+	var err error
+	for _, worker := range master.workers {
+		subGraph := graph_package.GetCommunicationSubGraphInPartition(master.numWorkingWorkers, graph, worker.Id)
 		master.wg.Add(1)
-		go master.sendSubGraphToWorker(master.workers[partitionId], &subGraph)
+		go func(w *remote_worker.RemoteWorker) {
+			workerError := master.sendSubGraphToWorker(w, &subGraph)
+			if workerError != nil {
+				err = workerError
+			}
+		}(worker)
 	}
 	master.wg.Wait()
+	return err
 }
 
-func (master *Master) orderWorkersToWriteSubGraphs() {
+func (master *Master) orderWorkersToWriteSubGraphs() error {
 	log.Println("Ordering workers to write subgraphs")
+
+	var err error
 	for _, worker := range master.workers {
 		master.wg.Add(1)
-		go master.orderWriteSubGraph(worker)
+		go func(w *remote_worker.RemoteWorker) {
+			workerError := master.orderWriteSubGraph(w)
+			if workerError != nil {
+				err = workerError
+			}
+		}(worker)
 	}
 	master.wg.Wait()
+	return err
 }
 
-func (master *Master) orderWorkersToExecuteSuperStep() bool {
+func (master *Master) orderWorkersToExecuteSuperStep() (bool, error) {
 	log.Println("Ordering workers to execute superstep")
+
+	var err error
 	master.votesToHaltChan = make(chan bool, MAX_NUM_OF_WORKERS)
 	for _, worker := range master.workers {
 		master.wg.Add(1)
-		go master.orderSuperStep(worker)
+		go func(w *remote_worker.RemoteWorker) {
+			workerError := master.orderSuperStep(w)
+			if workerError != nil {
+				err = workerError
+			}
+		}(worker)
 	}
 	master.wg.Wait()
 	close(master.votesToHaltChan)
+	if err != nil {
+		return false, err
+	}
 	for vote := range master.votesToHaltChan {
 		if !vote {
-			return false
+			return false, nil
 		}
 	}
-	return true
+	return true, nil
 }
 
-func (master *Master) orderFinishOperations() {
+func (master *Master) orderFinishOperations() error {
 	log.Println("Ordering workers to finish operations")
+
+	var err error
 	for _, worker := range master.workers {
 		master.wg.Add(1)
-		go master.orderFinishOperation(worker)
+		go func(w *remote_worker.RemoteWorker) {
+			workerError := master.orderFinishOperation(w)
+			if workerError != nil {
+				err = workerError
+			}
+		}(worker)
 	}
 	master.wg.Wait()
+	return err
 }
 
 func (master *Master) reduceSubGraphsAndWriteToFile(outputFile string) {
@@ -90,8 +122,6 @@ func (master *Master) reduceSubGraphsAndWriteToFile(outputFile string) {
 	for _, worker := range master.workers {
 		fileNames = append(fileNames, utils.GetSubGraphOutputFileName(worker.Id))
 	}
-	// Reduzir os subgrafos
 	communicationGraph := graph_package.ReduceSubGraphsToCommunicationGraph(fileNames)
-	// Escrever o grafo final
 	communicationGraph.WriteGraphToFile(outputFile)
 }

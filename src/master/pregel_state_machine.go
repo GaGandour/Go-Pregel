@@ -41,20 +41,36 @@ func (master *Master) executePregelStep(pregelStepValues *PregelStepValues) {
 	case CHECK_WORKERS:
 		// Check workers
 		master.checkWorkers()
+		if master.numWorkingWorkers == 0 {
+			log.Println("No workers available. Ending Pregel.")
+			pregelStepValues.PregelState = END_PREGEL
+		}
 		pregelStepValues.PregelState = PARTITION_GRAPH
 	case PARTITION_GRAPH:
 		// Partition graph and distribute to workers
-		master.partitionGraph(pregelStepValues.Graph)
+		err := master.partitionGraph(pregelStepValues.Graph)
+		if err != nil {
+			pregelStepValues.PregelState = CHECK_WORKERS
+			return
+		}
 		pregelStepValues.PregelState = EXECUTE_SUPERSTEP
 	case EXECUTE_SUPERSTEP:
 		// Tell workers to execute superstep
-		shouldStopPregel := master.orderWorkersToExecuteSuperStep()
+		shouldStopPregel, err := master.orderWorkersToExecuteSuperStep()
+		if err != nil {
+			pregelStepValues.PregelState = CHECK_WORKERS
+			return
+		}
 		if shouldStopPregel {
 			pregelStepValues.PregelState = WRITE_SUBGRAPHS
 		}
 	case WRITE_SUBGRAPHS:
 		// Tell workers to write subgraphs
-		master.orderWorkersToWriteSubGraphs()
+		err := master.orderWorkersToWriteSubGraphs()
+		if err != nil {
+			pregelStepValues.PregelState = CHECK_WORKERS
+			return
+		}
 		pregelStepValues.PregelState = REDUCE_SUBGRAPHS
 	case REDUCE_SUBGRAPHS:
 		// Reduce subgraphs and write to file
