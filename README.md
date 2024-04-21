@@ -23,7 +23,7 @@ python -m venv venv
 Now, we must enter the virtual environment, install the libraries, and finally we can get out of the venv:
 ```
 source venv/bin/activate     # enter venv
-pip install requirements.txt # install
+pip install -r requirements.txt # install
 deactivate                   # exit venv
 ```
 
