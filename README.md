@@ -22,9 +22,9 @@ python -m venv venv
 
 Now, we must enter the virtual environment, install the libraries, and finally we can get out of the venv:
 ```
-source venv/bin/activate     # enter venv
+source venv/bin/activate        # enter venv
 pip install -r requirements.txt # install
-deactivate                   # exit venv
+deactivate                      # exit venv
 ```
 
 Your python environment is now ready. If you don't want to set the venv, just run `pip install requirements.txt`
