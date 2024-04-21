@@ -70,7 +70,7 @@ func (master *Master) orderSuperStep(remoteWorker *remote_worker.RemoteWorker) e
 	return err
 }
 
-func (master *Master) orderWriteSubGraph(remoteWorker *remote_worker.RemoteWorker) error {
+func (master *Master) orderWriteSubGraph(remoteWorker *remote_worker.RemoteWorker, pregelFinished bool) error {
 	var (
 		err   error
 		args  *customrpc.WriteSubGraphToFileArgs
@@ -79,6 +79,9 @@ func (master *Master) orderWriteSubGraph(remoteWorker *remote_worker.RemoteWorke
 
 	args = new(customrpc.WriteSubGraphToFileArgs)
 	reply = new(customrpc.WriteSubGraphToFileReply)
+
+	args.WorkerId = remoteWorker.Id
+	args.IsPregelFinished = pregelFinished
 
 	err = remoteWorker.CallRemoteWorker("Worker.WriteSubGraphToFile", args, reply, &master.wg)
 

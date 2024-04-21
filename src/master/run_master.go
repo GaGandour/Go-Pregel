@@ -12,7 +12,7 @@ import (
 // the operations to be executed in order to complete the task.
 //   - task: the Task object that contains the mapreduce operation.
 //   - hostname: the tcp/ip address on which it will listen for connections.
-func RunMaster(hostname string, inputFile string) {
+func RunMaster(hostname string, inputFile string, debug bool) {
 	var (
 		err          error
 		master       *Master
@@ -22,7 +22,7 @@ func RunMaster(hostname string, inputFile string) {
 
 	log.Println("Running Master on", hostname)
 
-	master = newMaster(hostname)
+	master = newMaster(hostname, debug)
 
 	newRpcServer = rpc.NewServer()
 	err = newRpcServer.Register(master)
@@ -58,6 +58,7 @@ func (master *Master) executePregel(inputFile string) bool {
 		InputFile:        inputFile,
 		PregelState:      READ_GRAPH_FROM_FILE,
 		Graph:            nil,
+		Finished:         false,
 	}
 
 	for {

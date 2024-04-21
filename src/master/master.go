@@ -22,15 +22,19 @@ type Master struct {
 
 	// Pregel Specific
 	votesToHaltChan chan bool
+
+	// Utils
+	debug bool
 }
 
 // Construct a new Master struct
-func newMaster(address string) (master *Master) {
+func newMaster(address string, debug bool) (master *Master) {
 	master = new(Master)
 	master.address = address
 	master.workers = make(map[int]*remote_worker.RemoteWorker, 0)
 	master.votesToHaltChan = make(chan bool, MAX_NUM_OF_WORKERS)
 	master.numWorkingWorkers = 0
+	master.debug = debug
 	return
 }
 

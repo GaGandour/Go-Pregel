@@ -7,8 +7,11 @@ import (
 	"pregel/utils"
 )
 
-func (worker *Worker) getWorkerSubGraphFile() string {
-	return utils.GetSubGraphOutputFileName(worker.id)
+func (worker *Worker) getWorkerSubGraphFile(isPregelFinished bool) string {
+	if isPregelFinished {
+		return utils.GetSubGraphOutputFileName(worker.id)
+	}
+	return utils.GetSuperStepSubGraphOutputFileName(worker.id, worker.superStep)
 }
 
 func (worker *Worker) getRemoteWorkerByPartitionId(partitionId int) *remote_worker.RemoteWorker {
