@@ -25,7 +25,7 @@ fi
 cd ..
 source venv/bin/activate
 cd visualization
-python3 draw_graph.py $(ls ../src/output_graphs/SuperStep-$SUPERSTEP*)
+python3 draw_graph.py $SUPERSTEP $(ls ../src/output_graphs/SuperStep-$SUPERSTEP*)
 deactivate
-open graph.html
+open graph-superstep-$SUPERSTEP.html
 cd ..

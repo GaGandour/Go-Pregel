@@ -2,9 +2,11 @@ import json
 import sys
 
 from pyvis.network import Network
-from user_defined_value_displaying import edge_value_to_display, vertex_value_to_display
+from user_defined_value_displaying import (edge_value_to_display,
+                                           vertex_value_to_display)
 
 FILE = "../src/output_graphs/output_graph.json"
+OUTPUT_FILE = "graph.html"
 
 VERTEX_VALUE_KEY = "Value"
 EDGE_VALUE_KEY = "Value"
@@ -48,18 +50,19 @@ def print_graph_from_dict(vertexes: dict):
                     arrowStrikethrough=False,
                 )
 
-    net.show("graph.html")
+    net.show(OUTPUT_FILE)
 
 
 if __name__ == "__main__":
     vertexes = {}
     temp_vertexes = {}
     if len(sys.argv) > 1:
-        for arg in sys.argv[1:]:
+        for arg in sys.argv[2:]:
             file = arg
             with open(file, "r") as f:
                 temp_vertexes = json.load(f)
             vertexes.update(temp_vertexes)
+        OUTPUT_FILE = "graph-superstep-" + sys.argv[1] + ".html"
     else:
         # read from file
         with open(FILE, "r") as f:

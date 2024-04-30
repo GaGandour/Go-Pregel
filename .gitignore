@@ -3,4 +3,4 @@ docker-compose.yml
 pregel
 user_defined_*
 venv
-graph.html
+*.html
