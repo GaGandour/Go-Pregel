@@ -49,7 +49,7 @@ func RunMaster(hostname string, inputFile string, debug bool) {
 func (master *Master) getConnectionsFromWorkers() {
 	log.Println("Waiting for workers to connect")
 	go master.acceptMultipleConnections()
-	time.Sleep(time.Duration(5) * time.Second)
+	time.Sleep(time.Duration(TIME_TO_WAIT_FOR_WORKER_REGISTER_IN_SECONDS) * time.Second)
 }
 
 func (master *Master) executePregel(inputFile string) bool {

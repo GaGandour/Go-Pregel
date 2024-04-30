@@ -1,4 +1,5 @@
 import json
+import sys
 
 from pyvis.network import Network
 from user_defined_value_displaying import edge_value_to_display, vertex_value_to_display
@@ -11,12 +12,7 @@ EDGES_KEY = "Edges"
 EDGE_DESTINATION_KEY = "To"
 
 
-def print_graph_from_file(file_name):
-    vertexes = {}
-    # read from file
-    with open(file_name, "r") as f:
-        vertexes = json.load(f)
-
+def print_graph_from_dict(vertexes: dict):
     # Create a directed graph
     net = Network(notebook=True, cdn_resources="remote", select_menu=False, directed=True)
 
@@ -56,4 +52,17 @@ def print_graph_from_file(file_name):
 
 
 if __name__ == "__main__":
-    print_graph_from_file(FILE)
+    vertexes = {}
+    temp_vertexes = {}
+    if len(sys.argv) > 1:
+        for arg in sys.argv[1:]:
+            file = arg
+            with open(file, "r") as f:
+                temp_vertexes = json.load(f)
+            vertexes.update(temp_vertexes)
+    else:
+        # read from file
+        with open(FILE, "r") as f:
+            vertexes = json.load(f)
+
+    print_graph_from_dict(vertexes)
