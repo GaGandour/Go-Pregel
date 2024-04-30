@@ -56,7 +56,10 @@ def print_graph_from_dict(vertexes: dict):
 if __name__ == "__main__":
     vertexes = {}
     temp_vertexes = {}
-    if len(sys.argv) > 1:
+    if len(sys.argv) == 2:
+        print("This superstep doesn't exist")
+        sys.exit(1)
+    elif len(sys.argv) > 2:
         for arg in sys.argv[2:]:
             file = arg
             with open(file, "r") as f:
