@@ -2,8 +2,7 @@ import json
 import sys
 
 from pyvis.network import Network
-from user_defined_value_displaying import (edge_value_to_display,
-                                           vertex_value_to_display)
+from user_defined_value_displaying import edge_value_to_display, vertex_value_to_display
 
 FILE = "../src/output_graphs/output_graph.json"
 OUTPUT_FILE = "graph.html"
