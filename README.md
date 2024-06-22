@@ -121,4 +121,4 @@ Your Go-Pregel algorithm is ready to go. But when running it, the UI can be a bi
 
 ## Testing
 
-<!-- TODO: There must be a way to test some algoritms, like big unit tests -->
+<!-- TODO: There must be a way to test some algoritms, like big unit tests or use cases -->
