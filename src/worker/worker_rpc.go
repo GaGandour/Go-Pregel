@@ -29,7 +29,7 @@ func (worker *Worker) RegisterSubGraph(args *customrpc.RegisterSubGraphArgs, rep
 // RPC - WriteSubGraphToFile
 func (worker *Worker) WriteSubGraphToFile(args *customrpc.WriteSubGraphToFileArgs, reply *customrpc.WriteSubGraphToFileReply) error {
 	log.Println("Writing SubGraph to file")
-	outputFileName := worker.getWorkerSubGraphFile()
+	outputFileName := worker.getWorkerSubGraphFile(args.IsPregelFinished)
 	worker.graph.WriteGraphToFile(outputFileName)
 	return nil
 }

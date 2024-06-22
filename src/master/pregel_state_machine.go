@@ -25,6 +25,7 @@ type PregelStepValues struct {
 	InputFile        string
 	PregelState      PregelState
 	Graph            *graph_package.CommunicationGraph
+	Finished         bool
 }
 
 func (master *Master) executePregelStep(pregelStepValues *PregelStepValues) {
@@ -44,6 +45,7 @@ func (master *Master) executePregelStep(pregelStepValues *PregelStepValues) {
 		if master.numWorkingWorkers == 0 {
 			log.Println("No workers available. Ending Pregel.")
 			pregelStepValues.PregelState = END_PREGEL
+			return
 		}
 		pregelStepValues.PregelState = PARTITION_GRAPH
 	case PARTITION_GRAPH:
@@ -53,7 +55,11 @@ func (master *Master) executePregelStep(pregelStepValues *PregelStepValues) {
 			pregelStepValues.PregelState = CHECK_WORKERS
 			return
 		}
-		pregelStepValues.PregelState = EXECUTE_SUPERSTEP
+		if master.debug {
+			pregelStepValues.PregelState = WRITE_SUBGRAPHS
+		} else {
+			pregelStepValues.PregelState = EXECUTE_SUPERSTEP
+		}
 	case EXECUTE_SUPERSTEP:
 		// Tell workers to execute superstep
 		shouldStopPregel, err := master.orderWorkersToExecuteSuperStep()
@@ -62,16 +68,24 @@ func (master *Master) executePregelStep(pregelStepValues *PregelStepValues) {
 			return
 		}
 		if shouldStopPregel {
+			pregelStepValues.Finished = true
+			pregelStepValues.PregelState = WRITE_SUBGRAPHS
+		}
+		if master.debug {
 			pregelStepValues.PregelState = WRITE_SUBGRAPHS
 		}
 	case WRITE_SUBGRAPHS:
 		// Tell workers to write subgraphs
-		err := master.orderWorkersToWriteSubGraphs()
+		err := master.orderWorkersToWriteSubGraphs(pregelStepValues.Finished)
 		if err != nil {
 			pregelStepValues.PregelState = CHECK_WORKERS
 			return
 		}
-		pregelStepValues.PregelState = REDUCE_SUBGRAPHS
+		if pregelStepValues.Finished {
+			pregelStepValues.PregelState = REDUCE_SUBGRAPHS
+		} else {
+			pregelStepValues.PregelState = EXECUTE_SUPERSTEP
+		}
 	case REDUCE_SUBGRAPHS:
 		// Reduce subgraphs and write to file
 		master.reduceSubGraphsAndWriteToFile(utils.OUTPUT_FILE_NAME)

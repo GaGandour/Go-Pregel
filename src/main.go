@@ -17,6 +17,7 @@ var (
 	port           = flag.Int("port", 5000, "TCP port to listen on")
 	masterAddr     = flag.String("master", "localhost:5000", "Master address")
 	graphInputFile = flag.String("graph_file", "../graphs/graph1.json", "Graph input file")
+	debug          = flag.Bool("debug", false, "Enable debug mode")
 )
 
 // Code Entry Point
@@ -35,11 +36,12 @@ func main() {
 		log.Println("Address:", *addr)
 		log.Println("Port:", *port)
 		log.Println("Graph File:", *graphInputFile)
+		log.Println("Debug:", *debug)
 
 		hostname = *addr + ":" + strconv.Itoa(*port)
 
 		// Create fan in and out channels for mapreduce.Tas
-		master.RunMaster(hostname, *graphInputFile)
+		master.RunMaster(hostname, *graphInputFile, *debug)
 
 	case "worker":
 		log.Println("NodeType:", *nodeType)

@@ -1,9 +1,11 @@
 import json
+import sys
 
 from pyvis.network import Network
 from user_defined_value_displaying import edge_value_to_display, vertex_value_to_display
 
 FILE = "../src/output_graphs/output_graph.json"
+OUTPUT_FILE = "graph.html"
 
 VERTEX_VALUE_KEY = "Value"
 EDGE_VALUE_KEY = "Value"
@@ -11,12 +13,7 @@ EDGES_KEY = "Edges"
 EDGE_DESTINATION_KEY = "To"
 
 
-def print_graph_from_file(file_name):
-    vertexes = {}
-    # read from file
-    with open(file_name, "r") as f:
-        vertexes = json.load(f)
-
+def print_graph_from_dict(vertexes: dict):
     # Create a directed graph
     net = Network(notebook=True, cdn_resources="remote", select_menu=False, directed=True)
 
@@ -52,8 +49,27 @@ def print_graph_from_file(file_name):
                     arrowStrikethrough=False,
                 )
 
-    net.show("graph.html")
+    net.show(OUTPUT_FILE)
 
 
 if __name__ == "__main__":
-    print_graph_from_file(FILE)
+    vertexes = {}
+    temp_vertexes = {}
+    if len(sys.argv) == 2:
+        print("This superstep doesn't exist")
+        file = sys.argv[1]
+        with open(file, "r") as f:
+            vertexes = json.load(f)
+    elif len(sys.argv) > 2:
+        for arg in sys.argv[2:]:
+            file = arg
+            with open(file, "r") as f:
+                temp_vertexes = json.load(f)
+            vertexes.update(temp_vertexes)
+        OUTPUT_FILE = "graph-superstep-" + sys.argv[1] + ".html"
+    else:
+        # read from file
+        with open(FILE, "r") as f:
+            vertexes = json.load(f)
+
+    print_graph_from_dict(vertexes)

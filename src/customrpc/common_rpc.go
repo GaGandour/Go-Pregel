@@ -69,7 +69,8 @@ type RegisterSubGraphReply struct {
 }
 
 type WriteSubGraphToFileArgs struct {
-	WorkerId int
+	WorkerId         int
+	IsPregelFinished bool
 }
 
 type WriteSubGraphToFileReply struct {

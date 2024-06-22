@@ -55,14 +55,14 @@ func (master *Master) partitionGraph(graph *graph_package.CommunicationGraph) er
 	return err
 }
 
-func (master *Master) orderWorkersToWriteSubGraphs() error {
+func (master *Master) orderWorkersToWriteSubGraphs(isPregelFinished bool) error {
 	log.Println("Ordering workers to write subgraphs")
 
 	var err error
 	for _, worker := range master.workers {
 		master.wg.Add(1)
 		go func(w *remote_worker.RemoteWorker) {
-			workerError := master.orderWriteSubGraph(w)
+			workerError := master.orderWriteSubGraph(w, isPregelFinished)
 			if workerError != nil {
 				err = workerError
 			}
