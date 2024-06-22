@@ -57,7 +57,9 @@ if __name__ == "__main__":
     temp_vertexes = {}
     if len(sys.argv) == 2:
         print("This superstep doesn't exist")
-        sys.exit(1)
+        file = sys.argv[1]
+        with open(file, "r") as f:
+            vertexes = json.load(f)
     elif len(sys.argv) > 2:
         for arg in sys.argv[2:]:
             file = arg
