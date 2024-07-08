@@ -56,7 +56,7 @@ if __name__ == "__main__":
     vertexes = {}
     temp_vertexes = {}
     if len(sys.argv) == 2:
-        print("This superstep doesn't exist")
+        # We are reading the final Pregel output
         file = sys.argv[1]
         with open(file, "r") as f:
             vertexes = json.load(f)
