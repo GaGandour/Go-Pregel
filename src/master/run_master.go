@@ -46,6 +46,8 @@ func RunMaster(hostname string, inputFile string) {
 	master.executePregel(inputFile)
 }
 
+// getConnectionsFromWorkers will wait for workers to connect to the master.
+// It will ignore connections that happen after 5 seconds.
 func (master *Master) getConnectionsFromWorkers() {
 	log.Println("Waiting for workers to connect")
 	go master.acceptMultipleConnections()
