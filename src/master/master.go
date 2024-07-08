@@ -27,14 +27,20 @@ type Master struct {
 	debug bool
 }
 
+type MasterArguments struct {
+	Hostname       string
+	GraphInputFile string
+	Debug          bool
+}
+
 // Construct a new Master struct
-func newMaster(address string, debug bool) (master *Master) {
+func newMaster(args MasterArguments) (master *Master) {
 	master = new(Master)
-	master.address = address
+	master.address = args.Hostname
 	master.workers = make(map[int]*remote_worker.RemoteWorker, 0)
 	master.votesToHaltChan = make(chan bool, MAX_NUM_OF_WORKERS)
 	master.numWorkingWorkers = 0
-	master.debug = debug
+	master.debug = args.Debug
 	return
 }
 
