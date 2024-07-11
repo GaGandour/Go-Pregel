@@ -29,25 +29,42 @@ def generate_argparse() -> argparse.ArgumentParser:
         help="Failure step",
         default=-1,
     )
-    # parser.add_argument(
-    #     "--checkpoint_frequency",
-    #     type=int,
-    #     help="Checkpoint frequency",
-    #     default=-1,
-    # )
+    parser.add_argument(
+        "--checkpoint_frequency",
+        type=int,
+        help="Checkpoint frequency",
+        default=-1,
+    )
     return parser
 
 
 def create_worker(worker_id: int, failure_step: int) -> str:
-    command = f"""["./pregel", "-type", "worker", "-addr", "pregel-worker-{worker_id}", "-port", "5000{worker_id}", "-master", "pregel-master:{MASTER_PORT}\""""
+    cmd_elements = [
+        "./pregel",
+        "-type",
+        "worker",
+        "-addr",
+        f"pregel-worker-{worker_id}",
+        "-port",
+        f"5000{worker_id}",
+        "-master",
+        f"pregel-master:{MASTER_PORT}",
+    ]
     if failure_step >= 0 and worker_id == 1:
-        command += f""", "-failure_step", "{failure_step}\""""
-    command += "]"
+        cmd_elements.extend(
+            [
+                "-failure_step",
+                f"{failure_step}",
+            ],
+        )
+
+    cmd_string = ", ".join([f'"{element}"' for element in cmd_elements])
+    cmd_string = f"[{cmd_string}]"
 
     return f"""  pregel-worker-{worker_id}:
     image: pregel
     container_name: pregel-worker-{worker_id}
-    command: {command}
+    command: {cmd_string}
     ports:
       - "5000{worker_id}:5000{worker_id}"
     volumes:
@@ -56,11 +73,40 @@ def create_worker(worker_id: int, failure_step: int) -> str:
 """
 
 
-def create_master(input_file: str, debug: bool, num_workers: int) -> str:
+def create_master(
+    input_file: str,
+    debug: bool,
+    num_workers: int,
+    checkpoint_frequency: int,
+) -> str:
+
+    cmd_elements = [
+        "./pregel",
+        "-type",
+        "master",
+        "-port",
+        f"{MASTER_PORT}",
+        "-addr",
+        "pregel-master",
+        "-graph_file",
+        f"/graphs/{input_file}",
+    ]
+    if debug:
+        cmd_elements.append("-debug")
+    if checkpoint_frequency > 0:
+        cmd_elements.extend(
+            [
+                "-checkpoint_frequency",
+                f"{checkpoint_frequency}",
+            ],
+        )
+    cmd_string = ", ".join([f'"{element}"' for element in cmd_elements])
+    cmd_string = f"[{cmd_string}]"
+    
     master = f"""  pregel-master:
     image: pregel
     container_name: pregel-master
-    command: ["./pregel", "-type", "master", "-port", "{MASTER_PORT}", "-addr", "pregel-master", "-graph_file", "/graphs/{input_file}"{', "-debug"' if debug else ""}]
+    command: {cmd_string}
     tty: true
     stdin_open: true
     ports:
@@ -87,11 +133,12 @@ def create_docker_compose(
     input_file: str,
     debug: bool,
     failure_step: int,
+    checkpoint_frequency: int,
 ) -> str:
     workers_description = "\n".join([create_worker(i, failure_step) for i in range(1, num_workers + 1)])
     return f"""version: '3'
 services:
-{create_master(input_file, debug, num_workers)}
+{create_master(input_file, debug, num_workers, checkpoint_frequency)}
 {workers_description}
 """
 
@@ -105,5 +152,6 @@ if __name__ == "__main__":
             args.graph_file,
             args.debug,
             args.failure_step,
+            args.checkpoint_frequency,
         )
     )
