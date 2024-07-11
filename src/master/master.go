@@ -24,13 +24,15 @@ type Master struct {
 	votesToHaltChan chan bool
 
 	// Utils
-	debug bool
+	debug               bool
+	checkpointFrequency int
 }
 
 type MasterArguments struct {
-	Hostname       string
-	GraphInputFile string
-	Debug          bool
+	Hostname            string
+	GraphInputFile      string
+	Debug               bool
+	CheckpointFrequency int
 }
 
 // Construct a new Master struct
@@ -41,6 +43,7 @@ func newMaster(args MasterArguments) (master *Master) {
 	master.votesToHaltChan = make(chan bool, MAX_NUM_OF_WORKERS)
 	master.numWorkingWorkers = 0
 	master.debug = args.Debug
+    master.checkpointFrequency = args.CheckpointFrequency
 	return
 }
 

@@ -47,6 +47,7 @@ func main() {
 			Hostname:       hostname,
 			GraphInputFile: *graphInputFile,
 			Debug:          *debug,
+            CheckpointFrequency: *checkPointFrequency,
 		}
 
 		// Create fan in and out channels for mapreduce.Tas
