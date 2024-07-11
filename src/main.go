@@ -65,6 +65,7 @@ func main() {
 		workerArgs := worker.WorkerArguments{
 			Hostname:       hostname,
 			MasterHostname: *masterAddr,
+            FailureStep:    *failureStep,
 		}
 		worker.RunWorker(workerArgs)
 	}

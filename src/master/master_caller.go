@@ -20,7 +20,7 @@ func (master *Master) checkWorker(remoteWorker *remote_worker.RemoteWorker) erro
 	err = remoteWorker.CallRemoteWorker("Worker.HeartBeat", args, reply, &master.wg)
 
 	if err != nil {
-		log.Printf("Failed to check worker. Error: %v\n", err)
+		log.Printf("Failed to check worker with ID %d. Error: %v\n", remoteWorker.Id, err)
 	}
 	return err
 }
