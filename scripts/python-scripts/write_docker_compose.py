@@ -1,5 +1,4 @@
 import argparse
-import sys
 
 MASTER_PORT = 50000
 
