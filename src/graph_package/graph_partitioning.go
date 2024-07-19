@@ -19,7 +19,7 @@ func GetSubGraphInPartition(numberOfPartitions int, graph *Graph, partitionId in
 
 func GetCommunicationSubGraphInPartition(numberOfPartitions int, graph *CommunicationGraph, partitionId int) CommunicationGraph {
 	subGraph := CommunicationGraph{
-		totalNumberOfVertexes: graph.totalNumberOfVertexes,
+		TotalNumberOfVertexes: graph.TotalNumberOfVertexes,
 		Vertexes:              make(map[VertexIdType]CommunicationVertex),
 	}
 

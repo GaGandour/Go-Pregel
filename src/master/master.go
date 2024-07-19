@@ -24,8 +24,12 @@ type Master struct {
 	votesToHaltChan chan bool
 
 	// Utils
-	debug               bool
-	checkpointFrequency int
+	debug bool
+
+	// Fault Tolerance
+	lastCompletedSuperStep int
+	lastCheckpointSuperStep     int
+	checkpointFrequency    int
 }
 
 type MasterArguments struct {
@@ -43,7 +47,9 @@ func newMaster(args MasterArguments) (master *Master) {
 	master.votesToHaltChan = make(chan bool, MAX_NUM_OF_WORKERS)
 	master.numWorkingWorkers = 0
 	master.debug = args.Debug
-    master.checkpointFrequency = args.CheckpointFrequency
+	master.checkpointFrequency = args.CheckpointFrequency
+	master.lastCompletedSuperStep = -1 // the first superstep is actually zero
+	master.lastCheckpointSuperStep = -1 // the first superstep is actually zero
 	return
 }
 

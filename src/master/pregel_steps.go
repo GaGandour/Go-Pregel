@@ -125,3 +125,14 @@ func (master *Master) reduceSubGraphsAndWriteToFile(outputFile string) {
 	communicationGraph := graph_package.ReduceSubGraphsToCommunicationGraph(fileNames)
 	communicationGraph.WriteGraphToFile(outputFile)
 }
+
+func (master *Master) reduceSubGraphsFromLastCheckpoint() *graph_package.CommunicationGraph {
+	log.Println("Reducing subgraphs from last checkpoint")
+	fileNames := make([]string, 0)
+	for _, worker := range master.workers {
+		// TODO: get checkpoint file names
+		fileNames = append(fileNames, utils.GetSuperStepSubGraphOutputFileName(worker.Id, master.lastCheckpointSuperStep))
+	}
+	communicationGraph := graph_package.ReduceSubGraphsToCommunicationGraph(fileNames)
+    return communicationGraph
+}

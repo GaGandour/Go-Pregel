@@ -28,7 +28,6 @@ type Worker struct {
 
 	// SubGraph
 	graph     *graph_package.Graph
-	superStep int
 
     // Fault tolerance
     failureStep int
@@ -47,7 +46,6 @@ func newWorker(args WorkerArguments) *Worker {
 	worker.masterHostname = args.MasterHostname
 	worker.done = make(chan bool)
 	worker.remoteWorkersMap = make(map[int]*remote_worker.RemoteWorker)
-	worker.superStep = 0
     worker.failureStep = args.FailureStep
 	return worker
 }

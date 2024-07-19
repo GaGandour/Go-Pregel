@@ -50,6 +50,13 @@ func (master *Master) executePregelStep(pregelStepValues *PregelStepValues) {
 		pregelStepValues.PregelState = PARTITION_GRAPH
 	case PARTITION_GRAPH:
 		// Partition graph and distribute to workers
+        // pregelStepValues.Finished = false
+        log.Println("Partitioning graph")
+        master.lastCompletedSuperStep = master.lastCheckpointSuperStep
+        if master.checkpointFrequency > 0 && master.lastCheckpointSuperStep >= 0 {
+            log.Println("Reducing subgraphs from last checkpoint")
+            pregelStepValues.Graph = master.reduceSubGraphsFromLastCheckpoint()
+        }
 		err := master.partitionGraph(pregelStepValues.Graph)
 		if err != nil {
 			pregelStepValues.PregelState = CHECK_WORKERS
@@ -67,12 +74,18 @@ func (master *Master) executePregelStep(pregelStepValues *PregelStepValues) {
 			pregelStepValues.PregelState = CHECK_WORKERS
 			return
 		}
+		master.lastCompletedSuperStep++
 		if shouldStopPregel {
 			pregelStepValues.Finished = true
 			pregelStepValues.PregelState = WRITE_SUBGRAPHS
 		}
 		if master.debug {
 			pregelStepValues.PregelState = WRITE_SUBGRAPHS
+		}
+		if master.lastCompletedSuperStep > 0 && master.checkpointFrequency > 0 {
+			if master.lastCompletedSuperStep%master.checkpointFrequency == 0 {
+				pregelStepValues.PregelState = WRITE_SUBGRAPHS
+			}
 		}
 	case WRITE_SUBGRAPHS:
 		// Tell workers to write subgraphs
@@ -81,6 +94,7 @@ func (master *Master) executePregelStep(pregelStepValues *PregelStepValues) {
 			pregelStepValues.PregelState = CHECK_WORKERS
 			return
 		}
+		master.lastCheckpointSuperStep = master.lastCompletedSuperStep
 		if pregelStepValues.Finished {
 			pregelStepValues.PregelState = REDUCE_SUBGRAPHS
 		} else {
