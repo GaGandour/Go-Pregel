@@ -65,6 +65,10 @@ fi
 
 sh build_image.sh
 
+echo "Cleaning outputs from other pregel runs..."
+./clean_outputs.sh # Clean previous outputs
+echo "Finished cleaning outputs from other pregel runs"
+
 cd ..
 
 if [ "$DEBUG" = true ]; then
