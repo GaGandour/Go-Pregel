@@ -74,7 +74,7 @@ func ConvertCommunicationGraphToGraph(communicationGraph *CommunicationGraph) *G
 			ReceivedMessagesInSuperStep: make(map[int][]PregelMessage),
 			messageMutex:                sync.Mutex{},
 			MessagesToSend:              make(map[VertexIdType][]PregelMessage),
-			VotedToHalt:                 false,
+			VotedToHalt:                 communicationVertex.VotedToHalt,
 			numSuperSteps:               communicationGraph.NextSuperStep,
 		}
 		if len(communicationVertex.IncomingMessages) > 0 {
@@ -102,6 +102,7 @@ func ConvertGraphToCommunicationGraph(graph *Graph) *CommunicationGraph {
 			Value: vertex.Value,
 			Edges: edges,
             IncomingMessages: vertex.ReceivedMessagesInSuperStep[graph.SuperStep],
+            VotedToHalt: vertex.VotedToHalt,
 		}
 	}
 	return communicationGraph
