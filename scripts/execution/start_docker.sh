@@ -4,6 +4,7 @@
 
 DEBUG=false
 FAILURE_STEP=-1
+CHECKPOINT_FREQUENCY=-1
 
 for arg in "$@"
 do
@@ -43,6 +44,12 @@ do
     shift
     ;;
   esac
+  case $arg in
+    -checkpoint_frequency=*)
+    CHECKPOINT_FREQUENCY="${arg#*=}"
+    shift
+    ;;
+  esac
 done
 
 if [ -z "$NUM_WORKERS" ]
@@ -66,6 +73,7 @@ if [ "$DEBUG" = true ]; then
       --num_workers=$NUM_WORKERS \
       --graph_file=$GRAPH_FILE \
       --failure_step=$FAILURE_STEP \
+      --checkpoint_frequency=$CHECKPOINT_FREQUENCY \
       --debug \
       > ../docker-compose.yml
 else
@@ -73,6 +81,7 @@ else
       --num_workers=$NUM_WORKERS \
       --graph_file=$GRAPH_FILE \
       --failure_step=$FAILURE_STEP \
+      --checkpoint_frequency=$CHECKPOINT_FREQUENCY \
       > ../docker-compose.yml
 fi
 
