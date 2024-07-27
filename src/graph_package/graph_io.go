@@ -126,5 +126,6 @@ func ReduceSubGraphsToCommunicationGraph(fileNames []string) *CommunicationGraph
 		}
 	}
 	communicationGraph.TotalNumberOfVertexes = len(communicationGraph.Vertexes)
+    communicationGraph.NextSuperStep = communicationGraphNextSuperStep
 	return communicationGraph
 }
