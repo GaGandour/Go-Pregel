@@ -54,8 +54,12 @@ func (master *Master) executePregelStep(pregelStepValues *PregelStepValues) {
         log.Println("Partitioning graph")
         master.lastCompletedSuperStep = master.lastCheckpointSuperStep
         if master.checkpointFrequency > 0 && master.lastCheckpointSuperStep >= 0 {
-            log.Println("Reducing subgraphs from last checkpoint")
-            pregelStepValues.Graph = master.reduceSubGraphsFromLastCheckpoint()
+            tempGraph := master.reduceSubGraphsFromLastCheckpoint()
+            if tempGraph != nil {
+                pregelStepValues.Graph = tempGraph
+                log.Println("Reduced graph from last checkpoint")
+                log.Println("Next superstep: ", pregelStepValues.Graph.NextSuperStep)
+            }
         }
 		err := master.partitionGraph(pregelStepValues.Graph)
 		if err != nil {
