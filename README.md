@@ -41,7 +41,7 @@ python -m venv venv
 ```
 
 Now, we must enter the virtual environment, install the libraries, and finally we can get out of the venv:
-```
+```bash
 source venv/bin/activate        # enter venv
 pip install -r requirements.txt # install
 deactivate                      # exit venv
@@ -52,7 +52,7 @@ Your python environment is now ready. If you don't want to set the venv, just ru
 ### Generating Missing Files
 
 To generate the files that you must fill up to use Pregel, run:
-```
+```bash
 cd scripts
 sh write_untracked_files.sh
 ```
@@ -70,11 +70,20 @@ In the next sections, we will explain what each file is for and how to use them.
 
 ### Running Pregel
 
-Finally, we can run your algorithm in any graph in the `graphs/` folder.
+Finally, we can run your algorithm in any graph in the `graphs/` folder by using the `start_docker.sh` script under the `/scripts/execution/` folder. Before using it, you MUST be in this `/scripts/execution/` folder before running it. To see the usage of the script and/or see the available arguments to pass to it, run `./start_docker.sh -h` or `./start_docker.sh --help`.
 
+```bash
+cd scripts/execution
+./start_docker.sh -h
 ```
-sh start_docker.sh <NUMBER OF WORKERS> <Name OF GRAPH FILE>
+
+In the most simple use case, the command will look like this:
+```bash
+cd scripts/execution
+./start_docker.sh -num_workers=<number_of_workers> -graph_file=<graph_file>
 ```
+
+
 In the end of the execution, a browser page with the output graph will open.
 
 ## Writing the Algorithm

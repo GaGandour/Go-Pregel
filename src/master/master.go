@@ -25,16 +25,31 @@ type Master struct {
 
 	// Utils
 	debug bool
+
+	// Fault Tolerance
+	lastCompletedSuperStep int
+	lastCheckpointSuperStep     int
+	checkpointFrequency    int
+}
+
+type MasterArguments struct {
+	Hostname            string
+	GraphInputFile      string
+	Debug               bool
+	CheckpointFrequency int
 }
 
 // Construct a new Master struct
-func newMaster(address string, debug bool) (master *Master) {
+func newMaster(args MasterArguments) (master *Master) {
 	master = new(Master)
-	master.address = address
+	master.address = args.Hostname
 	master.workers = make(map[int]*remote_worker.RemoteWorker, 0)
 	master.votesToHaltChan = make(chan bool, MAX_NUM_OF_WORKERS)
 	master.numWorkingWorkers = 0
-	master.debug = debug
+	master.debug = args.Debug
+	master.checkpointFrequency = args.CheckpointFrequency
+	master.lastCompletedSuperStep = -1 // the first superstep is actually zero
+	master.lastCheckpointSuperStep = -1 // the first superstep is actually zero
 	return
 }
 

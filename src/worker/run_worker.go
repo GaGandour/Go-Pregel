@@ -9,7 +9,7 @@ import (
 
 // RunWorker will run a instance of a worker. It'll initialize and then try to register with
 // master.
-func RunWorker(hostname string, masterHostname string) {
+func RunWorker(args WorkerArguments) {
 	var (
 		err           error
 		worker        *Worker
@@ -18,9 +18,9 @@ func RunWorker(hostname string, masterHostname string) {
 		retryDuration time.Duration
 	)
 
-	log.Println("Running Worker on", hostname)
+	log.Println("Running Worker on", args.Hostname)
 
-	worker = newWorker(hostname, masterHostname)
+	worker = newWorker(args)
 
 	rpcs = rpc.NewServer()
 	rpcs.Register(worker)

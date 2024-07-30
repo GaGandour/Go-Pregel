@@ -12,7 +12,7 @@ import (
 // the operations to be executed in order to complete the task.
 //   - task: the Task object that contains the mapreduce operation.
 //   - hostname: the tcp/ip address on which it will listen for connections.
-func RunMaster(hostname string, inputFile string, debug bool) {
+func RunMaster(args MasterArguments) {
 	var (
 		err          error
 		master       *Master
@@ -20,9 +20,9 @@ func RunMaster(hostname string, inputFile string, debug bool) {
 		listener     net.Listener
 	)
 
-	log.Println("Running Master on", hostname)
+	log.Println("Running Master on", args.Hostname)
 
-	master = newMaster(hostname, debug)
+	master = newMaster(args)
 
 	newRpcServer = rpc.NewServer()
 	err = newRpcServer.Register(master)
@@ -43,7 +43,7 @@ func RunMaster(hostname string, inputFile string, debug bool) {
 
 	master.getConnectionsFromWorkers()
 
-	master.executePregel(inputFile)
+	master.executePregel(args.GraphInputFile)
 }
 
 // getConnectionsFromWorkers will wait for workers to connect to the master.

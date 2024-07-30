@@ -3,6 +3,8 @@
 # Get arguments
 
 DEBUG=false
+FAILURE_STEP=-1
+CHECKPOINT_FREQUENCY=-1
 
 for arg in "$@"
 do
@@ -11,7 +13,9 @@ do
     echo "Usage: ./start_docker.sh -num_workers=<number of workers> -graph_file=<graph input file>"
     echo "Optional arguments:"
     echo "  -debug: Run in debug mode. This makes the pregel program to register the graph state in every superstep.\n"
+    echo "  -failure_step=<step number>: Simulate a failure in one of the workers at the specified step number. The worker will not be restarted and the computation will continue. The step number should be a positive integer.\n"
     echo "Example 1: ./start_docker.sh -num_workers=3 -graph_file=graph1.json"
+    echo "Example 1: ./start_docker.sh -num_workers=3 -graph_file=graph1.json -failure_step=5"
     echo "Example 1: ./start_docker.sh -num_workers=3 -graph_file=graph1.json -debug"
     exit 0
     ;;
@@ -34,6 +38,18 @@ do
     shift
     ;;
   esac
+  case $arg in
+    -failure_step=*)
+    FAILURE_STEP="${arg#*=}"
+    shift
+    ;;
+  esac
+  case $arg in
+    -checkpoint_frequency=*)
+    CHECKPOINT_FREQUENCY="${arg#*=}"
+    shift
+    ;;
+  esac
 done
 
 if [ -z "$NUM_WORKERS" ]
@@ -49,11 +65,28 @@ fi
 
 sh build_image.sh
 
+echo "Cleaning outputs from other pregel runs..."
+./clean_outputs.sh # Clean previous outputs
+echo "Finished cleaning outputs from other pregel runs"
+
+cd ..
+
 if [ "$DEBUG" = true ]; then
   echo "Running in debug mode"
-  python3 write_docker_compose.py $NUM_WORKERS $GRAPH_FILE -debug > ../docker-compose.yml
+  python3 python-scripts/write_docker_compose.py \
+      --num_workers=$NUM_WORKERS \
+      --graph_file=$GRAPH_FILE \
+      --failure_step=$FAILURE_STEP \
+      --checkpoint_frequency=$CHECKPOINT_FREQUENCY \
+      --debug \
+      > ../docker-compose.yml
 else
-  python3 write_docker_compose.py $NUM_WORKERS $GRAPH_FILE > ../docker-compose.yml
+  python3 python-scripts/write_docker_compose.py \
+      --num_workers=$NUM_WORKERS \
+      --graph_file=$GRAPH_FILE \
+      --failure_step=$FAILURE_STEP \
+      --checkpoint_frequency=$CHECKPOINT_FREQUENCY \
+      > ../docker-compose.yml
 fi
 
 cd ..
@@ -62,9 +95,9 @@ docker-compose -f docker-compose.yml up -d
 echo "Starting Pregel with $NUM_WORKERS workers on file $GRAPH_FILE"
 docker attach pregel-master
 echo "Stopping Pregel containers"
-cd scripts
+cd scripts/execution
 sh ./stop_docker.sh
-cd ..
+cd ../..
 source venv/bin/activate
 cd visualization
 python3 draw_graph.py ../src/output_graphs/output_graph.json

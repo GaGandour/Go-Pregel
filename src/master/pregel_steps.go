@@ -125,3 +125,14 @@ func (master *Master) reduceSubGraphsAndWriteToFile(outputFile string) {
 	communicationGraph := graph_package.ReduceSubGraphsToCommunicationGraph(fileNames)
 	communicationGraph.WriteGraphToFile(outputFile)
 }
+
+func (master *Master) reduceSubGraphsFromLastCheckpoint() *graph_package.CommunicationGraph {
+	log.Println("Reducing subgraphs from last checkpoint")
+	fileNames, err := utils.GetCheckpointFileNamesForSuperstep(master.lastCheckpointSuperStep + 1)
+    if err != nil {
+        log.Println("Error getting checkpoint file names")
+        return nil
+    }
+	communicationGraph := graph_package.ReduceSubGraphsToCommunicationGraph(fileNames)
+    return communicationGraph
+}

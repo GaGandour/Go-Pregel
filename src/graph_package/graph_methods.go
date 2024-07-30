@@ -32,19 +32,19 @@ func (vertex *Vertex) SetValue(value VertexValue) {
 	vertex.Value = value
 }
 
-func (vertex *Vertex) GetEdgeValue(edgeId VertexIdType) EdgeValue {
+func (vertex *Vertex) GetEdgeValue(edgeId EdgeIdType) EdgeValue {
 	edge := vertex.Edges[edgeId]
 	return edge.Value
 }
 
-func (vertex *Vertex) SetEdgeValue(edgeId VertexIdType, edgeValue EdgeValue) {
+func (vertex *Vertex) SetEdgeValue(edgeId EdgeIdType, edgeValue EdgeValue) {
 	if edge, ok := vertex.Edges[edgeId]; ok {
 		edge.Value = edgeValue
 		vertex.Activate()
 	}
 }
 
-func (vertex *Vertex) GetOutEdges() map[VertexIdType]*Edge {
+func (vertex *Vertex) GetOutEdges() map[EdgeIdType]*Edge {
 	return vertex.Edges
 }
 

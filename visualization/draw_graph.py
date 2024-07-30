@@ -53,23 +53,24 @@ def print_graph_from_dict(vertexes: dict):
 
 
 if __name__ == "__main__":
+    graph = {}
     vertexes = {}
     temp_vertexes = {}
     if len(sys.argv) == 2:
-        print("This superstep doesn't exist")
+        # We are reading the final Pregel output
         file = sys.argv[1]
         with open(file, "r") as f:
-            vertexes = json.load(f)
+            vertexes = json.load(f)["Vertexes"]
     elif len(sys.argv) > 2:
         for arg in sys.argv[2:]:
             file = arg
             with open(file, "r") as f:
-                temp_vertexes = json.load(f)
+                temp_vertexes = json.load(f)["Vertexes"]
             vertexes.update(temp_vertexes)
         OUTPUT_FILE = "graph-superstep-" + sys.argv[1] + ".html"
     else:
         # read from file
         with open(FILE, "r") as f:
-            vertexes = json.load(f)
+            vertexes = json.load(f)["Vertexes"]
 
     print_graph_from_dict(vertexes)

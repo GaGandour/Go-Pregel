@@ -12,7 +12,6 @@ func (worker *Worker) RegisterSubGraph(args *customrpc.RegisterSubGraphArgs, rep
 	log.Println("Registering SubGraph")
 	worker.graph = graph_package.ConvertCommunicationGraphToGraph(&args.SubGraph)
 	worker.id = args.WorkerId
-	worker.superStep = 0
 	// Build map
 	worker.remoteWorkersMap = make(map[int]*remote_worker.RemoteWorker)
 	for key, value := range args.RemoteWorkersMap {
@@ -37,6 +36,11 @@ func (worker *Worker) WriteSubGraphToFile(args *customrpc.WriteSubGraphToFileArg
 // RPC - RunSuperStep
 func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *customrpc.RunSuperStepReply) error {
 	log.Println("Running SuperStep")
+    // Work failure
+    if worker.graph.SuperStep == worker.failureStep {
+        log.Println("Worker failed at superstep", worker.graph.SuperStep)
+        panic("Worker failed!")
+    }
 	var workerVoteToHalt = true
 	for _, vertex := range worker.graph.Vertexes {
 		vertex.SuperStep()
@@ -45,7 +49,7 @@ func (worker *Worker) RunSuperStep(args *customrpc.RunSuperStepArgs, reply *cust
 	}
 	reply.VoteToHalt = workerVoteToHalt
 	worker.PassMessages()
-	worker.superStep++
+	worker.graph.SuperStep++
 	return nil
 }
 

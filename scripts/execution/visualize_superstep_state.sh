@@ -22,7 +22,7 @@ if [ -z "$SUPERSTEP" ]
     exit 1
 fi
 
-cd ..
+cd ../..
 source venv/bin/activate
 cd visualization
 python3 draw_graph.py $SUPERSTEP $(ls ../src/output_graphs/SuperStep-$SUPERSTEP*)

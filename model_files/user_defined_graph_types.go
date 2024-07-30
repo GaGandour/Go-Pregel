@@ -6,6 +6,7 @@ But please, don't get to crazy with it.
 Strings always work well.
 */
 type VertexIdType string
+type EdgeIdType string
 
 type VertexValue struct {
 	/*

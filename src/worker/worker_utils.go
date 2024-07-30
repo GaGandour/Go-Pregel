@@ -11,7 +11,7 @@ func (worker *Worker) getWorkerSubGraphFile(isPregelFinished bool) string {
 	if isPregelFinished {
 		return utils.GetSubGraphOutputFileName(worker.id)
 	}
-	return utils.GetSuperStepSubGraphOutputFileName(worker.id, worker.superStep)
+	return utils.GetSuperStepSubGraphOutputFileName(worker.id, worker.graph.SuperStep)
 }
 
 func (worker *Worker) getRemoteWorkerByPartitionId(partitionId int) *remote_worker.RemoteWorker {
@@ -39,13 +39,13 @@ func (worker *Worker) PassMessages() {
 			for receiverVertexId, messageList := range messageMap {
 				receivingVertex := worker.graph.Vertexes[receiverVertexId]
 				for _, message := range messageList {
-					receivingVertex.ReceiveMessage(worker.superStep+1, message)
+					receivingVertex.ReceiveMessage(worker.graph.SuperStep+1, message)
 				}
 			}
 		} else {
 			remoteWorkerToReceive := worker.getRemoteWorkerByPartitionId(partitionId)
 			args_remote := &customrpc.ReceiveMessagesArgs{
-				SuperStep:  worker.superStep + 1,
+				SuperStep:  worker.graph.SuperStep + 1,
 				MessageMap: messageMap,
 			}
 			reply_remote := new(customrpc.ReceiveMessagesReply)
