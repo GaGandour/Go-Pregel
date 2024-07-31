@@ -1,5 +1,7 @@
 #/bin/bash
 
+SUPERSTEP=-1
+
 for arg in "$@"
 do
     case $arg in
@@ -16,16 +18,18 @@ do
     esac
 done
 
-if [ -z "$SUPERSTEP" ]
-  then
-    echo "Missing SUPERSTEP. Run ./visualize_superstep_state.sh with -h or --help for more information on the necessary arguments."
-    exit 1
-fi
-
 cd ../..
 source venv/bin/activate
 cd visualization
-python3 draw_graph.py $SUPERSTEP $(ls ../src/output_graphs/SuperStep-$SUPERSTEP*)
-deactivate
-open graph-superstep-$SUPERSTEP.html
+
+if [ "$SUPERSTEP" -eq -1 ]; then
+    python3 draw_graph.py
+    deactivate
+    open graph.html
+else
+    python3 draw_graph.py -superstep=$SUPERSTEP
+    deactivate
+    open graph-superstep-$SUPERSTEP.html
+fi
+
 cd ..
