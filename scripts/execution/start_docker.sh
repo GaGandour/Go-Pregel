@@ -97,10 +97,6 @@ docker attach pregel-master
 echo "Stopping Pregel containers"
 cd scripts/execution
 sh ./stop_docker.sh
-cd ../..
-source venv/bin/activate
-cd visualization
-python3 draw_graph.py ../src/output_graphs/output_graph.json
-deactivate
-open graph.html
-cd ..
+
+# Visualize output
+./visualize_pregel_output.sh

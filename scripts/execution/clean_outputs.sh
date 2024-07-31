@@ -1,2 +1,2 @@
 sudo rm ../../src/output_graphs/*
-rm ../../visualization/graph.html
+rm ../../visualization/graph*.html
