@@ -1,0 +1,114 @@
+{
+    "Vertexes": {
+        "0": {
+            "Value": {
+                "ComponentID": "0",
+            },
+            "Edges": {
+                "02": {
+                    "To": "2"
+                },
+                "04": {
+                    "To": "4"
+                },
+                "05": {
+                    "To": "5"
+                },
+            }
+        },
+        "1": {
+            "Value": {
+                "ComponentID": "0",
+            },
+            "Edges": {
+                "14": {
+                    "To": "4"
+                },
+                "15": {
+                    "To": "5"
+                },
+            }
+        },
+        "2": {
+            "Value": {
+                "ComponentID": "0",
+            },
+            "Edges": {
+                "23": {
+                    "To": "3"
+                },
+                "24": {
+                    "To": "4"
+                },
+            }
+        },
+        "3": {
+            "Value": {
+                "ComponentID": "0",
+            },
+            "Edges": {}
+        },
+        "4": {
+            "Value": {
+                "ComponentID": "0",
+            },
+            "Edges": {
+                "45": {
+                    "To": "5"
+                }
+            }
+        },
+        "5": {
+            "Value": {
+                "ComponentID": "0",
+            },
+            "Edges": {}
+        },
+        "6": {
+            "Value": {
+                "ComponentID": "6",
+            },
+            "Edges": {}
+        },
+        "7": {
+            "Value": {
+                "ComponentID": "6",
+            },
+            "Edges": {
+                "76": {
+                    "To": "6"
+                }
+            }
+        },
+        "8": {
+            "Value": {
+                "ComponentID": "8",
+            },
+            "Edges": {
+                "89": {
+                    "To": "9"
+                }
+            }
+        },
+        "9": {
+            "Value": {
+                "ComponentID": "8",
+            },
+            "Edges": {
+                "910": {
+                    "To": "10"
+                }
+            }
+        },
+        "10": {
+            "Value": {
+                "ComponentID": "8",
+            },
+            "Edges": {
+                "108": {
+                    "To": "8"
+                }
+            }
+        }
+    }
+}

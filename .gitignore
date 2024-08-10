@@ -1,5 +1,5 @@
 docker-compose.yml
-*.json
+src/output_graphs/*
 pregel
 user_defined_*
 venv

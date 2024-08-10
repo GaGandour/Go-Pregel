@@ -131,3 +131,6 @@ Your Go-Pregel algorithm is ready to go. But when running it, the UI can be a bi
 ## Testing
 
 <!-- TODO: There must be a way to test some algoritms, like big unit tests or use cases -->
+We are going to test three algorithms in the distributed versions in our Go-Pregel framework. The algorithms are: PageRank, Connected Components, and Single Source Shortest Path (SSSP). We are going to test them in the graphs `simple_graph`, `simple_graph2`, and `simple_graph3`, respectively. The tests are going to be done in the `scripts/execution` folder.
+
+<!-- TODO: add graph with GPS data downloaded from the internet. -->
