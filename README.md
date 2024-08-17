@@ -53,8 +53,8 @@ Your python environment is now ready. If you don't want to set the venv, just ru
 
 To generate the files that you must fill up to use Pregel, run:
 ```bash
-cd scripts
-sh write_untracked_files.sh
+cd scripts/prepare-repo
+./write_untracked_files.sh
 ```
 
 ### Writing the Algorithm
