@@ -1,0 +1,36 @@
+{ 
+    "Vertexes": {
+        "0": {
+            "Value": {
+                "Partition": 0
+            },
+            "Edges": {
+                "1": {
+                    "To": "1",
+                }
+            }
+        },
+        "1":{
+            "Value": {
+                "Partition": 1
+            },
+            "Edges": {}
+        },
+        "2": {
+            "Value": {
+                "Partition": 0
+            },
+            "Edges": {
+                "1": {
+                    "To": "3",
+                }
+            }
+        },
+        "3":{
+            "Value": {
+                "Partition": 1
+            },
+            "Edges": {}
+        }
+    }
+}
