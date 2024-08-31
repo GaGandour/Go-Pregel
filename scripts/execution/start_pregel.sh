@@ -5,6 +5,7 @@
 DEBUG=false
 FAILURE_STEP=-1
 CHECKPOINT_FREQUENCY=-1
+TEST=false
 
 for arg in "$@"
 do
@@ -12,11 +13,12 @@ do
     -h|--help)
     echo "Usage: ./start_docker.sh -num_workers=<number of workers> -graph_file=<graph input file>"
     echo "Optional arguments:"
-    echo "  -debug: Run in debug mode. This makes the pregel program to register the graph state in every superstep.\n"
-    echo "  -failure_step=<step number>: Simulate a failure in one of the workers at the specified step number. The worker will not be restarted and the computation will continue. The step number should be a positive integer.\n"
+    echo "  -debug: Run in debug mode. This makes the pregel program to register the graph state in every superstep."
+    echo "  -failure_step=<step number>: Simulate a failure in one of the workers at the specified step number. The worker will not be restarted and the computation will continue. The step number should be a positive integer."
+    echo "  -test: Run the program in test mode. This will not open the graph visualization.\n"
     echo "Example 1: ./start_docker.sh -num_workers=3 -graph_file=graph1.json"
-    echo "Example 1: ./start_docker.sh -num_workers=3 -graph_file=graph1.json -failure_step=5"
-    echo "Example 1: ./start_docker.sh -num_workers=3 -graph_file=graph1.json -debug"
+    echo "Example 2: ./start_docker.sh -num_workers=3 -graph_file=graph1.json -failure_step=5"
+    echo "Example 3: ./start_docker.sh -num_workers=3 -graph_file=graph1.json -debug"
     exit 0
     ;;
   esac
@@ -50,6 +52,12 @@ do
     shift
     ;;
   esac
+  case $arg in
+    -test=*)
+    TEST="${arg#*=}"
+    shift
+    ;;
+  esac
 done
 
 if [ -z "$NUM_WORKERS" ]
@@ -63,7 +71,7 @@ if [ -z "$GRAPH_FILE" ]
     exit 1
 fi
 
-sh build_image.sh
+sh build_docker_image.sh
 
 echo "Cleaning outputs from other pregel runs..."
 ./clean_outputs.sh # Clean previous outputs
@@ -96,11 +104,14 @@ echo "Starting Pregel with $NUM_WORKERS workers on file $GRAPH_FILE"
 docker attach pregel-master
 echo "Stopping Pregel containers"
 cd scripts/execution
-sh ./stop_docker.sh
-cd ../..
-source venv/bin/activate
-cd visualization
-python3 draw_graph.py ../src/output_graphs/output_graph.json
-deactivate
-open graph.html
-cd ..
+sh ./stop_docker_containers.sh
+
+if [ "$TEST" = false ]; then
+    cd ../..
+    source venv/bin/activate
+    cd visualization
+    python3 draw_graph.py ../src/output_graphs/output_graph.json
+    deactivate
+    open graph.html
+    cd ..
+fi
