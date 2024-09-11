@@ -40,10 +40,8 @@ cd ../python-scripts
 source ../../venv/bin/activate
 if [ $VERBOSE = true ]
 then
-    echo 'verbose'
     python3 graph_comparison.py --graph_file=$FILE_PATH --verbose
 else
-    echo 'not verbose'
     python3 graph_comparison.py --graph_file=$FILE_PATH
 fi
 deactivate
