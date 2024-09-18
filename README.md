@@ -47,7 +47,7 @@ pip install -r requirements.txt # install
 deactivate                      # exit venv
 ```
 
-Your python environment is now ready. If you don't want to set the venv, just run `pip install requirements.txt`
+Your python environment is now ready. If you don't want to set the venv, just run `pip install requirements.txt`. Be aware that, with this, the libraries will be installed in your global python environment.
 
 ### Generating Missing Files
 
@@ -74,13 +74,13 @@ Finally, we can run your algorithm in any graph in the `graphs/` folder by using
 
 ```bash
 cd scripts/execution
-./start_docker.sh -h
+./start_pregel.sh -h
 ```
 
 In the most simple use case, the command will look like this:
 ```bash
 cd scripts/execution
-./start_docker.sh -num_workers=<number_of_workers> -graph_file=<graph_file>
+./start_pregel.sh -num_workers=<number_of_workers> -graph_file=<graph_file>
 ```
 
 
