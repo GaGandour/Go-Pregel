@@ -14,18 +14,27 @@ do
         shift
         ;;
     esac
+    case $arg in
+        -output_file=*)
+        OUTPUT_FILE="${arg#*=}"
+        shift
+        ;;
+    esac
 done
-
-if [ -z "$SUPERSTEP" ]
-  then
-    echo "Missing SUPERSTEP. Run ./visualize_superstep_state.sh with -h or --help for more information on the necessary arguments."
-    exit 1
-fi
 
 cd ../..
 source venv/bin/activate
 cd visualization
-python3 draw_graph.py --superstep=$SUPERSTEP
-deactivate
-open graph-superstep-$SUPERSTEP.html
+
+if [ -z "$SUPERSTEP" ]
+then
+    python3 draw_graph.py --output_file=$OUTPUT_FILE
+    deactivate
+    open graph.html
+else
+    python3 draw_graph.py --superstep=$SUPERSTEP
+    deactivate
+    open graph-superstep-$SUPERSTEP.html
+fi
+
 cd ..
