@@ -5,6 +5,7 @@
 FAILURE_STEP=-1
 VERBOSE=false
 CHECKPOINT_FREQUENCY=-1
+SKIP_PREGEL=false
 
 for arg in "$@"
 do
@@ -51,6 +52,12 @@ do
         shift
         ;;
     esac
+    case $arg in
+        -skip_pregel)
+        SKIP_PREGEL=true
+        shift
+        ;;
+    esac
 done
 
 if [ -z "$NUM_WORKERS" ]
@@ -64,24 +71,27 @@ if [ -z "$ALGORITHM" ]
     exit 1
 fi
 
-# Iterate through the list of graph files
+# Iterate through the list of graph files if skip pregel is not set
+if [ $SKIP_PREGEL = false ]
+then
+    for filename in ../../graphs/${ALGORITHM}/*.json; do
+        # Extract the graph name from the file name
+        graph_name=$(basename $filename)
+        graph_path="${ALGORITHM}/${graph_name}"
+        # Execute pregel and wait for output files
+        ./start_pregel.sh \
+            -num_workers=$NUM_WORKERS \
+            -graph_file=$graph_path \
+            -failure_step=$FAILURE_STEP \
+            -checkpoint_frequency=$CHECKPOINT_FREQUENCY \
+            -test
+    done
+fi
 
-for filename in ../../graphs/${ALGORITHM}/*.json; do
-    # Extract the graph name from the file name
-    graph_name=$(basename $filename)
-    graph_path="${ALGORITHM}/${graph_name}"
-    # Execute pregel and wait for output files
-    ./start_pregel.sh \
-        -num_workers=$NUM_WORKERS \
-        -graph_file=$graph_path \
-        -failure_step=$FAILURE_STEP \
-        -checkpoint_frequency=$CHECKPOINT_FREQUENCY \
-        -test
-    # Compare the output files
-    if [ $VERBOSE = true ]
-    then
-        ./compare_results.sh -file_path=$graph_path -verbose
-    else
-        ./compare_results.sh -file_path=$graph_path
-    fi
-done
+# Compare the output files
+if [ $VERBOSE = true ]
+then
+    ./compare_results.sh -algorithm=$ALGORITHM -verbose
+else
+    ./compare_results.sh -algorithm=$ALGORITHM
+fi

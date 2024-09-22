@@ -17,8 +17,8 @@ do
         ;;
     esac
     case $arg in
-        -file_path=*)
-        FILE_PATH="${arg#*=}"
+        -algorithm=*)
+        ALGORITHM="${arg#*=}"
         shift
         ;;
     esac
@@ -30,9 +30,9 @@ do
     esac
 done
 
-if [ -z "$FILE_PATH" ]
+if [ -z "$ALGORITHM" ]
   then
-    echo "Missing file_path. Run ./test_pregel_algorithm.sh with -h or --help for more information on the necessary arguments."
+    echo "Missing algorithm. Run ./test_pregel_algorithm.sh with -h or --help for more information on the necessary arguments."
     exit 1
 fi
 
@@ -40,9 +40,9 @@ cd ../python-scripts
 source ../../venv/bin/activate
 if [ $VERBOSE = true ]
 then
-    python3 graph_comparison.py --graph_file=$FILE_PATH --verbose
+    python3 graph_comparison.py --algorithm=$ALGORITHM --verbose
 else
-    python3 graph_comparison.py --graph_file=$FILE_PATH
+    python3 graph_comparison.py --algorithm=$ALGORITHM
 fi
 deactivate
 cd ../execution

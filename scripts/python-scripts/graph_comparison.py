@@ -1,8 +1,10 @@
 import argparse
 import json
+import os
 
-OUTPUT_GRAPH_FILE = "../../src/output_graphs/output_graph.json"
+OUTPUT_GRAPH_FILE = "../../src/output_graphs/"
 ANSWER_GRAPH_PATH = "../../answers/"
+
 
 def generate_argparse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Checks if the output graph is correct")
@@ -12,7 +14,7 @@ def generate_argparse() -> argparse.ArgumentParser:
         action="store_true",
     )
     parser.add_argument(
-        "--graph_file",
+        "--algorithm",
         type=str,
         help="Output graph file",
         required=True,
@@ -23,9 +25,11 @@ def generate_argparse() -> argparse.ArgumentParser:
 def graph_name_from_file(file_name: str) -> str:
     return file_name.split("/")[-1]
 
+
 def begin_test(graph_file: str) -> None:
     print("=========================================================")
     print(f"Testing output graph for {graph_name_from_file(graph_file)}...\n")
+
 
 def print_answer_is_wrong(graph_file: str) -> None:
     print(f"[x] Output graph for {graph_name_from_file(graph_file)} is incorrect.")
@@ -36,7 +40,8 @@ def print_answer_is_correct(graph_file: str) -> None:
 
 
 def graph_tester(
-    graph_file: str,
+    answer_file: str,
+    pregel_file: str,
     verbose: bool = False,
 ) -> int:
     # This flag may change along with the function execution
@@ -44,9 +49,9 @@ def graph_tester(
 
     output_graph = {}
     answer_graph = {}
-    with open(OUTPUT_GRAPH_FILE, "r") as f:
+    with open(pregel_file, "r") as f:
         output_graph = json.load(f)
-    with open(ANSWER_GRAPH_PATH + graph_file, "r") as f:
+    with open(answer_file, "r") as f:
         answer_graph = json.load(f)
 
     answer_graph = answer_graph["Vertexes"]
@@ -93,15 +98,33 @@ def graph_tester(
                 return 0
     return 1
 
+def test_graph(answer_file, pregel_file, verbose=False):
+    begin_test(pregel_file)
+    result = graph_tester(answer_file, pregel_file, verbose)
+    if result == 0:
+        print_answer_is_wrong(pregel_file)
+    else:
+        print_answer_is_correct(pregel_file)
+    print("=========================================================")
+    return result
 
 if __name__ == "__main__":
     parser = generate_argparse()
     args = parser.parse_args()
-    begin_test(args.graph_file)
-    result = graph_tester(args.graph_file, args.verbose)
-    if result == 0:
-        print_answer_is_wrong(args.graph_file)
+
+    files_to_compare = os.listdir(ANSWER_GRAPH_PATH + args.algorithm + "/")
+
+    correct = 0
+    total = 0
+
+    for file in files_to_compare:
+        graph_file = args.algorithm + "/" + file
+        answer_file = ANSWER_GRAPH_PATH + graph_file
+        pregel_file = OUTPUT_GRAPH_FILE + graph_file
+        total += 1
+        correct += test_graph(answer_file, pregel_file, args.verbose)
+
+    if correct == total:
+        print(f"All {correct} of {total} graphs are correct!")
     else:
-        print_answer_is_correct(args.graph_file)
-    print("=========================================================")
-    exit(result)
+        print(f"{total - correct} of {total} graphs are incorrect!")
