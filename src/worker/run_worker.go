@@ -35,7 +35,7 @@ func RunWorker(args WorkerArguments) {
 	worker.listener = listener
 	defer worker.listener.Close()
 
-	retryDuration = time.Duration(2) * time.Second
+	retryDuration = time.Duration(500) * time.Millisecond
 	for {
 		err = worker.register()
 

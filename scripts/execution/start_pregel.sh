@@ -98,7 +98,12 @@ else
 fi
 
 cd ..
-mkdir -p src/output_graphs
+
+# Create the folder structure for the output graph
+graph_output_folder_structure=$(dirname "$GRAPH_FILE")
+mkdir -p "src/output_graphs/$graph_output_folder_structure"
+echo "Created folder structure: src/output_graphs/$graph_output_folder_structure"
+
 docker-compose -f docker-compose.yml up -d
 echo "Starting Pregel with $NUM_WORKERS workers on file $GRAPH_FILE"
 docker attach pregel-master
@@ -110,7 +115,7 @@ if [ "$TEST" = false ]; then
     cd ../..
     source venv/bin/activate
     cd visualization
-    python3 draw_graph.py ../src/output_graphs/output_graph.json
+    python3 draw_graph.py --output_file=$GRAPH_FILE
     deactivate
     open graph.html
     cd ..

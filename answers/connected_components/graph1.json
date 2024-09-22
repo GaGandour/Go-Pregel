@@ -2,7 +2,7 @@
     "Vertexes": {
         "0": {
             "Value": {
-                "ComponentID": "0",
+                "ComponentID": "0"
             },
             "Edges": {
                 "01": {
@@ -10,12 +10,12 @@
                 },
                 "02": {
                     "To": "2"
-                },
+                }
             }
         },
         "1": {
             "Value": {
-                "ComponentID": "0",
+                "ComponentID": "0"
             },
             "Edges": {
                 "10": {
@@ -23,12 +23,12 @@
                 },
                 "12": {
                     "To": "2"
-                },
+                }
             }
         },
         "2": {
             "Value": {
-                "ComponentID": "0",
+                "ComponentID": "0"
             },
             "Edges": {
                 "21": {
@@ -36,27 +36,27 @@
                 },
                 "20": {
                     "To": "0"
-                },
+                }
             }
         },
         "3": {
             "Value": {
-                "ComponentID": "3",
+                "ComponentID": "3"
             },
             "Edges": {
                 "34": {
                     "To": "4"
-                },
+                }
             }
         },
         "4": {
             "Value": {
-                "ComponentID": "3",
+                "ComponentID": "3"
             },
             "Edges": {
                 "43": {
                     "To": "3"
-                },
+                }
             }
         }
     }

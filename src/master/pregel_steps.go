@@ -116,23 +116,30 @@ func (master *Master) orderFinishOperations() error {
 	return err
 }
 
-func (master *Master) reduceSubGraphsAndWriteToFile(outputFile string) {
+func (master *Master) reduceSubGraphsAndWriteToFile(output_file_path string) {
 	log.Println("Reducing subgraphs and writing to file")
 	fileNames := make([]string, 0)
 	for _, worker := range master.workers {
 		fileNames = append(fileNames, utils.GetSubGraphOutputFileName(worker.Id))
 	}
+	// assert that output_file_path begins with '/graphs/'
+	if output_file_path[:8] != "/graphs/" {
+		panic("Output file path must begin with '/graphs/'")
+	}
+	// remove '/graphs/' from the beginning of the output_file_path
+	output_file_path = output_file_path[8:]
+
 	communicationGraph := graph_package.ReduceSubGraphsToCommunicationGraph(fileNames)
-	communicationGraph.WriteGraphToFile(outputFile)
+	communicationGraph.WriteGraphToFile(utils.OUTPUT_FILES_DIR + output_file_path)
 }
 
 func (master *Master) reduceSubGraphsFromLastCheckpoint() *graph_package.CommunicationGraph {
 	log.Println("Reducing subgraphs from last checkpoint")
 	fileNames, err := utils.GetCheckpointFileNamesForSuperstep(master.lastCheckpointSuperStep + 1)
-    if err != nil {
-        log.Println("Error getting checkpoint file names")
-        return nil
-    }
+	if err != nil {
+		log.Println("Error getting checkpoint file names")
+		return nil
+	}
 	communicationGraph := graph_package.ReduceSubGraphsToCommunicationGraph(fileNames)
-    return communicationGraph
+	return communicationGraph
 }

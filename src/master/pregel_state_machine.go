@@ -3,7 +3,6 @@ package master
 import (
 	"log"
 	"pregel/graph_package"
-	"pregel/utils"
 )
 
 type PregelState int
@@ -35,7 +34,7 @@ func (master *Master) executePregelStep(pregelStepValues *PregelStepValues) {
 		inputFile := pregelStepValues.InputFile
 		graph := graph_package.ReadCommunicationGraphFromFile(inputFile)
 		if graph == nil {
-			log.Println("Error reading graph from file")
+			panic("Error reading graph from file")
 		}
 		pregelStepValues.Graph = graph
 		pregelStepValues.PregelState = CHECK_WORKERS
@@ -106,7 +105,7 @@ func (master *Master) executePregelStep(pregelStepValues *PregelStepValues) {
 		}
 	case REDUCE_SUBGRAPHS:
 		// Reduce subgraphs and write to file
-		master.reduceSubGraphsAndWriteToFile(utils.OUTPUT_FILE_NAME)
+		master.reduceSubGraphsAndWriteToFile(pregelStepValues.InputFile)
 		pregelStepValues.PregelState = FINISH_OPERATIONS
 	case FINISH_OPERATIONS:
 		// Tell workers to shut down
