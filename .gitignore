@@ -1,5 +1,6 @@
 docker-compose.yml
 src/output_graphs/*
+docker_logs/*
 pregel
 user_defined_*
 venv
