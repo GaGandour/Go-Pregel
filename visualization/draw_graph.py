@@ -1,7 +1,6 @@
 import argparse
 import json
 import os
-import sys
 
 from pyvis.network import Network
 from user_defined_value_displaying import edge_value_to_display, vertex_value_to_display
