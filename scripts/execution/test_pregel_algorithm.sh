@@ -16,9 +16,11 @@ do
         echo "  -failure_step=<step number>: Simulate a failure in one of the workers at the specified step number. The worker will not be restarted and the computation will continue. The step number should be a positive integer."
         echo "  -checkpoint_frequency=<frequency>: Checkpoint the graph state every <frequency> supersteps. The frequency should be a positive integer."
         echo "  -verbose: A little more explanation about the errors is given.\n"
+        echo "  -skip_pregel: Skip the pregel execution and only compare the output files.\n"
         echo "Example 1: ./test_pregel_algorithm.sh -num_workers=3 -algorithm=topological_sort"
         echo "Example 2: ./test_pregel_algorithm.sh -num_workers=3 -algorithm=topological_sort -failure_step=5"
-        echo "Example 3: ./test_pregel_algorithm.sh -num_workers=3 -algorithm=topological_sort -debug"
+        echo "Example 3: ./test_pregel_algorithm.sh -num_workers=3 -algorithm=topological_sort -verbose"
+        echo "Example 4: ./test_pregel_algorithm.sh -num_workers=3 -algorithm=topological_sort -skip_pregel"
         exit 0
         ;;
     esac

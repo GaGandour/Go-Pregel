@@ -12,6 +12,7 @@ do
   case $arg in
     -h|--help)
     echo "Usage: ./start_docker.sh -num_workers=<number of workers> -graph_file=<graph input file>"
+    echo "The graph file is the relative path from the graphs folder."
     echo "Optional arguments:"
     echo "  -debug: Run in debug mode. This makes the pregel program to register the graph state in every superstep."
     echo "  -failure_step=<step number>: Simulate a failure in one of the workers at the specified step number. The worker will not be restarted and the computation will continue. The step number should be a positive integer."

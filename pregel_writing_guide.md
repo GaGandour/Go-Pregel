@@ -95,7 +95,7 @@ Finally, we need to decide how we'll output the result. In Pregel, the ouput is 
 
 ## Go-Pregel API
 
-### The Graph Types
+### The User-Defined Graph Types
 
 The files we can change in the Go-Pregel are the ones that start with "user_defined". The first one is the `./src/graph_package/user_defined_graph_types.go` file. This file contains the schemas used to store the data. There are five types you can define here:
 
@@ -115,7 +115,7 @@ The second file we can change is the `./src/graph_package/user_defined_graph_met
 
 We can also store the global variables in the top of the file. In the SSSP problem, we can store the source vertex here.
 
-The implementation of the functions 1 and 2 are the most important part of the algorithm, and for that we'll need to use the available methods (not to be implemented nor changed!) in the `./src/graph_package/graph_methods.go` file. The available methods are:
+The implementation of the functions 1 and 2 are the most important part of the algorithm, and for that we'll need to use the available methods (not to be implemented nor changed!) in the `./src/graph_package/graph_auxiliary_methods.go` file. The available methods are:
 
 1. `GetSuperStepNumber`: returns the current superstep number.
 2. `GetValue`: returns the value stored in the vertex.
@@ -127,6 +127,14 @@ The implementation of the functions 1 and 2 are the most important part of the a
 8. `VoteToHalt`: votes to halt the algorithm. If all vertices vote to halt, the algorithm ends.
 
 There are other methods in the file, but those are the only ones that you'll need.
+
+### Other Important Graph Types
+
+Another important type is the `Edge` type. It represents an edge in the graph, and the `Vertex` method `GetOutEdges` returns a map of edges (of type `Edge`) that go out of the vertex. The keys are the edge IDs. The `Edge` type has three fields:
+
+1. `Id`: the edge ID. (type `EdgeIdType`)
+2. `To`: the vertex ID of the target vertex. (type `VertexIdType`)
+3. `Value`: the value stored in the edge. (type `EdgeValue`)
 
 ## The Bellman-Ford Algorithm in Go-Pregel
 
