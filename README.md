@@ -57,6 +57,7 @@ Now, we must enter the virtual environment, install the libraries, and finally w
 
 ```bash
 source venv/bin/activate        # enter venv
+# if you are on Windows, run .\venv\Scripts\activate instead, without the source command!
 pip install -r requirements.txt # install
 deactivate                      # exit venv
 ```
