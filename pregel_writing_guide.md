@@ -153,12 +153,11 @@ type EdgeValue struct {
 }
 
 type PregelMessage struct {
-    Distance int
-    Weight int
+    NewDistance int
 }
 ```
 
-Now, we need to define the global variables and the methods. We'll use the following global variables:
+Now, we need to define the global variables and the methods, both in the methods file. We'll use the following global variables:
 
 ```go
 var source VertexIdType
@@ -168,33 +167,57 @@ And the following methods:
 
 ```go
 func (vertex *Vertex) ComputeInSuperStepZero() {
-    source = 0
-    if vertex.Id == source {
-        vertex.SetValue(VertexValue{Distance: 0})
-    } else {
-        vertex.SetValue(VertexValue{Distance: inf})
-    }
-    for _, edge := range vertex.GetOutEdges() {
-        vertex.PrepareMessageToVertex(edge.To, PregelMessage{Distance: vertex.GetValue(), Weight: edge.Value.Weight})
-    }
+	source = "0"
+	if vertex.Id == source {
+		vertex.SetValue(VertexValue{Distance: 0})
+	} else {
+		vertex.SetValue(VertexValue{Distance: -1})
+	}
+
+	if vertex.Id == source {
+		for _, edge := range vertex.GetOutEdges() {
+			pregelMessage := PregelMessage{NewDistance: edge.Value.Weight}
+			vertex.PrepareMessageToVertex(edge.To, pregelMessage)
+		}
+	}
 }
 
 func (vertex *Vertex) Compute(receivedMessages []PregelMessage) {
-    if vertex.GetSuperStepNumber() == len(vertex.GetGraph().Vertices) - 1 {
-        vertex.VoteToHalt()
-        return
-    }
-    distance := vertex.GetValue().Distance
-    for _, message := range receivedMessages {
-        if message.Distance + message.Weight < distance {
-            distance = message.Distance + message.Weight
-            vertex.SetValue(VertexValue{Distance: distance})
-        }
-    }
-    for _, edge := range vertex.GetOutEdges() {
-        vertex.PrepareMessageToVertex(edge.To, PregelMessage{Distance: distance, Weight: edge.Value.Weight})
-    }
+	currentDistance := vertex.GetValue().Distance
+
+	hasChanged := false
+	for _, message := range receivedMessages {
+		if currentDistance == -1 || message.NewDistance < currentDistance {
+			hasChanged = true
+			currentDistance = message.NewDistance
+		}
+	}
+
+	if hasChanged {
+		vertex.SetValue(VertexValue{Distance: currentDistance})
+		for _, edge := range vertex.GetOutEdges() {
+			pregelMessage := PregelMessage{NewDistance: currentDistance + edge.Value.Weight}
+			vertex.PrepareMessageToVertex(edge.To, pregelMessage)
+		}
+	} else {
+		vertex.VoteToHalt()
+	}
 }
 ```
 
 And that's it! We have the Bellman-Ford algorithm in Go-Pregel. Now we can run it in a distributed way.
+
+After running pregel, we want to customize the output visualization. We can do that on the `./visualization/user_defined_value_displaying.py` file. We can rewrite the functions `vertex_value_to_display` and `edge_value_to_display` to display the information we want. In the SSSP problem, we can display the distance from the source to the vertex in the vertex itself. We also would like to display the weight of the edge in the edge itself. The functions mentioned already come with two parameters: the vertex or edge ID and the value stored in the vertex or edge, as a dictionary. The dictionary follows the same schema as in the Go-Pregel algorithm. The following code is an example of customization:
+
+```python
+def vertex_value_to_display(vertex_id, value_dict) -> str:
+    return f"""{vertex_id}\nDistance: {value_dict["Distance"]}"""
+
+
+def edge_value_to_display(edge_id, value_dict) -> str:
+    return f"""{edge_id}\nWeight: {value_dict["Weight"]}"""
+```
+
+Now, the visualization tool will display the graph with the distances and weights in the vertices and edges, respectively.
+
+![Graph output image](./assets/sssp\ output\ graph.png)

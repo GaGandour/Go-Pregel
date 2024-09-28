@@ -46,8 +46,9 @@ The best way to understand it is by watching a real Pregel execution. The next i
 
 1. Gather in pairs. If you want, you can also do the activity alone. However, even if you do it in pairs, each person has to write the code and make it work on their own computer. Each pair will hand in a single report.
 2. Go to [https://github.com/GaGandour/Go-Pregel](https://github.com/GaGandour/Go-Pregel) and clone the repo.
-3. Read the [pregel_writing_guide.md](https://github.com/GaGandour/Go-Pregel/blob/main/pregel_writing_guide.md) file to understand which files you have to modify, if necessary.
-4. Start coding!
+3. Read the [README.md](https://github.com/GaGandour/Go-Pregel/blob/main/README.md) to set up your environment. All the commands have to be run from the project directory.
+4. Read the [pregel_writing_guide.md](https://github.com/GaGandour/Go-Pregel/blob/main/pregel_writing_guide.md) file to understand which files you have to modify, if necessary.
+5. Start coding!
 
 There will be three levels of dificulty, to be done in order. For each level of dificulty, you have to:
 
@@ -65,6 +66,11 @@ There will be three levels of dificulty, to be done in order. For each level of 
 Every algorithm inside the `/graphs/` folder has files named `graph1.json`, `graph2.json` and so on. The last graph is the one that has the highest number.
 
 ### The Levels
+
+#### Level 0 (Very Easy)
+
+Implement the Single Source Shortest Path (SSSP) algorithm in Go-Pregel, and then test the algorithm on the given graphs. The solution is in the [pregel_writing_guide.md](https://github.com/GaGandour/Go-Pregel/blob/main/pregel_writing_guide.md) file.
+
 #### Level 1 (Easy)
 
 Choose between one of the following algorithms:

@@ -72,7 +72,7 @@ cd scripts/prepare-repo
 ./write_untracked_files.sh
 ```
 
-### Writing the Algorithm
+### Writing the Graph Algorithm
 
 You can modify the following files:
 + `src/graph_package/user_defined_graph_methods.go`
@@ -85,7 +85,7 @@ To understand how to write a pregel algorithm, read the [pregel_writing_guide.md
 
 ### Running Pregel
 
-Finally, we can run your algorithm in any graph in the `graphs/` folder by using the `start_docker.sh` script under the `/scripts/execution/` folder. Before using it, you MUST be in this `/scripts/execution/` folder before running it. To see the usage of the script and/or see the available arguments to pass to it, run `./start_docker.sh -h` or `./start_docker.sh --help`.
+Finally, we can run your algorithm in any graph in the `graphs/` folder by using the `start_docker.sh` script under the `/scripts/execution/` folder. Before using it, you MUST be in this `/scripts/execution/` folder before running it. To see the usage of the script and/or see the available arguments to pass to it, run `./start_docker.sh -h` or `./start_docker.sh --help`. Remember to start the docker deamon!
 
 ```bash
 cd scripts/execution
