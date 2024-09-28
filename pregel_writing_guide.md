@@ -220,4 +220,4 @@ def edge_value_to_display(edge_id, value_dict) -> str:
 
 Now, the visualization tool will display the graph with the distances and weights in the vertices and edges, respectively.
 
-![Graph output image]("./assets/sssp_output_graph.png")
+![Graph output image](./assets/sssp_output_graph.png)
