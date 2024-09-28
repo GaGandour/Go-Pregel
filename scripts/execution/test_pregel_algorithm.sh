@@ -90,6 +90,7 @@ then
     done
 fi
 
+cd ../auxiliary/
 # Compare the output files
 if [ $VERBOSE = true ]
 then

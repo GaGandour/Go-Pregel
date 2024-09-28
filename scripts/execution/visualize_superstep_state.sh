@@ -5,6 +5,7 @@ do
     case $arg in
         -h|--help)
         echo "Usage: ./visualize_superstep_state.sh -superstep=<superstep number>"
+        echo "Or: ./visualize_superstep_state.sh -output_file=<output file name>"
         exit 0
         ;;
     esac

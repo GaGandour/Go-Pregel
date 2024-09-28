@@ -1,7 +1,10 @@
 {
     "Vertexes": {
         "0": {
-            "Edges": {
+           "Value": {
+               "Distance": 0
+           },
+           "Edges": {
                 "02": {
                     "To": "2",
                     "Value": {
@@ -23,6 +26,9 @@
             }
         },
         "1": {
+            "Value": {
+                "Distance": -1
+            },
             "Edges": {
                 "14": {
                     "To": "4",
@@ -39,6 +45,9 @@
             }
         },
         "2": {
+            "Value": {
+                "Distance": 1
+            },
             "Edges": {
                 "23": {
                     "To": "3",
@@ -55,9 +64,15 @@
             }
         },
         "3": {
+            "Value": {
+                "Distance": 2
+            },
             "Edges": {}
         },
         "4": {
+            "Value": {
+                "Distance": 1
+            },
             "Edges": {
                 "45": {
                     "To": "5",
@@ -68,9 +83,15 @@
             }
         },
         "5": {
+            "Value": {
+                "Distance": 1
+            },
             "Edges": {}
         },
         "6": {
+            "Value": {
+                "Distance": -1
+            },
             "Edges": {
                 "67": {
                     "To": "7",
@@ -81,9 +102,15 @@
             }
         },
         "7": {
+            "Value": {
+                "Distance": -1
+            },
             "Edges": {}
         },
         "8": {
+            "Value": {
+                "Distance": -1
+            },
             "Edges": {
                 "89": {
                     "To": "9",
@@ -94,6 +121,9 @@
             }
         },
         "9": {
+            "Value": {
+                "Distance": -1
+            },
             "Edges": {
                 "910": {
                     "To": "10",
@@ -104,6 +134,9 @@
             }
         },
         "10": {
+            "Value": {
+                "Distance": -1
+            },
             "Edges": {
                 "108": {
                     "To": "8",

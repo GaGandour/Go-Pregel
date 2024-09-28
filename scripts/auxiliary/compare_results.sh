@@ -45,5 +45,5 @@ else
     python3 graph_comparison.py --algorithm=$ALGORITHM
 fi
 deactivate
-cd ../execution
+cd ../auxiliary/
 

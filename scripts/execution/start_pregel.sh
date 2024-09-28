@@ -75,7 +75,9 @@ fi
 sh build_docker_image.sh
 
 echo "Cleaning outputs from other pregel runs..."
+cd ../auxiliary/
 ./clean_outputs.sh # Clean previous outputs
+cd ../execution/
 echo "Finished cleaning outputs from other pregel runs"
 
 cd ..
@@ -109,8 +111,9 @@ docker-compose -f docker-compose.yml up -d
 echo "Starting Pregel with $NUM_WORKERS workers on file $GRAPH_FILE"
 docker attach pregel-master
 echo "Stopping Pregel containers"
-cd scripts/execution
+cd scripts/auxiliary
 sh ./stop_docker_containers.sh
+cd ../execution
 
 if [ "$TEST" = false ]; then
     cd ../..
