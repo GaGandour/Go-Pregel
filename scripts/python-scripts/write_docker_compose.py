@@ -135,8 +135,7 @@ def create_docker_compose(
     checkpoint_frequency: int,
 ) -> str:
     workers_description = "\n".join([create_worker(i, failure_step) for i in range(1, num_workers + 1)])
-    return f"""version: '3'
-services:
+    return f"""services:
 {create_master(input_file, debug, num_workers, checkpoint_frequency)}
 {workers_description}
 """
