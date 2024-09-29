@@ -54,8 +54,8 @@ do
     ;;
   esac
   case $arg in
-    -test=*)
-    TEST="${arg#*=}"
+    -test)
+    TEST=true
     shift
     ;;
   esac
