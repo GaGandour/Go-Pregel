@@ -14,6 +14,12 @@ Pregel is a Google framework used for writing distributed graph algorithms.
 
 Go-Pregel is a Golang version of Pregel, written by Gandour for his Graduation Thesis. Its basic functionality is the same as the original Pregel, and both frameworks work in the same way (although Google's Pregel is written in C++). From now on, for simplicity, all mentions of Pregel refer to Go-Pregel.
 
+### The Problem
+
+The objective of Pregel is to distribute graph algorithms. Imagine Facebook's social network as a graph, where each vertex is a person and each edge is a friendship between two people. Or imagine the internet as a graph, where each vertex is a website and each edge is a hyperlink. These are huge graphs in which you can't simply process all the data in a single machine, let alone run a graph algorithm on it, such as Dijkstra's algorithm or the PageRank algorithm. We thus need to distribute the computation.
+
+However, it is difficult to distribute the computation of a graph algorithm, because each algorithm has its own characteristics and can be parallelized in a different way. Pregel solves this problem by providing a framework that allows the user to write a graph algorithm in a simple way, and then Pregel takes care of distributing the computation. Of course, it isn't as simple as copying the algorithm to Pregel, but the necessary adaptations are much simpler that writing a distributed algorithm from scratch.
+
 ### Input and Output
 
 The input of a Pregel algorithm is always a graph, and the output of a Pregel algorithm is always a graph (there are some exceptions that won't be covered in this document). However, in some algorithms, the desired output is not a graph. For example, in the [SSSP](https://www.sciencedirect.com/topics/computer-science/shortest-path-problem#:~:text=The%20Single%2DSource%20Shortest%20Path,%5B1%5D%20solve%20this%20problem.) problem, the output is maybe a path from a source to the destiny, along with the distance traveled.
@@ -38,13 +44,19 @@ In Pregel, each vertex of the graph acts as an independent node, with its own co
 
 BSP shows us how Pregel executes its computation, but it doesn't show us how the algorithm stops. The algorithm stops by unanimity. After each superstep, each vertex votes if Pregel should or not halt. If every vertex agrees to halt the algorithm, it stops, and the final graph is written. When a vertex votes to halt, it becomes inactive, and it won't take part in the next computation steps. The vertex stays inactive forever, or until it receives a message from another vertex (after which it becomes active again, and the vote to halt is nullified until it votes again).
 
-The best way to understand it is by watching a real Pregel execution. The next image shows the execution of a Pregel algorithm. The input and output are [strongly connected graphs](https://www.geeksforgeeks.org/strongly-connected-components/) in which each vertex has an integer value. The algorithm finds the minimum value among all the vertices and stores it in every vertex. The white vertices are active and the gray ones are inactive. The full arrows are edges and the dotted arrows are messages being passed.
+The best way to understand it is by watching a real Pregel execution. The next image shows the execution of a Pregel algorithm. The input and output are [strongly connected graphs](https://www.geeksforgeeks.org/strongly-connected-components/) in which each vertex has an integer value. The algorithm finds the minimum value among all the vertices and stores it in every vertex. The white vertices are active and the gray ones are inactive. The full arrows are edges and the dotted arrows are messages being passed. Finally, the number inside each vertex is the value it holds in a certain superstep. We'll call the vertex in the image below, from left to right, as A, B, C and D.
 
 ![Pregel Execution Example](https://lh7-rt.googleusercontent.com/docsz/AD_4nXeI_dcXtNqEuJCWrMBFGxeQ5RMZOKbiEamSxfUvB3OaaIjWMA7f8_IGEwUbji9HCfzygSrqxJMdT1IlvuhQSeISlN5ddToWvA4hnMKvmM2cvrDIbcfgV-xpj7G6rOm4Kk4iShgMCK8sWr0J2F_Dv7v1QOA?key=oZsNvXQ9C3K9ph2At-HyBg)
 
+In the superstep zero, vertex A sends a message to B saying that A has value 3. On the other hand, B sends a message to A and D saying that B has 6. In superstep 1, the vertexes read the messages received in superstep zero and update their values - A and D change to 6, while B and C didn't change their values. Since B and C didn't change values, they vote to halt. The active vertices then sent messages to the others: A sends 6 to B and D sends 6 to C. In superstep 2, C receives a message, so it awakens and changes value. B also awakens, but it doesn't change value and votes to halt again. Finally, C sends 6 to B and D. In superstep 3, B and D receive the message, but don't change value. They vote to halt, and the algorithm stops because every vertex is inactive.
+
+### Algorithm Distribution
+
+Note that each vertex is independent, and only communicate with others through messages. There is no memory sharing between them. So it's possible to distribute the vertexes among many machines. In practice, each machine receives many vertexes, and the whole graph is distributed uniformly among those machines.
+
 ## Activity
 
-1. Gather in pairs. If you want, you can also do the activity alone. However, even if you do it in pairs, each person has to write the code and make it work on their own computer. Each pair will hand in a single report.
+1. Gather in pairs. If you want, you can also do the activity alone. However, even if you do it in pairs, each person has to write the code and make it work on their own computer.
 2. Go to [https://github.com/GaGandour/Go-Pregel](https://github.com/GaGandour/Go-Pregel) and clone the repo.
 3. Read the [README.md](https://github.com/GaGandour/Go-Pregel/blob/main/README.md) to set up your environment. All the commands have to be run from the project directory.
 4. Read the [pregel_writing_guide.md](https://github.com/GaGandour/Go-Pregel/blob/main/pregel_writing_guide.md) file to understand which files you have to modify, if necessary.
@@ -55,15 +67,6 @@ There will be three levels of difficulty, to be done in order. For each level of
 1. Write the algorithm in Go-Pregel.
 2. Test the algorithm using the provided testing script (read the repo [README.md](https://github.com/GaGandour/Go-Pregel/blob/main/README.md))
 3. Be sure that you algorithm passes all tests.
-
-### What needs to be written on the report
-
-1. The code of the algorithm for each level of difficulty.
-2. The reasoning behind it and how you came up with it.
-3. The print of the terminal saying that the algorithm passed all tests.
-4. An image of the last graph for the algorithm, generated by the visualization tool.
-
-Every algorithm inside the `/graphs/` folder has files named `graph1.json`, `graph2.json` and so on. The last graph is the one that has the highest number.
 
 ### The Levels
 
@@ -89,4 +92,5 @@ Solve Sudoku using Pregel. You have to be creative here.
 ## Deliverables
 
 1. For each level of difficulty, the files `./src/graph_package/user_defined_graph_types.go` and `./src/graph_package/user_defined_graph_methods.go` must be submitted.
-2. Fill in the google form with the link available in Google Classroom.
+2. In the `./src/graph_package/user_defined_graph_methods.go` file, write a comment explaining how you came up with the algorithm adaptation to Pregel. Don't forget to put your name and the name of the algorithm on the top of the file.
+3. Fill in the google form with the link available in Google Classroom.
