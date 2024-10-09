@@ -93,6 +93,7 @@ Your python environment is now ready. If you don't want to set the venv, just ru
 
 To generate the files that you must fill up to use Pregel, run:
 ```bash
+# Run from the root of the project
 cd scripts/prepare-repo
 ./write_untracked_files.sh
 ```
@@ -113,6 +114,7 @@ To understand how to write a pregel algorithm, read the [pregel_writing_guide.md
 Finally, we can run your algorithm in any graph in the `graphs/` folder by using the `start_docker.sh` script under the `/scripts/execution/` folder. Before using it, you MUST be in this `/scripts/execution/` folder before running it. To see the usage of the script and/or see the available arguments to pass to it, run `./start_docker.sh -h` or `./start_docker.sh --help`. Remember to start the docker deamon!
 
 ```bash
+# Run from the root of the project
 cd scripts/execution
 ./start_pregel.sh -h
 ```
@@ -120,6 +122,7 @@ cd scripts/execution
 In the most simple use case, the command will look like this, where the graph_file is the path to the graph file relative from the `graphs/` folder:
 
 ```bash
+# Run from the root of the project
 cd scripts/execution
 ./start_pregel.sh -num_workers=<number_of_workers> -graph_file=<graph_file>
 ```
@@ -131,6 +134,7 @@ In the end of the execution, a browser page with the output graph will open.
 If you want to visualize the output of the Pregel algorithm without running it again, or if you want to visualize the Pregel state in a certain superstep (or even the initial state), you can use the `visualize_superstep_state.sh` script inside `./scripts/execution/`. The usage is similar to the `start_pregel.sh` script. If you want to visualize a superstep, you run:
 
 ```bash
+# Run from the root of the project
 cd scripts/execution
 ./visualize_superstep_state.sh -superstep=<superstep>
 ```
@@ -138,6 +142,7 @@ cd scripts/execution
 However, if you want to visualize the final pregel outputfor a certain graph, you can run the following commands, where the output file is also the relative path to the graph file from the `graphs/` folder:
 
 ```bash
+# Run from the root of the project
 cd scripts/execution
 ./visualize_superstep_state.sh -output_file=<output_file>
 ```
@@ -147,6 +152,7 @@ cd scripts/execution
 After writing a Pregel algorithm, you can test it in every available graph inside `./graphs/<algorithm>/` folder, by using the `./scripts/execution/test_pregel_algorithm.sh` script. To understand the flags and arguments that you can pass to the script, run:
 
 ```bash
+# Run from the root of the project
 cd scripts/execution
 ./test_pregel_algorithm.sh -h
 ```
