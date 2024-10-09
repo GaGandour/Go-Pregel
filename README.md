@@ -111,7 +111,7 @@ To understand how to write a pregel algorithm, read the [pregel_writing_guide.md
 
 ### Running Pregel
 
-Finally, we can run your algorithm in any graph in the `graphs/` folder by using the `start_docker.sh` script under the `/scripts/execution/` folder. Before using it, you MUST be in this `/scripts/execution/` folder before running it. To see the usage of the script and/or see the available arguments to pass to it, run `./start_docker.sh -h` or `./start_docker.sh --help`. Remember to start the docker deamon!
+Finally, we can run your algorithm in any graph in the `graphs/` folder by using the `start_docker.sh` script under the `/scripts/execution/` folder. Before using it, you MUST be in this `/scripts/execution/` folder before running it. To see the usage of the script and/or see the available arguments to pass to it, run `./start_docker.sh -h` or `./start_docker.sh --help`. **Remember to start the docker deamon!**
 
 ```bash
 # Run from the root of the project
