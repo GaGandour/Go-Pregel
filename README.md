@@ -45,6 +45,30 @@ We use Go to execute the Pregel logic, and Docker to containerize it.
 
 You'll also need Python. We'll use Python (you can download it at [https://www.python.org/downloads/](https://www.python.org/downloads/)) to visualize the output graph, after the Pregel algorithm has finished. Python is also used to write the `docker-compose.yml` file, which is used to run the Pregel algorithm.
 
+### If you are using Windows
+
+If you are not using Windows, you can skip this section.
+
+If you are using windows, you'll need wsl to run pregel. You can install it on Windows 10 by following the instructions at [https://docs.microsoft.com/en-us/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+
+After installing wsl, you'll need to run wsl and run the following commands:
+
+```bash
+sudo apt update
+sudo apt install python3-pip
+sudo apt install python3-venv
+```
+
+This guarantees that you'll be able to create a virtual environment on wsl.
+
+Furthermore, you'll need to replace every appearence of the word `open` in the files `./scripts/execution/start_pregel.sh` and `./scripts/execution/visualize_superstep_state.sh` to `Explorer.exe`. This is because the `open` command is not available on wsl.
+
+### If you are using Linux
+
+If you are not using Linux, you can skip this section.
+
+If you are using Linux, you'll need to replace every appearence of the word `open` in the files `./scripts/execution/start_pregel.sh` and `./scripts/execution/visualize_superstep_state.sh` to `firefox` or `google-chrome`, depending on your preferences. This is because the `open` command is not available on Linux.
+
 ### Preparing the python environment
 
 For our Python file to work, we'll need some libraries. It is recommended to set up a virtual environment (venv) to contain the necessary libraries, although it's not mandatory. If you want to set up the venv, it's very simple:
@@ -52,6 +76,8 @@ For our Python file to work, we'll need some libraries. It is recommended to set
 ```
 python -m venv venv
 ```
+
+Depending on the machine, you'll might need to use `python3` instead of `python`.
 
 Now, we must enter the virtual environment, install the libraries, and finally we can get out of the venv:
 
