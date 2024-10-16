@@ -85,9 +85,9 @@ Choose between one of the following algorithms:
 
 Implement the Bipartite Graph algorithm in Go-Pregel, and then test the algorithm on the given graphs.
 
-#### Level 3 (Ultra hard - Optional)
+#### (OPTIONAL) Level 3 (Ultra hard - Optional - This is really hard)
 
-Solve Sudoku using Pregel. You have to be creative here.
+Solve Sudoku using Pregel. You have to be creative here. In this level, you'll also have to model the Sudoku problem as a graph, and provide input graphs to test it.
 
 ## Deliverables
 
