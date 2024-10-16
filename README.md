@@ -96,6 +96,7 @@ To generate the files that you must fill up to use Pregel, run:
 # Run from the root of the project
 cd scripts/prepare-repo
 ./write_untracked_files.sh
+cd ../..
 ```
 
 ### Writing the Graph Algorithm
@@ -117,6 +118,7 @@ Finally, we can run your algorithm in any graph in the `graphs/` folder by using
 # Run from the root of the project
 cd scripts/execution
 ./start_pregel.sh -h
+cd ../..
 ```
 
 In the most simple use case, the command will look like this, where the graph_file is the path to the graph file relative from the `graphs/` folder:
@@ -125,6 +127,7 @@ In the most simple use case, the command will look like this, where the graph_fi
 # Run from the root of the project
 cd scripts/execution
 ./start_pregel.sh -num_workers=<number_of_workers> -graph_file=<graph_file>
+cd ../..
 ```
 
 In the end of the execution, a browser page with the output graph will open.
@@ -137,6 +140,7 @@ If you want to visualize the output of the Pregel algorithm without running it a
 # Run from the root of the project
 cd scripts/execution
 ./visualize_superstep_state.sh -superstep=<superstep>
+cd ../..
 ```
 
 However, if you want to visualize the final pregel outputfor a certain graph, you can run the following commands, where the output file is also the relative path to the graph file from the `graphs/` folder:
@@ -145,6 +149,7 @@ However, if you want to visualize the final pregel outputfor a certain graph, yo
 # Run from the root of the project
 cd scripts/execution
 ./visualize_superstep_state.sh -output_file=<output_file>
+cd ../..
 ```
 
 ### Running tests for a certain algorithm
@@ -155,6 +160,7 @@ After writing a Pregel algorithm, you can test it in every available graph insid
 # Run from the root of the project
 cd scripts/execution
 ./test_pregel_algorithm.sh -h
+cd ../..
 ```
 
 ### Debugging

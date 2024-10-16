@@ -141,6 +141,7 @@ Another important type is the `Edge` type. It represents an edge in the graph, a
 Now that we know how to convert an algorithm to Pregel, let's see the Bellman-Ford algorithm in Go-Pregel. The first thing we need to do is to define the graph types. We'll use the following types:
 
 ```go
+// File: ./src/graph_package/user_defined_graph_types.go
 type VertexIdType string
 type EdgeIdType string
 
@@ -157,15 +158,13 @@ type PregelMessage struct {
 }
 ```
 
-Now, we need to define the global variables and the methods, both in the methods file. We'll use the following global variables:
+Now, we need to define the global variables and the methods, both in the methods file. We'll use the following global variable and methods:
 
 ```go
+// File: ./src/graph_package/user_defined_graph_methods.go
+
 var source VertexIdType
-```
 
-And the following methods:
-
-```go
 func (vertex *Vertex) ComputeInSuperStepZero() {
 	source = "0"
 	if vertex.Id == source {

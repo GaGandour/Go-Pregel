@@ -57,8 +57,8 @@ Note that each vertex is independent, and only communicate with others through m
 ## Activity
 
 1. Gather in pairs. If you want, you can also do the activity alone. However, even if you do it in pairs, each person has to write the code and make it work on their own computer.
-2. Go to [https://github.com/GaGandour/Go-Pregel](https://github.com/GaGandour/Go-Pregel) and clone the repo.
-3. Read the [README.md](https://github.com/GaGandour/Go-Pregel/blob/main/README.md) to set up your environment. All the commands have to be run from the project directory.
+2. Do the Pre-Lab if you haven't done it yet.
+3. (Optional) Read the [README.md](https://github.com/GaGandour/Go-Pregel/blob/main/README.md) If you have any doubts.
 4. Read the [pregel_writing_guide.md](https://github.com/GaGandour/Go-Pregel/blob/main/pregel_writing_guide.md) file to understand which files you have to modify, if necessary.
 5. Start coding!
 

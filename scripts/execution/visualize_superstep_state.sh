@@ -31,11 +31,27 @@ if [ -z "$SUPERSTEP" ]
 then
     python3 draw_graph.py --output_file=$OUTPUT_FILE
     deactivate
+    ###############################
+    echo "Opening graph image in browser..."
+    # In MacOs:
     open graph.html
+    # In Linux:
+    # firefox graph.html
+    # In Windows:
+    # Explorer.exe graph.html
+    ###############################
 else
     python3 draw_graph.py --superstep=$SUPERSTEP
     deactivate
+    ###############################
+    echo "Opening graph image in browser..."
+    # In MacOs:
     open graph-superstep-$SUPERSTEP.html
+    # In Linux:
+    # firefox graph.html
+    # In Windows:
+    # Explorer.exe graph.html
+    ###############################
 fi
 
 cd ..

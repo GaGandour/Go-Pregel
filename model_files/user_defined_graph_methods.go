@@ -1,3 +1,14 @@
+/*
+THIS COMMENT IS FOR THE STUDENTS GOING THROUGH THE LAB:
+Student Name: <Your Name>
+Class: <Your Class>
+
+Algorithm: <Your Algorithm. Examples: sssp, connected_components, etc.>
+
+Explanation of the algorithm parallelization:
+<Explain how your Pregel algorithm works, and why it parallelizes the proposed algorithm. Also, explain how you came up with your solution.>
+*/
+
 package graph_package
 
 /*

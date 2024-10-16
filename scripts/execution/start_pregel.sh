@@ -121,6 +121,14 @@ if [ "$TEST" = false ]; then
     cd visualization
     python3 draw_graph.py --output_file=$GRAPH_FILE
     deactivate
+    ###############################
+    echo "Opening graph image in browser..."
+    # In MacOs:
     open graph.html
+    # In Linux:
+    # firefox graph.html
+    # In Windows:
+    # Explorer.exe graph.html
+    ###############################
     cd ..
 fi

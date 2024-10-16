@@ -1,3 +1,11 @@
+/*
+THIS COMMENT IS FOR THE STUDENTS GOING THROUGH THE LAB:
+Student Name: <Your Name>
+Class: <Your Class>
+
+Algorithm: <Your Algorithm. Examples: sssp, connected_components, etc.>
+*/
+
 package graph_package
 
 /*
