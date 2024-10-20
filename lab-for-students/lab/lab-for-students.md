@@ -54,6 +54,18 @@ In the superstep zero, vertex A sends a message to B saying that A has value 3. 
 
 Note that each vertex is independent, and only communicate with others through messages. There is no memory sharing between them. So it's possible to distribute the vertexes among many machines. In practice, each machine receives many vertexes, and the whole graph is distributed uniformly among those machines.
 
+### The Go-Pregel Arquitecture
+
+The Go-Pregel framework follows a master-worker architecture. After the user writes the algorithm and triggers the pregel script, the master and workers are activated. The master worker reads the graph from a file in the storage and partitions the graph among the workers. Then the Pregel State Machine begins its execution, giving orders to the workers when they need to proceed with new supersteps, or checkpoint registering. When all workers vote to halt (this is checked by the master after every superstep), the master tells the workers to write the final graph to the storage. The master and workers then stop the execution.
+
+After that, the visualization tool is activated and reads the final graph json file and converts it to a html file, which is then opened in the browser. The following image shows the Go-Pregel architecture, and the next one shows the Pregel State Machine flowchart.
+
+![Go-Pregel Arquitecture](../../assets/pregel_architecture.svg)
+
+![Go-Pregel State Machine](../../assets/pregel_flowchart.svg)
+
+
+
 ## Activity
 
 1. Gather in pairs. If you want, you can also do the activity alone. However, even if you do it in pairs, each person has to write the code and make it work on their own computer.

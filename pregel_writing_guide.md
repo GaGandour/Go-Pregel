@@ -36,13 +36,13 @@ To understand the necessary parts of the algorithm, we'll make the following que
 2. Are there any inputs to the algorithm, besides the graph itself? **Answer: Yes, we need the source vertex.**
 3. What is the algorithm output, and what does it represent? **Answer: The output is the distance from the source to all other vertices.**
 4. What happens to the algorithm from the point of view of a single vertex? This question can be divided in the followings:
-    1. When does a vertex's data is accessed or changed by the algorithm? **Answer: when we update the distance of a vertex. This happens if and only if the vertex is the first vertex in the priority queue, and it never happens again. A vertex is the first vertex in a priority queue if and only if it is the vertex with the shortest distance registered in it.**
-    2. does a vertex stop being accessed by the algorithm? **Answer: when the vertex is the first vertex in the priority queue, that is, after the first time it is explored.**
-    3. What happens in each vertex access? What information do we need to do that? **Answer: we change the current distance for each neighbour of the current vertex and store the values to the priority queue.**
-    4. is the relationship between the order of vertex accesses and the topology of the graph (i.e., the edges)? **Answer: The order of vertex accesses is determined by the priority queue. The only relationship that exists is that a vertex to be explored is, for sure, a neighbour of an already explored graph.**
-    5. the order of exploration matters for the algorithm? If so, is there any specific order change that wouldn't change the result? **Answer: the order of the algorithm does matter and cannot be changed. The order of the algorithm depends heavily on the first element of the priority queue, which is determinedby the topology of the graph and by the weighs of the edges. There isn't any way to change the order of vertex exploration while guaranteeing the same results.**
+    1. When is a vertex's data accessed or changed by the algorithm? **Answer: when we update the distance of a vertex. This happens if and only if the vertex is the first vertex in the priority queue, and it never happens again. A vertex is the first vertex in a priority queue if and only if it is the vertex with the shortest distance registered in it.**
+    2. When does a vertex stop being accessed by the algorithm? **Answer: when the vertex is the first vertex in the priority queue, that is, after the first time it is explored.**
+    3. What happens in each vertex access? What information do we need to process/update it? **Answer: we change the current distance for each neighbour of the current vertex and store the values to the priority queue.**
+    4. What is the relationship between the order of vertex accesses and the topology of the graph (i.e., the edges)? **Answer: The order of vertex accesses is determined by the priority queue. The only relationship that exists is that a vertex to be explored is, for sure, a neighbour of an already explored graph.**
+    5. Does the order of exploration matter for the algorithm? If so, is there any specific order change that wouldn't change the result? **Answer: the order of the algorithm does matter and cannot be changed. The order of the algorithm depends heavily on the first element of the priority queue, which is determined by the topology of the graph and by the weights of the edges. There isn't any way to change the order of vertex exploration while guaranteeing the same results.**
 
-After question 4.5, if we realize that the order of exploration matters and there is no way to change it without changing the result, the algorithm as it is is not suitable for Pregel (note that this is ***usually*** true for DFS-based algorithms - but not always). We have two choices then: the first is being creative and changing the algorithm in a way that we can change the order of operations without changing the result. The second is to use a different algorithm that is suitable for Pregel. In the end, both options are the same: use another algorithm. In the case of the Dijkstra algorithm, we can use the Bellman-Ford algorithm, which is a more suitable algorithm for Pregel. Let's see the python pseudocode for the Bellman-Ford algorithm and repeat the questions:
+After question 4.v, if we realize that the order of exploration matters and there is no way to change it without changing the result, the algorithm (as it is) is not suitable for Pregel (note that this is ***usually*** true for DFS-based algorithms - but not always). We have two choices then: the first is being creative and changing the algorithm in a way that we can change the order of operations without changing the result. The second is to use a different algorithm that is suitable for Pregel. In the end, both options are the same: use another algorithm. In the case of the Dijkstra algorithm, we can use the Bellman-Ford algorithm, which is a more suitable algorithm for Pregel. Let's see the python pseudocode for the Bellman-Ford algorithm and repeat the questions:
 
 ```python
 def bellman_ford(graph, source):
@@ -64,11 +64,11 @@ def bellman_ford(graph, source):
 2. Are there any inputs to the algorithm, besides the graph itself? **Answer: Yes, we need the source vertex.**
 3. What is the algorithm output, and what does it represent? **Answer: The output is the distance from the source to all other vertices.**
 4. What happens to the algorithm from the point of view of a single vertex? This question can be divided in the followings:
-    1. When does a vertex's data is accessed or changed by the algorithm? **Answer: a vertex's data is accessed several times regularly in a loop**
-    2. Does a vertex stop being accessed by the algorithm? **Answer: after N-1 iterations of the loop, where N is the number of vertices.**
-    3. What happens in each vertex access? What information do we need to do that? **Answer: we check if the distance to a vertex can be updated, based on the current distance of its neighbours and the weight of the respective edges. For that, we need the weight of the edges pointing to the vertex, as well as the distance stored in the other vertex. Or even better, we actually only need the sum of those two numbers.**
-    4. Is the relationship between the order of vertex accesses and the topology of the graph (i.e., the edges)? **Answer: None. The vertexes are accessed in order inside a for loop, regardless of topology.**
-    5. The order of exploration matters for the algorithm? If so, is there any specific order change that wouldn't change the result? **Answer: as long as, at the end of each iteration, each edge of a vertex has been used once, we can run it in any order and the result won't change.**
+    1. When is a vertex's data accessed or changed by the algorithm? **Answer: a vertex's data is accessed several times regularly in a loop**
+    2. When does a vertex stop being accessed by the algorithm? **Answer: after N-1 iterations of the loop, where N is the number of vertices.**
+    3. What happens in each vertex access? What information do we need to process/update it? **Answer: we check if the distance to a vertex can be updated, based on the current distance of its neighbours and the weight of the respective edges. For that, we need the weight of the edges pointing to the vertex, as well as the distance stored in the other vertex. Or even better, we actually only need the sum of those two numbers.**
+    4. What is the relationship between the order of vertex accesses and the topology of the graph (i.e., the edges)? **Answer: None. The vertexes are accessed in order inside a for loop, regardless of topology.**
+    5. Does the order of exploration matter for the algorithm? If so, is there any specific order change that wouldn't change the result? **Answer: as long as, at the end of each iteration, each edge of a vertex has been used once, we can run it in any order and the result won't change.**
 
 Good! It seems that the Bellman-Ford algorithm is suitable for Pregel. Let's see how we can convert it to a distributed version.
 
@@ -83,11 +83,11 @@ The initialization step is directly mapped to the `ComputeInSuperStepZero` metho
 
 ### Mapping the main loop
 
-Pregel is based on a big loop in which each vertex executes a previously programmed function defined by YOU, the user. Here, it's important that the order of operations between two different vertices does not matter. In Pregel, each vertex acts as a single independent machine, so in each iteration of the main loop, we need to send messages to the oher vertices with the necessary data for them to update their state (recall the answer from question 4.3).
+Pregel is based on a big loop in which each vertex executes a previously programmed function defined by YOU, the user. Here, it's important that the order of operations between two different vertices does not matter. In Pregel, each vertex acts as a single independent machine, so in each iteration of the main loop, we need to send messages to the oher vertices with the necessary data for them to update their state (recall the answer from question 4.iii).
 
 ### Writing the halting condition
 
-Also, we need to make sure the algorithm ends, so each vertex needs to vote to halt the algorithm when it has nothing more to do. We need to check the answer for question 4.2 for that. In the Bellman-Ford algorithm, we can see that a vertex stops being accessed after N-1 iterations of the loop, where N is the number of vertices. So, we can use this as a halting condition.
+Also, we need to make sure the algorithm ends, so each vertex needs to vote to halt the algorithm when it has nothing more to do. We need to check the answer for question 4.ii for that. In the Bellman-Ford algorithm, we can see that a vertex stops being accessed after N-1 iterations of the loop, where N is the number of vertices. So, we can use this as a halting condition.
 
 ### Deciding the output format
 
@@ -101,9 +101,9 @@ The files we can change in the Go-Pregel are the ones that start with "user_defi
 
 1. `VertexIdType`: the type of the vertex id. It can be any hasheable type.
 2. `EdgeIdType`: the type of the edge id. It can be any hasheable type.
-3. `VertexValue`: this is a struct that will hold the values stored in each vertex. You can put any thing you want here, even other structs. In the SSSP problem, we can store the distance from the source to the vertex here.
-4. `EdgeValue`: this is a struct that will hold the values stored in each edge. You can put any thing you want here, even other structs. In the SSSP problem, we can store the weight of the edge here.
-5. `PregelMessage`: this is a struct that will hold the messages sent between vertices. You can put any thing you want here, even other structs. In the SSSP problem, we can store the distance from the source to the vertex here together with the edge's weight to the target vertex.
+3. `VertexValue`: this is a struct that will hold the values stored in each vertex. You can put anything you want here, even other structs. In the SSSP problem, we can store the distance from the source to the vertex here.
+4. `EdgeValue`: this is a struct that will hold the values stored in each edge. You can put anything you want here, even other structs. In the SSSP problem, we can store the weight of the edge here.
+5. `PregelMessage`: this is a struct that will hold the messages sent between vertices. You can put anything you want here, even other structs. In the SSSP problem, we can store the distance from the source to the vertex here together with the edge's weight to the target vertex.
 
 ### The Graph Methods
 
@@ -220,3 +220,5 @@ def edge_value_to_display(edge_id, value_dict) -> str:
 Now, the visualization tool will display the graph with the distances and weights in the vertices and edges, respectively.
 
 ![Graph output image](./assets/sssp_output_graph.png)
+
+This image is a html stored in `./visualization/graph.html`. The file of the graph itself is in `./src/output_graphs/sssp/graph1.json`. Substitute `sssp` for the name of the algorithm you're running, and `graph1` for the name of the graph you're running the algorithm on.
