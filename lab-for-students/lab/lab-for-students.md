@@ -44,11 +44,11 @@ In Pregel, each vertex of the graph acts as an independent node, with its own co
 
 BSP shows us how Pregel executes its computation, but it doesn't show us how the algorithm stops. The algorithm stops by unanimity. After each superstep, each vertex votes if Pregel should or not halt. If every vertex agrees to halt the algorithm, it stops, and the final graph is written. When a vertex votes to halt, it becomes inactive, and it won't take part in the next computation steps. The vertex stays inactive forever, or until it receives a message from another vertex (after which it becomes active again, and the vote to halt is nullified until it votes again).
 
-The best way to understand it is by watching a real Pregel execution. The next image shows the execution of a Pregel algorithm. The input and output are [strongly connected graphs](https://www.geeksforgeeks.org/strongly-connected-components/) in which each vertex has an integer value. The algorithm finds the minimum value among all the vertices and stores it in every vertex. The white vertices are active and the gray ones are inactive. The full arrows are edges and the dotted arrows are messages being passed. Finally, the number inside each vertex is the value it holds in a certain superstep. We'll call the vertex in the image below, from left to right, as A, B, C and D.
+The best way to understand it is by watching a real Pregel execution. The next image shows the execution of a Pregel algorithm. The input and output are [strongly connected graphs](https://www.geeksforgeeks.org/strongly-connected-components/) in which each vertex has an integer value. The algorithm finds the maximum value among all the vertices and stores it in every vertex. The white vertices are active and the gray ones are inactive. The full arrows are edges and the dotted arrows are messages being passed. Finally, the number inside each vertex is the value it holds in a certain superstep. We'll call the vertex in the image below, from left to right, as A, B, C and D.
 
 ![Pregel Execution Example](https://lh7-rt.googleusercontent.com/docsz/AD_4nXeI_dcXtNqEuJCWrMBFGxeQ5RMZOKbiEamSxfUvB3OaaIjWMA7f8_IGEwUbji9HCfzygSrqxJMdT1IlvuhQSeISlN5ddToWvA4hnMKvmM2cvrDIbcfgV-xpj7G6rOm4Kk4iShgMCK8sWr0J2F_Dv7v1QOA?key=oZsNvXQ9C3K9ph2At-HyBg)
 
-In the superstep zero, vertex A sends a message to B saying that A has value 3. On the other hand, B sends a message to A and D saying that B has 6. In superstep 1, the vertexes read the messages received in superstep zero and update their values - A and D change to 6, while B and C didn't change their values. Since B and C didn't change values, they vote to halt. The active vertices then sent messages to the others: A sends 6 to B and D sends 6 to C. In superstep 2, C receives a message, so it awakens and changes value. B also awakens, but it doesn't change value and votes to halt again. Finally, C sends 6 to B and D. In superstep 3, B and D receive the message, but don't change value. They vote to halt, and the algorithm stops because every vertex is inactive.
+In the superstep zero, vertex A sends a message to B saying that A has value 3. On the other hand, B sends a message to A and D saying that B has 6. C and D also send messages with their respective values to their neighbors. In superstep 1, the vertexes read the messages received in superstep zero and update their values - A and D change to 6, while B and C didn't change their values. Since B and C didn't change values, they vote to halt. The active vertices then sent messages to the others: A sends 6 to B and D sends 6 to C. In superstep 2, C receives a message, so it awakens and changes value. B also awakens, but it doesn't change value and votes to halt again. Finally, C sends 6 to B and D. In superstep 3, B and D receive the message, but don't change value. They vote to halt, and the algorithm stops because every vertex is inactive.
 
 ### Algorithm Distribution
 
@@ -60,9 +60,9 @@ The Go-Pregel framework follows a master-worker architecture. After the user wri
 
 After that, the visualization tool is activated and reads the final graph json file and converts it to a html file, which is then opened in the browser. The following image shows the Go-Pregel architecture, and the next one shows the Pregel State Machine flowchart.
 
-![Go-Pregel Arquitecture](../../assets/pregel_architecture.svg)
+![Go-Pregel Arquitecture](../../assets/pregel_architecture.png)
 
-![Go-Pregel State Machine](../../assets/pregel_flowchart.svg)
+![Go-Pregel State Machine](../../assets/pregel_flowchart.png)
 
 
 
@@ -77,7 +77,7 @@ After that, the visualization tool is activated and reads the final graph json f
 There will be three levels of difficulty, to be done in order. For each level of difficulty, you have to:
 
 1. Write the algorithm in Go-Pregel.
-2. Test the algorithm using the provided testing script (read the repo [README.md](https://github.com/GaGandour/Go-Pregel/blob/main/README.md))
+2. Test your algorithm using the `scripts/execution/start_pregel.sh` script. Run it for each graph and check if the output graph is correct. Read the repo [README.md](https://github.com/GaGandour/Go-Pregel/blob/main/README.md) if you have any questions on how to run the script.
 3. Be sure that you algorithm passes all tests.
 
 ### The Levels
