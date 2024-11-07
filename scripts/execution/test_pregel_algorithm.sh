@@ -18,7 +18,7 @@ do
         echo "  -verbose: A little more explanation about the errors is given.\n"
         echo "  -skip_pregel: Skip the pregel execution and only compare the output files.\n"
         echo "Example 1: ./test_pregel_algorithm.sh -num_workers=3 -algorithm=topological_sort"
-        echo "Example 2: ./test_pregel_algorithm.sh -num_workers=3 -algorithm=topological_sort -failure_step=5"
+        echo "Example 2: ./test_pregel_algorithm.sh -num_workers=3 -algorithm=topological_sort -failure_step=5 -checkpoint_frequency=2"
         echo "Example 3: ./test_pregel_algorithm.sh -num_workers=3 -algorithm=topological_sort -verbose"
         echo "Example 4: ./test_pregel_algorithm.sh -num_workers=3 -algorithm=topological_sort -skip_pregel"
         exit 0

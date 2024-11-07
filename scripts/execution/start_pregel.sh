@@ -18,9 +18,9 @@ do
     echo "  -failure_step=<step number>: Simulate a failure in one of the workers at the specified step number. The worker will not be restarted and the computation will continue. The step number should be a positive integer."
     echo "  -test: Run the program in test mode. This will not open the graph visualization.\n"
     echo "  --checkpoint_frequency=<frequency>: The frequency of the checkpointing. The checkpointing is done every <frequency> supersteps. The frequency should be a positive integer. This is useful when you use -failure_step."
-    echo "Example 1: ./start_docker.sh -num_workers=3 -graph_file=graph1.json"
-    echo "Example 2: ./start_docker.sh -num_workers=3 -graph_file=graph1.json -failure_step=5 --checkpoint_frequency=2"
-    echo "Example 3: ./start_docker.sh -num_workers=3 -graph_file=graph1.json -debug"
+    echo "Example 1: ./start_pregel.sh -num_workers=3 -graph_file=graph1.json"
+    echo "Example 2: ./start_pregel.sh -num_workers=3 -graph_file=graph1.json -failure_step=5 --checkpoint_frequency=2"
+    echo "Example 3: ./start_pregel.sh -num_workers=3 -graph_file=graph1.json -debug"
     exit 0
     ;;
   esac
