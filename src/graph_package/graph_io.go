@@ -28,7 +28,6 @@ func ReadGraphFromFile(fileName string) *Graph {
 }
 
 func ReadCommunicationGraphFromFile(fileName string) *CommunicationGraph {
-    log.Println(fileName)
 	graph := new(CommunicationGraph)
 	graphJson, err := os.ReadFile(fileName)
 	if err != nil {
